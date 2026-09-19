@@ -5,54 +5,55 @@ import { z } from "zod";
 function buildServer(env) {
   const server = new McpServer({
     name: "Radar Global Notify",
-    version: "1.0.0",
+    version: "1.1.0",
   });
 
   server.registerTool(
     "send_notification",
     {
       description:
-        "Envía una notificación push al teléfono del usuario mediante ntfy. Úsala para avisar cuando un briefing, informe o automatización importante haya terminado.",
+        "Envía una notificación al teléfono del usuario mediante Telegram. Úsala para avisar cuando un briefing, informe o automatización importante haya terminado.",
       inputSchema: {
         title: z.string().min(1).max(120),
         message: z.string().min(1).max(1000),
       },
     },
     async ({ title, message }) => {
-      if (!env.NTFY_TOPIC) {
+      if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
         return {
           isError: true,
           content: [
             {
               type: "text",
-              text: "NTFY_TOPIC no está configurado en Cloudflare.",
+              text: "Faltan TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID en Cloudflare.",
             },
           ],
         };
       }
 
-      const response = await fetch("https://ntfy.sh", {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify({
-          topic: env.NTFY_TOPIC,
-          title,
-          message,
-          priority: 4,
-          tags: ["satellite"],
-        }),
-      });
+      const response = await fetch(
+        `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            chat_id: env.TELEGRAM_CHAT_ID,
+            text: `${title}\n\n${message}`,
+          }),
+        }
+      );
 
-      if (!response.ok) {
-        const detail = await response.text();
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || !result?.ok) {
         return {
           isError: true,
           content: [
             {
               type: "text",
-              text: `No se pudo enviar la notificación (HTTP ${response.status}): ${detail}`,
+              text: `No se pudo enviar la notificación por Telegram (HTTP ${response.status}).`,
             },
           ],
         };
@@ -62,7 +63,7 @@ function buildServer(env) {
         content: [
           {
             type: "text",
-            text: "Notificación enviada correctamente al teléfono.",
+            text: "Notificación enviada correctamente por Telegram.",
           },
         ],
       };
@@ -80,6 +81,7 @@ export default {
       return Response.json({
         ok: true,
         service: "Radar Global Notify MCP",
+        delivery: "telegram",
         mcp: "/mcp",
       });
     }

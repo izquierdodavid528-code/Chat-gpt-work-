@@ -5,17 +5,17 @@ import { z } from "zod";
 function buildServer(env) {
   const server = new McpServer({
     name: "Radar Global Notify",
-    version: "1.1.0",
+    version: "1.2.0",
   });
 
   server.registerTool(
     "send_notification",
     {
       description:
-        "Envía una notificación al teléfono del usuario mediante Telegram. Úsala para avisar cuando un briefing, informe o automatización importante haya terminado.",
+        "Envía una notificación detallada al teléfono del usuario mediante Telegram. Puede incluir un mini-briefing con hechos clave, contexto, por qué importa y qué seguir.",
       inputSchema: {
         title: z.string().min(1).max(120),
-        message: z.string().min(1).max(1000),
+        message: z.string().min(1).max(3500),
       },
     },
     async ({ title, message }) => {
@@ -63,7 +63,7 @@ function buildServer(env) {
         content: [
           {
             type: "text",
-            text: "Notificación enviada correctamente por Telegram.",
+            text: "Notificación detallada enviada correctamente por Telegram.",
           },
         ],
       };

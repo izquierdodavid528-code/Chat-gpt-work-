@@ -99,12 +99,7 @@ export default {
         });
       }
 
-      const handler = createMcpHandler(() => buildServer(env), {
-        route: "/mcp",
-        responseMode: "auto",
-      });
-
-      return handler(request, env, ctx);
+      return createMcpHandler(() => buildServer(env))(request, env, ctx);
     }
 
     return new Response("Not found", { status: 404 });

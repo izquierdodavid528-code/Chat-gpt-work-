@@ -8,3 +8,49 @@ ScaledBorderAndShadow: yes
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Spanish,Noto Sans,24,&H00FFFFFF,&H00FFFFFF,&HAA000000,&H66000000,-1,0,0,0,100,100,0,0,1,2.4,0.8,2,28,28,72,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:02.15,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Bueno, la verdad es que\Nque Cuba ya ha caído.
+Dialogue: 0,0:00:02.15,0:00:03.75,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}No tiene una economía funcional
+Dialogue: 0,0:00:03.75,0:00:06.97,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}y está gobernada por personas que\Nsiguen hablando de una revolución
+Dialogue: 0,0:00:06.97,0:00:09.99,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}que lleva 20 años muerta\Ny que nunca funcionó.
+Dialogue: 0,0:00:09.99,0:00:11.27,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Y ese es el problema que tienen.
+Dialogue: 0,0:00:11.27,0:00:13.41,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}El problema que tiene Cuba ahora mismo
+Dialogue: 0,0:00:13.41,0:00:16.95,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}es que es un Estado fallido\Nen todos los sentidos.
+Dialogue: 0,0:00:16.95,0:00:20.39,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Ahora bien, puede que tengan un gobierno\Ncapaz de encarcelar y matar a personas.
+Dialogue: 0,0:00:20.39,0:00:24.20,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Tienen un régimen que es capaz de hacerlo\Ny que ha encarcelado y matado a personas.
+Dialogue: 0,0:00:24.20,0:00:25.48,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Pero no es un gobierno funcional
+Dialogue: 0,0:00:25.48,0:00:28.19,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}ni es un país funcional.\NSimplemente no lo es.
+Dialogue: 0,0:00:28.19,0:00:32.18,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Y, además, es un sistema alimentado por\Nla corrupción, la malversación y el robo.
+Dialogue: 0,0:00:32.18,0:00:35.41,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}La economía cubana... no existe una economía\Ncubana que beneficie al pueblo cubano.
+Dialogue: 0,0:00:35.41,0:00:38.09,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Todo lo que tenía alguna posibilidad\Nde generar dinero en Cuba
+Dialogue: 0,0:00:38.09,0:00:41.04,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}era controlado por las Fuerzas Armadas\Ncubanas y el Partido Comunista de Cuba
+Dialogue: 0,0:00:41.04,0:00:43.46,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}para llenar los bolsillos\Nde un puñado de personas
+Dialogue: 0,0:00:43.46,0:00:45.33,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}a costa de todo el país.
+Dialogue: 0,0:00:45.33,0:00:50.16,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}¿Sabes que desde 2021 cerca del 20 % de la\Npoblación de Cuba ha abandonado el país?
+Dialogue: 0,0:00:50.16,0:00:53.16,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Se ha ido porque esto es un\Nfracaso, un fracaso total.
+Dialogue: 0,0:00:53.16,0:00:55.80,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Así que esperamos que Cuba\Nelija un camino diferente.
+Dialogue: 0,0:00:55.80,0:01:00.35,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Esperamos que entre quienes hoy controlan\Nlas armas y el aparato represivo
+Dialogue: 0,0:01:00.35,0:01:02.50,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}haya algunas personas
+Dialogue: 0,0:01:02.50,0:01:05.45,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}que abran los ojos a la realidad\Nde lo que están enfrentando.
+Dialogue: 0,0:01:05.45,0:01:08.96,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Lo que ya no van a poder hacer\Nmientras Donald Trump sea presidente
+Dialogue: 0,0:01:08.96,0:01:14.84,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}es seguir robando y ganando\Ndinero a costa del pueblo cubano.
+Dialogue: 0,0:01:14.84,0:01:19.67,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Y lo que nunca vamos a permitir, bajo ninguna\Ncircunstancia, mientras Trump sea presidente
+Dialogue: 0,0:01:19.67,0:01:23.96,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}es que Cuba se convierta en una base de\Noperaciones contra intereses estadounidenses
+Dialogue: 0,0:01:23.96,0:01:26.11,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}o que represente una amenaza\Npara nuestra seguridad nacional.
+Dialogue: 0,0:01:26.11,0:01:27.41,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}En eso somos absolutamente claros.
+Dialogue: 0,0:01:27.41,0:01:32.01,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Como en todos los casos —puedes preguntar\Npor cualquier país o problema del mundo—
+Dialogue: 0,0:01:32.01,0:01:36.57,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}te diré que la preferencia de nuestro presidente\Nes resolver estas cosas diplomáticamente
+Dialogue: 0,0:01:36.57,0:01:39.25,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}y de una manera que\Npermita alcanzar un acuerdo
+Dialogue: 0,0:01:39.25,0:01:42.70,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}y poner a Cuba, o a cualquier país, en un\Ncamino de cambio positivo e irreversible
+Dialogue: 0,0:01:42.70,0:01:44.85,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}que incluya libertades económicas,\Npero también libertades políticas.
+Dialogue: 0,0:01:44.85,0:01:47.57,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}De hecho, no se puede tener\Nlibertad económica en Cuba
+Dialogue: 0,0:01:47.57,0:01:49.44,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}si primero no hay libertad política.
+Dialogue: 0,0:01:49.44,0:01:52.66,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Ambas tienen que avanzar,\Nal menos, al mismo tiempo.
+Dialogue: 0,0:01:52.66,0:01:54.54,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Eso requerirá un período de transición.
+Dialogue: 0,0:01:54.54,0:01:58.51,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Por desgracia, demasiados de los que siguen\Nallí coreando consignas revolucionarias
+Dialogue: 0,0:01:58.51,0:02:00.71,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}todavía creen que pueden esperar\Na que termine esta administración
+Dialogue: 0,0:02:00.71,0:02:02.68,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}sin hacer cambios ni hacer nada.
+Dialogue: 0,0:02:02.68,0:02:06.08,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}Están equivocados y aprenderán\Nla lección por las malas
+Dialogue: 0,0:02:06.08,0:02:06.88,Spanish,,0,0,0,,{\fad(70,60)\blur0.25}si no rectifican.

@@ -12,12 +12,12 @@ on:
 jobs:
   render:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     defaults:
       run:
         working-directory: remotion-reels
     steps:
-      - name: Checkout
+      - name: Checkout exact render branch
         uses: actions/checkout@v4
         with:
           ref: remotion-reels
@@ -27,13 +27,27 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Install ffmpeg for verification
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Install dependencies
         run: npm install
 
-      - name: Render MP4
+      - name: Ensure Remotion browser
+        run: npx remotion browser ensure
+
+      - name: Render exact preview source
         run: npm run render
 
-      - name: Upload MP4
+      - name: Verify MP4, duration and audio stream
+        run: |
+          test -s out/reel-final.mp4
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 out/reel-final.mp4
+          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 out/reel-final.mp4 | grep -E 'aac|mp3|opus'
+
+      - name: Upload final MP4
         uses: actions/upload-artifact@v4
         with:
           name: reel-final

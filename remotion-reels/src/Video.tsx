@@ -1,62 +1,325 @@
 import React from "react";
-import {AbsoluteFill, Sequence, Audio, interpolate, spring, useCurrentFrame, useVideoConfig, Easing} from "remotion";
+import {
+  AbsoluteFill,
+  Sequence,
+  Audio,
+  interpolate,
+  spring,
+  useCurrentFrame,
+  useVideoConfig,
+  Easing,
+} from "remotion";
 
-const clamp={extrapolateLeft:"clamp" as const,extrapolateRight:"clamp" as const};
-const lerp=(f:number,a:number,b:number,x:number,y:number)=>interpolate(f,[a,b],[x,y],clamp);
+const clamp = {extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const};
+const map = (f:number,a:number,b:number,x:number,y:number) => interpolate(f,[a,b],[x,y],clamp);
+const smooth = (f:number,a:number,b:number,x:number,y:number) =>
+  interpolate(f,[a,b],[x,y],{...clamp,easing:Easing.inOut(Easing.quad)});
 
-function wavDataUri(durationSec:number, sampleFn:(t:number,i:number)=>number){
-  const sr=8000,n=Math.max(1,Math.floor(durationSec*sr)),bytes=new Uint8Array(44+n*2),v=new DataView(bytes.buffer);
+function wav(duration:number, fn:(t:number,i:number)=>number){
+  const sr=11025;
+  const n=Math.max(1,Math.floor(duration*sr));
+  const bytes=new Uint8Array(44+n*2);
+  const v=new DataView(bytes.buffer);
   const put=(o:number,s:string)=>{for(let i=0;i<s.length;i++)bytes[o+i]=s.charCodeAt(i)};
-  put(0,"RIFF");v.setUint32(4,36+n*2,true);put(8,"WAVE");put(12,"fmt ");
-  v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);
-  put(36,"data");v.setUint32(40,n*2,true);
-  for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,sampleFn(i/sr,i)));v.setInt16(44+i*2,s<0?s*32768:s*32767,true);}
-  let bin="";for(let i=0;i<bytes.length;i+=4096){for(let j=i;j<Math.min(bytes.length,i+4096);j++)bin+=String.fromCharCode(bytes[j]);}
+  put(0,"RIFF"); v.setUint32(4,36+n*2,true); put(8,"WAVE"); put(12,"fmt ");
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*2,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+  put(36,"data"); v.setUint32(40,n*2,true);
+  for(let i=0;i<n;i++){
+    const s=Math.max(-1,Math.min(1,fn(i/sr,i)));
+    v.setInt16(44+i*2,s<0?s*32768:s*32767,true);
+  }
+  let bin="";
+  for(let i=0;i<bytes.length;i+=4096){
+    for(let j=i;j<Math.min(bytes.length,i+4096);j++)bin+=String.fromCharCode(bytes[j]);
+  }
   return "data:audio/wav;base64,"+btoa(bin);
 }
-const noise=(i:number)=>{const x=Math.sin(i*12.9898+78.233)*43758.5453;return (x-Math.floor(x))*2-1};
-const MUSIC=wavDataUri(11,(t,i)=>{const beat=t%0.5,off=(t+0.25)%0.5,kick=Math.sin(2*Math.PI*(58+24*Math.exp(-beat*18))*beat)*Math.exp(-beat*15),sn=off<.075?noise(i)*Math.exp(-off*30):0,hat=(t%.25)<.035?noise(i*7)*Math.exp(-(t%.25)*75):0,f=[110,146.83,164.81,130.81][Math.floor(t/.5)%4],ph=t%.5,bass=Math.sin(2*Math.PI*f*t)*Math.exp(-ph*4.8);return .26*kick+.07*sn+.025*hat+.08*bass});
-const WHOOSH=wavDataUri(.75,(t,i)=>{const env=Math.sin(Math.PI*Math.min(1,t/.75));return env*(.12*Math.sin(2*Math.PI*(180+780*t*t)*t)+.12*noise(i))});
-const SPLASH=wavDataUri(.8,(t,i)=>Math.exp(-t*5.5)*(.28*noise(i)+.07*Math.sin(2*Math.PI*95*t)));
-const STING=wavDataUri(1.4,t=>Math.exp(-t*2.2)*(.20*Math.sin(2*Math.PI*(t<.35?196:98)*t)+.08*Math.sin(2*Math.PI*(t<.35?392:196)*t)));
-const POP=wavDataUri(.18,t=>Math.exp(-t*22)*.32*Math.sin(2*Math.PI*(700-2100*t)*t));
 
-const Ocean=({drift=0}:{drift?:number})=>{const frame=useCurrentFrame(),swell=Math.sin((frame+drift)/11);return <AbsoluteFill style={{overflow:"hidden",background:"#45aecd"}}>
-<div style={{position:"absolute",inset:0,height:730,background:"linear-gradient(#7ed5ef 0%,#b9e9f3 66%,#f8efe0 100%)"}}/>
-<div style={{position:"absolute",top:160,left:820,width:120,height:120,borderRadius:"50%",background:"#ffd769",boxShadow:"0 0 90px rgba(255,218,110,.7)"}}/>
-<div style={{position:"absolute",top:555,left:-130,width:1400,height:88,background:"#e8d9b5",borderRadius:"50%",transform:"rotate(-2.5deg)"}}/>
-<div style={{position:"absolute",top:598,left:-80,width:1300,height:38,background:"#7aa9a2",borderRadius:"50%",opacity:.45,transform:"rotate(-2.5deg)"}}/>
-{Array.from({length:10}).map((_,i)=>{const y=700+i*122+(i%2)*28,x=-210+((i*149+frame*2.2)%360);return <div key={i} style={{position:"absolute",left:x,top:y+swell*(i%3===0?11:-6),width:1500,height:18,borderRadius:30,background:i%2?"rgba(255,255,255,.28)":"rgba(21,116,150,.22)",transform:`rotate(${i%2?1.3:-1.8}deg)`}}/>})}
-</AbsoluteFill>};
+const rnd=(i:number)=>{
+  const x=Math.sin(i*12.9898+78.233)*43758.5453;
+  return (x-Math.floor(x))*2-1;
+};
 
-type P={x:number;y:number;scale?:number;shirt?:string;skin?:string;rot?:number;hair?:string;pose?:number;hero?:boolean;look?:number;panic?:number};
-const Person=({x,y,scale=1,shirt="#e76453",skin="#c98b68",rot=0,hair="#2a211d",pose=0,hero=false,look=0,panic=0}:P)=><div style={{position:"absolute",left:x,top:y,width:160,height:300,transform:`scale(${scale}) rotate(${rot}deg)`,transformOrigin:"50% 100%",filter:"drop-shadow(0 9px 7px rgba(0,0,0,.25))"}}>
-<div style={{position:"absolute",left:47,top:16,width:70,height:78,borderRadius:"48% 48% 43% 43%",background:skin,border:"4px solid white"}}/>
-<div style={{position:"absolute",left:42,top:5,width:80,height:40,borderRadius:"70% 70% 28% 28%",background:hair,border:"3px solid white",borderBottom:"none"}}/>
-<div style={{position:"absolute",left:48,top:89,width:70,height:119,borderRadius:"28px 28px 18px 18px",background:shirt,border:"4px solid white"}}/>
-<div style={{position:"absolute",left:27,top:103,width:25,height:108,borderRadius:16,background:skin,border:"4px solid white",transform:`rotate(${-12-pose*20}deg)`,transformOrigin:"50% 8%"}}/>
-<div style={{position:"absolute",left:111,top:102,width:25,height:108,borderRadius:16,background:skin,border:"4px solid white",transform:`rotate(${13+pose*24}deg)`,transformOrigin:"50% 8%"}}/>
-<div style={{position:"absolute",left:53,top:201,width:29,height:96,borderRadius:14,background:"#263541",border:"4px solid white",transform:`rotate(${-4-pose*6}deg)`}}/>
-<div style={{position:"absolute",left:84,top:201,width:29,height:96,borderRadius:14,background:"#263541",border:"4px solid white",transform:`rotate(${5+pose*6}deg)`}}/>
-{hero&&!panic?<div style={{position:"absolute",left:55,top:37,width:56,height:22,borderRadius:8,background:"#171717",border:"3px solid white"}}>:<><div style={{position:"absolute",left:60+look,top:39,width:panic?11:8,height:panic?11:7,background:"#202020",borderRadius:"50%"}}/><div style={{position:"absolute",left:94+look,top:39,width:panic?11:8,height:panic?11:7,background:"#202020",borderRadius:"50%"}}/></>}
-<div style={{position:"absolute",left:76,top:62,width:panic?19:14,height:panic?15:5,borderRadius:panic?"50%":"0 0 50% 50%",background:panic?"#53251f":"#8d4a3d"}}/>
+const MUSIC=wav(12,(t,i)=>{
+  const beat=t%0.5;
+  const half=(t+0.25)%0.5;
+  const kick=Math.sin(2*Math.PI*(62+28*Math.exp(-beat*17))*beat)*Math.exp(-beat*15);
+  const sn=half<0.075?rnd(i)*Math.exp(-half*31):0;
+  const hat=(t%0.25)<0.028?rnd(i*3)*Math.exp(-(t%0.25)*95):0;
+  const notes=[110,146.83,164.81,130.81];
+  const f=notes[Math.floor(t/0.5)%4];
+  const bass=Math.sin(2*Math.PI*f*t)*Math.exp(-(t%0.5)*5);
+  const pluck=Math.sin(2*Math.PI*f*2*t)*Math.exp(-(t%0.25)*14);
+  return .23*kick+.055*sn+.018*hat+.065*bass+.018*pluck;
+});
+const POP=wav(.18,t=>Math.exp(-t*24)*.36*Math.sin(2*Math.PI*(820-2400*t)*t));
+const WHOOSH=wav(.9,(t,i)=>{
+  const e=Math.sin(Math.PI*Math.min(1,t/.9));
+  return e*(.12*rnd(i)+.11*Math.sin(2*Math.PI*(150+1100*t*t)*t));
+});
+const SPLASH=wav(1.0,(t,i)=>{
+  const e=Math.exp(-t*4.8);
+  return e*(.30*rnd(i)+.08*Math.sin(2*Math.PI*92*t)+.035*Math.sin(2*Math.PI*184*t));
+});
+const ENGINE=wav(3.5,(t,i)=>{
+  const pulse=.5+.5*Math.sin(2*Math.PI*7.4*t);
+  return .055*Math.sin(2*Math.PI*78*t)+.018*pulse*rnd(i);
+});
+const STING=wav(1.55,t=>{
+  const e=Math.exp(-t*2.0);
+  const f=t<.32?220:110;
+  return e*(.24*Math.sin(2*Math.PI*f*t)+.085*Math.sin(2*Math.PI*f*2.01*t));
+});
+const SCRATCH=wav(.45,(t,i)=>{
+  const e=Math.exp(-t*5);
+  return e*(.11*rnd(i)+.12*Math.sin(2*Math.PI*(900-1500*t)*t));
+});
+
+const Ocean=({drift=0}:{drift?:number})=>{
+  const frame=useCurrentFrame();
+  const wave=Math.sin((frame+drift)/10);
+  return (
+    <AbsoluteFill style={{overflow:"hidden",background:"#3daacb"}}>
+      <div style={{position:"absolute",inset:0,height:720,background:"linear-gradient(180deg,#7fd6ee 0%,#c9eef7 66%,#f5ead7 100%)"}}/>
+      <div style={{position:"absolute",top:135,left:840,width:118,height:118,borderRadius:"50%",background:"radial-gradient(circle at 38% 36%,#fff4b2 0 22%,#ffd65e 23% 100%)",boxShadow:"0 0 95px rgba(255,212,80,.55)"}}/>
+      <div style={{position:"absolute",top:500,left:-80,width:1230,height:110,background:"#ead9b5",borderRadius:"50%",transform:"rotate(-2.5deg)",boxShadow:"inset 0 -24px rgba(111,145,139,.22)"}}/>
+      <div style={{position:"absolute",top:565,left:-80,width:1230,height:44,borderRadius:"50%",background:"rgba(83,140,142,.35)",transform:"rotate(-2.5deg)"}}/>
+      {[0,1,2,3,4].map(i=><div key={i} style={{position:"absolute",top:475+(i%2)*17,left:115+i*220,width:52,height:16,borderTop:"4px solid rgba(55,86,92,.32)",borderRadius:"50%",transform:`rotate(${i%2?8:-9}deg)`}}/>)}
+      {Array.from({length:11}).map((_,i)=>{
+        const y=690+i*112+(i%2)*30;
+        const x=-230+((i*153+frame*2.15)%390);
+        return <div key={i} style={{position:"absolute",left:x,top:y+wave*(i%3===0?12:-6),width:1500,height:16,borderRadius:30,background:i%2?"rgba(255,255,255,.30)":"rgba(19,111,146,.23)",transform:`rotate(${i%2?1.4:-1.8}deg)`}}/>
+      })}
+      <div style={{position:"absolute",inset:0,background:"linear-gradient(125deg,rgba(255,255,255,.12),transparent 34%,rgba(255,255,255,.05) 63%,transparent)"}}/>
+    </AbsoluteFill>
+  );
+};
+
+type PersonProps={
+  x:number;y:number;scale?:number;rot?:number;skin?:string;hair?:string;shirt?:string;
+  pants?:string;pose?:number;hero?:boolean;panic?:number;look?:number;flip?:boolean;
+};
+
+const Person=({
+  x,y,scale=1,rot=0,skin="#bd835f",hair="#271d19",shirt="#d85f4e",pants="#263746",
+  pose=0,hero=false,panic=0,look=0,flip=false
+}:PersonProps)=>{
+  const skinHi="#dba17b";
+  const armL=-7-pose*25;
+  const armR=10+pose*28;
+  return (
+    <div style={{
+      position:"absolute",left:x,top:y,width:176,height:330,
+      transform:`scaleX(${flip?-1:1}) scale(${scale}) rotate(${rot}deg)`,
+      transformOrigin:"50% 100%",
+      filter:"drop-shadow(0 12px 10px rgba(20,35,45,.28))"
+    }}>
+      <div style={{position:"absolute",left:49,top:24,width:79,height:88,borderRadius:"44% 44% 42% 42%",background:`linear-gradient(125deg,${skinHi} 0%,${skin} 56%,#956347 100%)`,boxShadow:"inset -8px -5px 10px rgba(68,37,25,.12)"}}/>
+      <div style={{position:"absolute",left:44,top:8,width:88,height:50,borderRadius:"70% 72% 30% 24%",background:`linear-gradient(140deg,#46312a,${hair} 52%,#120d0b)`,clipPath:"polygon(0 58%,10% 22%,30% 4%,65% 0,92% 18%,100% 52%,82% 36%,67% 47%,54% 27%,36% 45%,17% 36%)"}}/>
+      <div style={{position:"absolute",left:38,top:106,width:100,height:130,borderRadius:"30px 30px 24px 24px",background:`linear-gradient(110deg,#ffffff1c,${shirt} 35%,#00000018 100%)`,boxShadow:"inset -11px 0 18px rgba(0,0,0,.10)"}}/>
+      <div style={{position:"absolute",left:30,top:115,width:27,height:116,borderRadius:18,background:`linear-gradient(90deg,${skinHi},${skin})`,transform:`rotate(${armL}deg)`,transformOrigin:"50% 8%"}}/>
+      <div style={{position:"absolute",left:119,top:114,width:27,height:116,borderRadius:18,background:`linear-gradient(90deg,${skin},#a36e50)`,transform:`rotate(${armR}deg)`,transformOrigin:"50% 8%"}}/>
+      <div style={{position:"absolute",left:43,top:229,width:39,height:100,borderRadius:"15px 15px 12px 12px",background:`linear-gradient(90deg,#354a5b,${pants})`,transform:`rotate(${-2-pose*7}deg)`,transformOrigin:"50% 0%"}}/>
+      <div style={{position:"absolute",left:91,top:229,width:39,height:100,borderRadius:"15px 15px 12px 12px",background:`linear-gradient(90deg,${pants},#1b2731)`,transform:`rotate(${3+pose*7}deg)`,transformOrigin:"50% 0%"}}/>
+      <div style={{position:"absolute",left:38,top:316,width:50,height:15,borderRadius:"14px 18px 8px 8px",background:"#1b1b1b",transform:`rotate(${-2-pose*7}deg)`}}/>
+      <div style={{position:"absolute",left:88,top:316,width:50,height:15,borderRadius:"18px 14px 8px 8px",background:"#1b1b1b",transform:`rotate(${3+pose*7}deg)`}}/>
+      <div style={{position:"absolute",left:58,top:46,width:16,height:8,borderRadius:"50%",background:"#2b221e",transform:`translateX(${look}px)`}}/>
+      <div style={{position:"absolute",left:101,top:46,width:16,height:8,borderRadius:"50%",background:"#2b221e",transform:`translateX(${look}px)`}}/>
+      <div style={{position:"absolute",left:84,top:51,width:7,height:25,borderRadius:"40%",background:"rgba(117,74,54,.45)",transform:"rotate(7deg)"}}/>
+      <div style={{position:"absolute",left:74,top:82,width:30,height:panic?19:8,borderRadius:panic?"50%":"0 0 50% 50%",background:panic?"#63342d":"#8c5042"}}/>
+      {hero && panic<.1 && <div style={{position:"absolute",left:48,top:39,width:82,height:28,borderRadius:8,background:"linear-gradient(#252525,#111)",boxShadow:"0 3px 4px rgba(0,0,0,.28)"}}>
+        <div style={{position:"absolute",left:9,top:5,width:27,height:13,borderRadius:5,background:"linear-gradient(135deg,#4d6978,#111)"}}/>
+        <div style={{position:"absolute",right:9,top:5,width:27,height:13,borderRadius:5,background:"linear-gradient(135deg,#4d6978,#111)"}}/>
+        <div style={{position:"absolute",left:36,top:10,width:10,height:4,background:"#333"}}/>
+      </div>}
+      {panic>.15 && <>
+        <div style={{position:"absolute",left:54,top:34,width:25,height:4,borderRadius:4,background:"#4a3028",transform:"rotate(-13deg)"}}/>
+        <div style={{position:"absolute",left:98,top:34,width:25,height:4,borderRadius:4,background:"#4a3028",transform:"rotate(13deg)"}}/>
+        <div style={{position:"absolute",left:59,top:44,width:18,height:14,borderRadius:"50%",background:"white"}}/>
+        <div style={{position:"absolute",left:102,top:44,width:18,height:14,borderRadius:"50%",background:"white"}}/>
+        <div style={{position:"absolute",left:65+look,top:48,width:8,height:8,borderRadius:"50%",background:"#222"}}/>
+        <div style={{position:"absolute",left:108+look,top:48,width:8,height:8,borderRadius:"50%",background:"#222"}}/>
+      </>}
+      {hero && <div style={{position:"absolute",left:54,top:119,width:67,height:8,borderRadius:5,background:"rgba(255,255,255,.22)"}}/>}
+    </div>
+  );
+};
+
+const Boat=({hero=true}:{hero?:boolean})=>{
+  const frame=useCurrentFrame();
+  const bob=Math.sin(frame/7)*6;
+  const micro=Math.sin(frame/10)*2;
+  return (
+    <div style={{position:"absolute",left:18,top:718+bob,width:1040,height:650}}>
+      <div style={{position:"absolute",left:118,top:350,width:790,height:225,background:"linear-gradient(180deg,#fffdf6,#e8e1cf)",clipPath:"polygon(4% 0,96% 0,83% 100%,17% 100%)",filter:"drop-shadow(0 23px 18px rgba(13,53,72,.28))"}}/>
+      <div style={{position:"absolute",left:160,top:359,width:706,height:62,borderRadius:18,background:"linear-gradient(180deg,#2f7798,#1f5873)"}}/>
+      <div style={{position:"absolute",left:231,top:423,width:565,height:39,borderRadius:21,background:"linear-gradient(#d8c396,#b49c73)"}}/>
+      <div style={{position:"absolute",left:260,top:250,width:520,height:104,background:"linear-gradient(180deg,#fffef9,#eee8d9)",border:"8px solid #344f5e",borderBottom:"none",borderRadius:"37px 37px 0 0"}}/>
+      {[0,1,2,3].map(i=><div key={i} style={{position:"absolute",left:284+i*118,top:275,width:87,height:58,borderRadius:12,background:"linear-gradient(135deg,#8ed7ec,#3d93b3)",border:"5px solid #344f5e",boxShadow:"inset 8px 7px 18px rgba(255,255,255,.35)"}}/>)}
+      <div style={{position:"absolute",left:382,top:145,width:9,height:107,background:"#41494e"}}/>
+      <div style={{position:"absolute",left:386,top:147,width:290,height:9,background:"#41494e"}}/>
+      <div style={{position:"absolute",left:668,top:147,width:9,height:106,background:"#41494e"}}/>
+      <div style={{position:"absolute",left:508,top:195,width:56,height:55,borderRadius:"7px 7px 0 0",background:"linear-gradient(#e5534e,#b73135)"}}/>
+      <div style={{position:"absolute",left:527,top:163,width:11,height:34,background:"#333"}}/>
+      <div style={{position:"absolute",left:531,top:158,width:42,height:18,borderRadius:12,background:"#ffd95a",transform:"rotate(-8deg)"}}/>
+      <div style={{position:"absolute",left:790,top:315,width:90,height:34,borderRadius:8,background:"#ece6d7",border:"4px solid #354e5c",fontFamily:"Arial",fontSize:18,fontWeight:900,textAlign:"center",lineHeight:"28px"}}>M-07</div>
+      <div style={{position:"absolute",transform:`translateY(${micro}px)`}}>
+        <Person x={162} y={75} scale={.66} shirt="#e5b64c" rot={-4}/>
+        <Person x={310} y={54} scale={.73} shirt="#5f9fc6" rot={2} hair="#5a402d"/>
+        <Person x={470} y={63} scale={.71} shirt="#ad6dc2" rot={-2} skin="#895d45"/>
+        <Person x={630} y={80} scale={.65} shirt="#57986d" rot={4} skin="#d6a37c"/>
+        <Person x={130} y={245} scale={.71} shirt="#c85161" rot={-4}/>
+        <Person x={704} y={245} scale={.69} shirt="#d8934a" rot={4} skin="#7b543f"/>
+        {hero&&<Person x={438} y={238} scale={.80} shirt="#171717" skin="#b98262" hair="#17110f" hero/>}
+      </div>
+    </div>
+  );
+};
+
+const Caption=({children,top=70,fontSize=52,sub}:{children:React.ReactNode;top?:number;fontSize?:number;sub?:string})=>{
+  const frame=useCurrentFrame();
+  const {fps}=useVideoConfig();
+  const p=spring({frame,fps,durationInFrames:18,config:{damping:18,stiffness:220}});
+  return (
+    <div style={{position:"absolute",top,left:48,right:48,display:"flex",justifyContent:"center",opacity:p,transform:`translateY(${(1-p)*-24}px) scale(${.95+.05*p})`}}>
+      <div style={{background:"rgba(255,255,255,.97)",color:"#101010",fontFamily:"Arial,Helvetica,sans-serif",fontWeight:900,fontSize,lineHeight:1.02,textAlign:"center",padding:"22px 30px",borderRadius:24,boxShadow:"0 9px 0 rgba(0,0,0,.14),0 20px 34px rgba(0,0,0,.13)",maxWidth:950,letterSpacing:-1.2}}>
+        <div>{children}</div>
+        {sub&&<div style={{fontSize:26,fontWeight:700,marginTop:10,color:"#5a6065",letterSpacing:0}}>{sub}</div>}
+      </div>
+    </div>
+  );
+};
+
+const Badge=({text,top=292}:{text:string;top?:number})=>{
+  const frame=useCurrentFrame(); const {fps}=useVideoConfig();
+  const p=spring({frame,fps,delay:18,durationInFrames:16,config:{damping:14,stiffness:200}});
+  return <div style={{position:"absolute",top,left:0,right:0,display:"flex",justifyContent:"center",opacity:p,transform:`scale(${.78+.22*p})`}}>
+    <div style={{background:"#ffdf5d",color:"#171717",fontFamily:"Arial",fontWeight:900,fontSize:38,padding:"13px 24px",borderRadius:18,border:"4px solid #171717",boxShadow:"6px 7px 0 rgba(0,0,0,.18)"}}>{text}</div>
+  </div>
+};
+
+const Arrow=({x,y,rot=0,p=1}:{x:number;y:number;rot?:number;p?:number})=><div style={{position:"absolute",left:x,top:y,width:120,height:18,background:"#ef3b3b",borderRadius:20,transform:`rotate(${rot}deg) scaleX(${p})`,transformOrigin:"0 50%",boxShadow:"0 3px 8px rgba(0,0,0,.25)"}}>
+  <div style={{position:"absolute",right:-8,top:-18,width:0,height:0,borderTop:"27px solid transparent",borderBottom:"27px solid transparent",borderLeft:"38px solid #ef3b3b"}}/>
 </div>;
 
-const Boat=({heroVisible=true}:{heroVisible?:boolean})=>{const frame=useCurrentFrame();return <div style={{position:"absolute",left:32,top:730+Math.sin(frame/7)*6,width:1020,height:620}}>
-<div style={{position:"absolute",left:130,top:340,width:760,height:210,background:"#faf5e8",clipPath:"polygon(5% 0,95% 0,82% 100%,18% 100%)",filter:"drop-shadow(0 22px 14px rgba(0,0,0,.28))"}}/>
-<div style={{position:"absolute",left:174,top:349,width:672,height:58,borderRadius:15,background:"#235f80"}}/>
-<div style={{position:"absolute",left:248,top:240,width:535,height:105,background:"#f8f5eb",border:"8px solid #304d5d",borderBottom:"none",borderRadius:"38px 38px 0 0"}}/>
-<div style={{position:"absolute",left:360,top:150,width:9,height:92,background:"#40484b"}}/><div style={{position:"absolute",left:365,top:151,width:290,height:9,background:"#40484b"}}/><div style={{position:"absolute",left:646,top:151,width:9,height:92,background:"#40484b"}}/>
-<Person x={180} y={78} scale={.68} shirt="#efb845" rot={-4}/><Person x={320} y={61} scale={.74} shirt="#64a5ce" rot={2}/><Person x={465} y={66} scale={.73} shirt="#bd70cf" rot={-2} skin="#8b5f45"/><Person x={616} y={83} scale={.67} shirt="#58a66e" rot={4}/><Person x={145} y={236} scale={.73} shirt="#d85b68" rot={-3}/><Person x={680} y={236} scale={.72} shirt="#e69b4e" rot={4} skin="#79503e"/>{heroVisible&&<Person x={436} y={226} scale={.82} shirt="#171717" skin="#b97b59" hair="#161616" hero/>}
-</div>};
+const Scene1=()=>{
+  const f=useCurrentFrame();
+  const zoom=smooth(f,0,90,1,1.065);
+  const arrow=map(f,34,52,0,1);
+  return <AbsoluteFill style={{transform:`scale(${zoom})`,transformOrigin:"50% 55%"}}>
+    <Ocean/><Boat/>
+    <Caption sub="El capitán lo dice una sola vez…">CAPITÁN: “EL BOTE SOLO AGUANTA 6”</Caption>
+    <Badge text="SOMOS 7 😬"/>
+    <Arrow x={460} y={938} rot={-17} p={arrow}/>
+  </AbsoluteFill>;
+};
 
-const Card=({children,top=86,fontSize=54}:{children:React.ReactNode;top?:number;fontSize?:number})=>{const frame=useCurrentFrame(),{fps}=useVideoConfig(),p=spring({frame,fps,durationInFrames:18,config:{damping:18,stiffness:220}});return <div style={{position:"absolute",top,left:54,right:54,display:"flex",justifyContent:"center",opacity:p,transform:`scale(${.94+.06*p})`}}><div style={{background:"white",color:"#111",fontFamily:"Arial,sans-serif",fontWeight:900,fontSize,lineHeight:1.02,textAlign:"center",padding:"22px 30px",borderRadius:22,boxShadow:"0 9px 0 rgba(0,0,0,.14)",maxWidth:940}}>{children}</div></div>};
+const Scene2=()=>{
+  const f=useCurrentFrame(); const {fps}=useVideoConfig();
+  const rise=spring({frame:f,fps,durationInFrames:28,config:{damping:13,stiffness:165}});
+  const pose=map(f,20,55,0,1);
+  const zoom=smooth(f,0,90,1.06,1.22);
+  const bubble=spring({frame:f,fps,delay:26,durationInFrames:16,config:{damping:14,stiffness:210}});
+  const reactions=map(f,38,58,0,1);
+  return <AbsoluteFill style={{transform:`scale(${zoom})`,transformOrigin:"52% 58%"}}>
+    <Ocean drift={19}/><Boat hero={false}/>
+    <div style={{position:"absolute",left:476,top:958-map(rise,0,1,0,115)}}>
+      <Person x={0} y={0} scale={.90} shirt="#171717" skin="#b98262" hair="#17110f" hero pose={pose}/>
+    </div>
+    <div style={{position:"absolute",left:565,top:635,opacity:bubble,transform:`scale(${.72+.28*bubble}) rotate(-2deg)`}}>
+      <div style={{background:"white",border:"5px solid #171717",borderRadius:28,padding:"20px 27px",fontFamily:"Arial",fontWeight:900,fontSize:47,lineHeight:1.02,boxShadow:"8px 9px 0 rgba(0,0,0,.22)"}}>TRANQUI.<br/>YO NADO 😎</div>
+      <div style={{position:"absolute",left:38,bottom:-30,width:40,height:40,background:"white",borderLeft:"5px solid #171717",borderBottom:"5px solid #171717",transform:"rotate(-34deg)"}}/>
+    </div>
+    <div style={{position:"absolute",left:190,top:1040,opacity:reactions,fontFamily:"Arial",fontWeight:900,fontSize:44,color:"#fff",textShadow:"0 4px 10px rgba(0,0,0,.7)"}}>¿QUÉ?</div>
+    <div style={{position:"absolute",left:720,top:1000,opacity:reactions,fontFamily:"Arial",fontWeight:900,fontSize:44,color:"#fff",textShadow:"0 4px 10px rgba(0,0,0,.7)"}}>BRO…</div>
+    <Caption top={72} fontSize={46}>EL BRO QUERIENDO QUEDAR COMO UN HÉROE</Caption>
+  </AbsoluteFill>;
+};
 
-const Intro=()=>{const f=useCurrentFrame();return <AbsoluteFill style={{transform:`scale(${lerp(f,0,82,1,1.07)})`}}><Ocean/><Boat/><Card>EL BOTE AGUANTA 6…<br/>Y SOMOS 7</Card><div style={{position:"absolute",top:270,left:90,right:90}}><Card top={0} fontSize={42}>EL BRO QUERIENDO QUEDAR COMO UN HÉROE:</Card></div></AbsoluteFill>};
-const Hero=()=>{const f=useCurrentFrame(),{fps}=useVideoConfig(),rise=spring({frame:f,fps,durationInFrames:27,config:{damping:13,stiffness:165}}),pose=lerp(f,20,48,0,1),b=spring({frame:f,fps,delay:24,durationInFrames:16,config:{damping:14,stiffness:210}});return <AbsoluteFill style={{transform:`scale(${lerp(f,0,76,1.07,1.24)})`}}><Ocean drift={21}/><Boat heroVisible={false}/><div style={{position:"absolute",left:476,top:953-lerp(rise,0,1,0,105)}}><Person x={0} y={0} scale={.91} shirt="#171717" skin="#b97b59" hero pose={pose}/></div><div style={{position:"absolute",left:590,top:650,opacity:b,transform:`scale(${.7+.3*b}) rotate(-3deg)`,background:"white",border:"5px solid #171717",borderRadius:26,padding:"20px 26px",fontFamily:"Arial",fontWeight:900,fontSize:46}}>TRANQUI,<br/>YO NADO 😎</div></AbsoluteFill>};
-const Jump=()=>{const f=useCurrentFrame(),p=interpolate(f,[18,60],[0,1],{...clamp,easing:Easing.in(Easing.quad)}),x=interpolate(p,[0,1],[490,735]),y=interpolate(p,[0,.46,1],[825,602,1330]),rot=interpolate(p,[0,1],[0,102]),sp=interpolate(f,[55,84],[0,1],clamp);return <AbsoluteFill><Ocean drift={39}/><Boat heroVisible={false}/><div style={{position:"absolute",left:x,top:y,transform:`rotate(${rot}deg)`}}><Person x={0} y={0} scale={.92} shirt="#171717" skin="#b97b59" hero pose={1}/></div>{Array.from({length:24}).map((_,i)=>{const a=Math.PI*2*i/24,d=interpolate(sp,[0,1],[0,120+(i%5)*24]),s=interpolate(sp,[0,.2,1],[0,1,.08],clamp);return <div key={i} style={{position:"absolute",left:708+Math.cos(a)*d,top:1340+Math.sin(a)*d*.48,width:14+(i%4)*7,height:26+(i%5)*9,borderRadius:"50%",background:"rgba(255,255,255,.88)",transform:`scale(${s})`}}/>})}<Card top={88} fontSize={48}>“YO NADO”</Card></AbsoluteFill>};
-const Punch=()=>{const f=useCurrentFrame(),bx=interpolate(f,[0,58],[0,810],{...clamp,easing:Easing.inOut(Easing.quad)}),turn=lerp(f,48,72,0,-23),zoom=interpolate(f,[72,103],[1,1.54],{...clamp,easing:Easing.out(Easing.exp)}),panic=lerp(f,65,78,0,1),sx=interpolate(f,[20,72],[-230,360],clamp);return <AbsoluteFill style={{transform:`scale(${zoom})`,transformOrigin:"53% 69%"}}><Ocean drift={58}/><div style={{transform:`translateX(${bx}px) scale(.8)`}}><Boat heroVisible={false}/></div><div style={{position:"absolute",left:465,top:1195,transform:`rotate(${turn}deg)`}}><Person x={0} y={0} scale={.73} shirt="#171717" skin="#b97b59" look={panic*5} panic={panic}/></div><div style={{position:"absolute",left:sx,top:1166,width:185,height:138,background:"#34424b",clipPath:"polygon(0 100%,68% 0,100% 100%)"}}/><Card>EL BRO, 3 SEGUNDOS DESPUÉS:</Card><div style={{position:"absolute",left:0,right:0,bottom:150,textAlign:"center",fontFamily:"Arial",fontWeight:900,fontSize:48,color:"white",opacity:lerp(f,74,84,0,1),textShadow:"0 5px 14px rgba(0,0,0,.85)"}}>“eh… ¿eso venía incluido?”</div></AbsoluteFill>};
+const Splash=({p}:{p:number})=><>
+  {Array.from({length:28}).map((_,i)=>{
+    const a=Math.PI*2*i/28;
+    const d=interpolate(p,[0,1],[0,115+(i%6)*23]);
+    const s=interpolate(p,[0,.18,1],[0,1,.08],clamp);
+    return <div key={i} style={{position:"absolute",left:735+Math.cos(a)*d,top:1335+Math.sin(a)*d*.48,width:12+(i%4)*8,height:26+(i%5)*10,borderRadius:"50%",background:"rgba(255,255,255,.90)",transform:`scale(${s}) rotate(${i*21}deg)`,boxShadow:"0 2px 7px rgba(20,100,135,.15)"}}/>
+  })}
+  <div style={{position:"absolute",left:585,top:1314,width:310,height:78,border:"14px solid rgba(255,255,255,.8)",borderRadius:"50%",transform:`scale(${interpolate(p,[0,.22,1],[.3,1,1.85],clamp)})`,opacity:interpolate(p,[0,.72,1],[1,.72,0],clamp)}}/>
+</>;
 
-const AudioLayer=()=> <AbsoluteFill><Sequence from={0} durationInFrames={330}><Audio src={MUSIC} volume={.34}/></Sequence><Sequence from={28} durationInFrames={12}><Audio src={POP} volume={.55}/></Sequence><Sequence from={169} durationInFrames={23}><Audio src={WHOOSH} volume={.7}/></Sequence><Sequence from={207} durationInFrames={24}><Audio src={SPLASH} volume={.9}/></Sequence><Sequence from={270} durationInFrames={42}><Audio src={STING} volume={.78}/></Sequence></AbsoluteFill>;
+const Scene3=()=>{
+  const f=useCurrentFrame();
+  const anticipate=interpolate(f,[0,13,23],[0,-28,0],clamp);
+  const p=interpolate(f,[19,64],[0,1],{...clamp,easing:Easing.in(Easing.quad)});
+  const x=interpolate(p,[0,1],[488,765]);
+  const y=interpolate(p,[0,.47,1],[835,585,1330])+anticipate;
+  const rot=interpolate(p,[0,1],[0,112]);
+  const scale=interpolate(p,[0,.8,1],[1,1.04,.77]);
+  const splash=interpolate(f,[58,88],[0,1],clamp);
+  const shake=f>56&&f<69?Math.sin(f*2.9)*8:0;
+  return <AbsoluteFill style={{transform:`translate(${shake}px,${-shake*.4}px)`}}>
+    <Ocean drift={37}/><Boat hero={false}/>
+    <div style={{position:"absolute",left:x,top:y,transform:`rotate(${rot}deg) scale(${scale})`,transformOrigin:"50% 78%"}}>
+      <Person x={0} y={0} scale={.91} shirt="#171717" skin="#b98262" hair="#17110f" hero pose={1}/>
+    </div>
+    {p>.08&&p<.76&&<div style={{position:"absolute",left:x-130,top:y+132,width:170,height:18,borderRadius:12,background:"rgba(255,255,255,.42)",transform:`rotate(${-20+rot*.18}deg)`}}/>}
+    <Splash p={splash}/>
+    <Caption top={72} fontSize={52}>“TRANQUI. YO NADO.”</Caption>
+  </AbsoluteFill>;
+};
 
-export default function Video(){return <AbsoluteFill style={{background:"#46b0cf",overflow:"hidden"}}><Sequence from={0} durationInFrames={82}><Intro/></Sequence><Sequence from={82} durationInFrames={78}><Hero/></Sequence><Sequence from={160} durationInFrames={72}><Jump/></Sequence><Sequence from={232} durationInFrames={98}><Punch/></Sequence><AudioLayer/></AbsoluteFill>}
+const Fin=({frame}:{frame:number})=>{
+  const x=smooth(frame,18,78,-240,360);
+  const bob=Math.sin(frame/5)*7;
+  return <>
+    <div style={{position:"absolute",left:x-120,top:1226+bob,width:330,height:80,borderRadius:"50%",background:"rgba(12,61,78,.22)",filter:"blur(8px)"}}/>
+    <div style={{position:"absolute",left:x,top:1152+bob,width:190,height:148,background:"linear-gradient(145deg,#53616b,#253039)",clipPath:"polygon(0 100%,68% 0,100% 100%)",filter:"drop-shadow(0 12px 9px rgba(0,0,0,.28))"}}/>
+  </>;
+};
+
+const Scene4=()=>{
+  const f=useCurrentFrame();
+  const boatX=smooth(f,0,63,0,845);
+  const boatS=smooth(f,0,63,.90,.66);
+  const turn=map(f,44,74,0,-24);
+  const panic=map(f,61,77,0,1);
+  const zoom=interpolate(f,[74,104],[1,1.58],{...clamp,easing:Easing.out(Easing.exp)});
+  const caption=map(f,0,14,0,1);
+  const flash=interpolate(f,[100,104,108],[0,.82,0],clamp);
+  return <AbsoluteFill style={{transform:`scale(${zoom})`,transformOrigin:"53% 69%"}}>
+    <Ocean drift={61}/>
+    <div style={{transform:`translateX(${boatX}px) scale(${boatS})`,transformOrigin:"50% 50%"}}><Boat hero={false}/></div>
+    <div style={{position:"absolute",left:462,top:1190,transform:`rotate(${turn}deg)`,transformOrigin:"50% 89%"}}>
+      <Person x={0} y={0} scale={.74} shirt="#171717" skin="#b98262" hair="#17110f" panic={panic} look={panic*4}/>
+    </div>
+    <Fin frame={f}/>
+    <div style={{opacity:caption}}><Caption top={72} fontSize={48}>EL BRO, 3 SEGUNDOS DESPUÉS:</Caption></div>
+    <div style={{position:"absolute",left:0,right:0,bottom:150,textAlign:"center",fontFamily:"Arial",fontWeight:900,fontSize:51,color:"white",opacity:map(f,75,86,0,1),textShadow:"0 5px 14px rgba(0,0,0,.88)"}}>“…eso no estaba en el plan.”</div>
+    <div style={{position:"absolute",inset:0,background:"white",opacity:flash}}/>
+  </AbsoluteFill>;
+};
+
+const Sound=()=>(
+  <AbsoluteFill>
+    <Sequence from={0} durationInFrames={360}><Audio src={MUSIC} volume={.30}/></Sequence>
+    <Sequence from={28} durationInFrames={12}><Audio src={POP} volume={.58}/></Sequence>
+    <Sequence from={106} durationInFrames={12}><Audio src={POP} volume={.54}/></Sequence>
+    <Sequence from={185} durationInFrames={27}><Audio src={WHOOSH} volume={.76}/></Sequence>
+    <Sequence from={223} durationInFrames={30}><Audio src={SPLASH} volume={.92}/></Sequence>
+    <Sequence from={255} durationInFrames={105}><Audio src={ENGINE} volume={.34}/></Sequence>
+    <Sequence from={300} durationInFrames={46}><Audio src={STING} volume={.84}/></Sequence>
+    <Sequence from={344} durationInFrames={14}><Audio src={SCRATCH} volume={.62}/></Sequence>
+  </AbsoluteFill>
+);
+
+export default function Video(){
+  return (
+    <AbsoluteFill style={{background:"#3daacb",overflow:"hidden"}}>
+      <Sequence from={0} durationInFrames={90}><Scene1/></Sequence>
+      <Sequence from={90} durationInFrames={90}><Scene2/></Sequence>
+      <Sequence from={180} durationInFrames={75}><Scene3/></Sequence>
+      <Sequence from={255} durationInFrames={105}><Scene4/></Sequence>
+      <Sound/>
+    </AbsoluteFill>
+  );
+}

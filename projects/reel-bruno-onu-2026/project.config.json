@@ -33,6 +33,15 @@
         "maxTrailingSeconds": 2,
         "maxContinuousSeconds": 4
       }
+    },
+    "audioMastering": {
+      "enabled": true,
+      "targetIntegratedLufs": -15,
+      "targetTruePeakDbfs": -1.5,
+      "targetLraLu": 7,
+      "sampleRateHz": 48000,
+      "codec": "aac",
+      "bitrateKbps": 320
     }
   }
 }

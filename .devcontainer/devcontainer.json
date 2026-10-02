@@ -1,0 +1,11 @@
+{
+  "name": "ChatGPT Work - Remotion",
+  "postCreateCommand": "cd remotion-subtitulos-es && npm install",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Remotion Studio",
+      "onAutoForward": "openBrowser"
+    }
+  }
+}

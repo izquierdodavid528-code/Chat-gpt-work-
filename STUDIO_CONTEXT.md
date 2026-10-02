@@ -135,6 +135,7 @@ Local planning check:
 - `scripts/blender/render-plan.py`: config validation and automatic mode selection.
 - `scripts/blender/master-audit.py`: master dependency/simulation audit and manifest.
 - `scripts/blender/verify-master-contract.py`: proves the audited master matches project config.
+- `scripts/blender/verify-recovery-plan.py`: prevents recovery across changed art/configuration or from validation-only runs.
 - `scripts/blender/verify_fidelity.py`: strict image fidelity gate.
 - `scripts/blender/verify-delivery.py`: proves PNG numbering and final video properties.
 - `scripts/blender/install-pinned.sh`: exact Blender installer.
@@ -171,9 +172,10 @@ When asked to continue studio work:
 
 ## Recovery and known boundaries
 
-- Frame block artifacts are checkpoints inside a run and are retained temporarily (currently 14 days).
+- Frame block artifacts are checkpoints and are retained temporarily (currently 14 days).
 - Before rerendering, inspect current/recent Actions artifacts and the master SHA-256.
-- Cross-run automatic resume from arbitrary old frame-block artifacts is **not** implemented yet; do not claim that it is.
+- If a compatible generic run already contains the full master + frame blocks, call `Blender Smart Render` with `recovery_run_id=<run id>`. Recovery verifies the source/current plan contract, master SHA, frame completeness, fidelity and final video before delivery, without rerendering the frames.
+- The workflow does not automatically discover which historical run should be recovered; the source run ID must be selected explicitly.
 - `render.parallel.safe=true` remains an explicit audit decision. Automation refuses unsafe projects but does not decide artistic/simulation safety on its own.
 - Baking a stateful simulation is still a project preparation step; Smart Render distributes and verifies a declared baked cache, it does not invent the bake.
 - Automated QA verifies technical fidelity and delivery properties; subjective artistic review remains separate.

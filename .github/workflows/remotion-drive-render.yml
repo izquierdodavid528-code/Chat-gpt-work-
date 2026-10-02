@@ -12,6 +12,11 @@ on:
         required: false
         default: ""
         type: string
+      skip_drive:
+        description: "Testing only: skip Drive asset access"
+        required: false
+        default: false
+        type: boolean
   workflow_call:
     inputs:
       project_slug:
@@ -21,6 +26,10 @@ on:
         required: false
         default: ""
         type: string
+      skip_drive:
+        required: false
+        default: false
+        type: boolean
     secrets:
       RCLONE_CONFIG_B64:
         required: false
@@ -82,12 +91,13 @@ jobs:
       REMOTION_CONCURRENCY: ${{ needs.plan.outputs.concurrency }}
       VALIDATION_FRAMES: ${{ needs.plan.outputs.validation_frames }}
       VALIDATION_ONLY: ${{ needs.plan.outputs.validation_only }}
+      SKIP_DRIVE: ${{ inputs.skip_drive }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Restore rclone config
-        if: env.VALIDATION_ONLY != 'true'
+        if: env.SKIP_DRIVE != 'true'
         env:
           RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
         run: |
@@ -98,7 +108,7 @@ jobs:
           grep -q '^\[drive\]$' "$RUNNER_TEMP/rclone.conf"
 
       - name: Install pinned rclone
-        if: env.VALIDATION_ONLY != 'true'
+        if: env.SKIP_DRIVE != 'true'
         run: |
           set -euo pipefail
           ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
@@ -108,7 +118,7 @@ jobs:
           rclone version | head -n 1 | grep -F "rclone v${RCLONE_VERSION}"
 
       - name: Download shared and project assets
-        if: env.VALIDATION_ONLY != 'true'
+        if: env.SKIP_DRIVE != 'true'
         run: |
           set -euo pipefail
           mkdir -p "$PROJECT_DIR/public/shared" "$PROJECT_DIR/public"
@@ -177,7 +187,7 @@ jobs:
           } > "$PROJECT_DIR/out/render-environment.txt"
 
       - name: Upload production delivery to Drive
-        if: env.VALIDATION_ONLY != 'true'
+        if: env.VALIDATION_ONLY != 'true' && env.SKIP_DRIVE != 'true'
         run: |
           set -euo pipefail
           rclone --config "$RUNNER_TEMP/rclone.conf" mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"

@@ -5,5 +5,27 @@
   "sceneScript": "scene.py",
   "blendFile": "out/scene.blend",
   "previewFile": "out/preview.png",
-  "renderEngine": "BLENDER_EEVEE_NEXT"
+  "renderEngine": "BLENDER_EEVEE_NEXT",
+  "blenderVersion": "4.5.14",
+  "frameStart": 1,
+  "fps": 24,
+  "frames": 1,
+  "resolution": "1080x1080",
+  "render": {
+    "parallel": {
+      "safe": false,
+      "simulationPolicy": "unknown",
+      "blockSize": 12,
+      "maxParallel": 10,
+      "controlFrames": [
+        1
+      ]
+    },
+    "video": {
+      "codec": "libx264",
+      "preset": "medium",
+      "crf": 16,
+      "pixFmt": "yuv420p"
+    }
+  }
 }

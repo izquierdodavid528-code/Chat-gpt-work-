@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import re
 import subprocess
 import sys
@@ -17,8 +18,19 @@ if not ref.is_file() or not actual.is_file():
 
 report.parent.mkdir(parents=True, exist_ok=True)
 
+rmse_max = float(os.environ.get("FIDELITY_RMSE_MAX", "2e-5"))
+changed_fraction_max = float(
+    os.environ.get("FIDELITY_CHANGED_FRACTION_MAX", "1e-4")
+)
+
 def run_capture(cmd):
-    p = subprocess.run(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.run(
+        cmd,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
     return (p.stdout + "\n" + p.stderr).strip(), p.returncode
 
 dims, _ = run_capture(["identify", "-format", "%w %h", str(ref)])
@@ -47,7 +59,9 @@ else:
 
 fraction = changed_pixels / total_pixels
 exact = changed_pixels == 0 and rmse == 0.0
-passed = exact or (rmse <= 2e-5 and fraction <= 1e-4)
+passed = exact or (
+    rmse <= rmse_max and fraction <= changed_fraction_max
+)
 mode = "exact" if exact else "strict-tolerance"
 
 psnr_raw, _ = run_capture([
@@ -58,8 +72,14 @@ ssim_raw, _ = run_capture([
     "ffmpeg", "-v", "info", "-i", str(ref), "-i", str(actual),
     "-lavfi", "ssim", "-f", "null", "-"
 ])
-psnr_line = next((x for x in reversed(psnr_raw.splitlines()) if "average:" in x and "PSNR" in x), "")
-ssim_line = next((x for x in reversed(ssim_raw.splitlines()) if "All:" in x and "SSIM" in x), "")
+psnr_line = next(
+    (x for x in reversed(psnr_raw.splitlines()) if "average:" in x and "PSNR" in x),
+    "",
+)
+ssim_line = next(
+    (x for x in reversed(ssim_raw.splitlines()) if "All:" in x and "SSIM" in x),
+    "",
+)
 
 with report.open("a", encoding="utf-8") as f:
     f.write(f"frame={frame}\n")
@@ -68,6 +88,8 @@ with report.open("a", encoding="utf-8") as f:
     f.write(f"changed_pixels={changed_pixels}\n")
     f.write(f"changed_fraction={fraction:.12g}\n")
     f.write(f"rmse_normalized={rmse:.12g}\n")
+    f.write(f"rmse_limit={rmse_max:.12g}\n")
+    f.write(f"changed_fraction_limit={changed_fraction_max:.12g}\n")
     f.write(f"psnr={psnr_line}\n")
     f.write(f"ssim={ssim_line}\n")
     f.write(f"result={'PASS' if passed else 'FAIL'}\n\n")

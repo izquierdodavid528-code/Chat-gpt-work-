@@ -9,5 +9,26 @@
   "renderEngine": "BLENDER_EEVEE_NEXT",
   "fps": 24,
   "frames": 144,
-  "resolution": "720x1280"
+  "resolution": "720x1280",
+  "blenderVersion": "4.5.14",
+  "frameStart": 1,
+  "render": {
+    "parallel": {
+      "safe": true,
+      "simulationPolicy": "none",
+      "blockSize": 12,
+      "maxParallel": 10,
+      "controlFrames": [
+        1,
+        72,
+        144
+      ]
+    },
+    "video": {
+      "codec": "libx264",
+      "preset": "medium",
+      "crf": 16,
+      "pixFmt": "yuv420p"
+    }
+  }
 }

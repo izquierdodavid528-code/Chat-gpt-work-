@@ -22,5 +22,9 @@ SCRIPT="$(node -e 'const c=require(process.argv[1]); console.log(c.sceneScript |
 mkdir -p "$PROJECT/out"
 export LIBGL_ALWAYS_SOFTWARE=1
 export MESA_LOADER_DRIVER_OVERRIDE=llvmpipe
+export BLENDER_PROJECT_SLUG="$SLUG"
+export BLENDER_PROGRESS_FILE="$PROJECT/out/render-progress.json"
 
-exec blender -b --python "$PROJECT/$SCRIPT"
+printf '{\n  "project": "%s",\n  "status": "starting",\n  "percent": 0,\n  "updated_at": null\n}\n' "$SLUG" > "$BLENDER_PROGRESS_FILE"
+
+exec blender -b --python "$ROOT/scripts/blender/render-with-progress.py" -- "$PROJECT/$SCRIPT"

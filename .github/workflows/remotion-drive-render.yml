@@ -20,7 +20,7 @@ on:
 
 jobs:
   render:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       DRIVE_BASE: "Remotion Projects"
@@ -55,7 +55,7 @@ jobs:
           echo "Drive project: $DRIVE_DIR"
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Validate project structure
         shell: bash
@@ -82,11 +82,16 @@ jobs:
             exit 1
           fi
 
-      - name: Install rclone
+      - name: Install pinned rclone
         shell: bash
         run: |
-          curl -fsSL https://rclone.org/install.sh | sudo bash
+          RCLONE_VERSION="1.75.1"
+          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          unzip -q "$ARCHIVE"
+          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
           rclone version
+          rclone version | head -n 1 | grep -F "rclone v${RCLONE_VERSION}"
 
       - name: Validate Google Drive access
         shell: bash
@@ -145,17 +150,62 @@ jobs:
           find "$PROJECT_DIR/public" -maxdepth 4 -type f -printf '%P\n' | sort
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: "20"
+          node-version: "20.20.2"
+
+      - name: Pin npm version
+        shell: bash
+        run: |
+          npm install --global npm@10.8.2
+          node --version | grep -F "v20.20.2"
+          npm --version | grep -F "10.8.2"
 
       - name: Install project dependencies
         working-directory: ${{ env.PROJECT_DIR }}
-        run: npm install --no-audit --no-fund
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            echo "::warning::package-lock.json missing; using npm install. Commit a lockfile for full dependency reproducibility."
+            npm install --no-audit --no-fund
+          fi
+
+      - name: Verify pinned Remotion environment
+        working-directory: ${{ env.PROJECT_DIR }}
+        shell: bash
+        run: |
+          node -e 'const p=require("./package.json"); if(p.dependencies.remotion!=="4.0.530"||p.dependencies["@remotion/cli"]!=="4.0.530"){process.exit(1)}'
+          npx remotion --version
 
       - name: Validate Remotion compositions
         working-directory: ${{ env.PROJECT_DIR }}
         run: npm run compositions
+
+      - name: Verify Chrome Headless Shell version
+        shell: bash
+        run: |
+          CHROME_BIN="$(find "$HOME/.cache" "$PROJECT_DIR/node_modules/.cache" -type f \( -name chrome-headless-shell -o -name headless_shell \) 2>/dev/null | head -n 1)"
+          if [ -z "$CHROME_BIN" ]; then
+            echo "::error::Remotion Chrome Headless Shell was not found after composition validation."
+            exit 1
+          fi
+          "$CHROME_BIN" --version
+          "$CHROME_BIN" --version | grep -F "149.0.7790.0"
+
+      - name: Record render environment
+        shell: bash
+        run: |
+          mkdir -p "$PROJECT_DIR/out"
+          {
+            echo "runner=ubuntu-24.04"
+            echo "node=$(node --version)"
+            echo "npm=$(npm --version)"
+            echo "rclone=$(rclone version | head -n 1)"
+            echo "remotion=$(cd "$PROJECT_DIR" && npx remotion --version | tail -n 1)"
+            echo "chrome=$("$CHROME_BIN" --version 2>/dev/null || true)"
+          } > "$PROJECT_DIR/out/render-environment.txt"
 
       - name: Render with Remotion
         working-directory: ${{ env.PROJECT_DIR }}
@@ -185,7 +235,7 @@ jobs:
             --stats 10s
 
       - name: Upload GitHub artifact backup
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: remotion-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
           path: ${{ env.PROJECT_DIR }}/out/

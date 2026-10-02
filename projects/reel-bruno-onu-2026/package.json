@@ -5,7 +5,8 @@
   "scripts": {
     "start": "remotion studio src/index.ts",
     "compositions": "remotion compositions src/index.ts",
-    "render": "remotion render src/index.ts BrunoONUReel out/reel-bruno-onu-2026-v2.mp4 --codec=h264 --pixel-format=yuv420p --crf=18 --log=info"
+    "render": "remotion render src/index.ts BrunoONUReelV3 out/reel-bruno-onu-2026-v3.mp4 --codec=h264 --pixel-format=yuv420p --crf=18 --concurrency=100% --log=info",
+    "render:v2": "remotion render src/index.ts BrunoONUReel out/reel-bruno-onu-2026-v2.mp4 --codec=h264 --pixel-format=yuv420p --crf=18 --log=info"
   },
   "dependencies": {
     "@remotion/cli": "4.0.530",

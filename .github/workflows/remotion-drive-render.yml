@@ -172,7 +172,15 @@ jobs:
           test -s "$PROJECT_DIR/$OUTPUT_FILE"
           mkdir -p "$PROJECT_DIR/out"
           ffprobe -v error             -show_streams             -show_format             -of json             "$PROJECT_DIR/$OUTPUT_FILE" > "$PROJECT_DIR/out/video-probe.json"
-          python3 scripts/remotion/verify-delivery.py             "$PROJECT_DIR/project.config.json"             "$PROJECT_DIR/out/video-probe.json"             "$PROJECT_DIR/out/delivery-report.json"
+          DELIVERY_ARGS=()
+          if [ "$VALIDATION_ONLY" = "true" ]; then
+            DELIVERY_ARGS+=(--validation)
+          fi
+          python3 scripts/remotion/verify-delivery.py \
+            "$PROJECT_DIR/project.config.json" \
+            "$PROJECT_DIR/out/video-probe.json" \
+            "$PROJECT_DIR/out/delivery-report.json" \
+            "${DELIVERY_ARGS[@]}"
           AUDIO_ARGS=()
           if [ "$VALIDATION_ONLY" = "true" ]; then
             AUDIO_ARGS+=(--validation)

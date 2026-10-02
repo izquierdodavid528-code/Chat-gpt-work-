@@ -25,6 +25,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
 if [ ! -x "$BIN" ]; then
   mkdir -p "$CACHE_ROOT"
   TMP="$(mktemp -d)"
+  trap 'rm -rf "$TMP"' EXIT
   ARCHIVE="$TMP/blender.tar.xz"
   FILENAME="blender-$VERSION-linux-x64.tar.xz"
 
@@ -49,7 +50,6 @@ if [ ! -x "$BIN" ]; then
 
   if [ "$OK" -ne 1 ]; then
     echo "ERROR: could not download Blender $VERSION"
-    rm -rf "$TMP"
     exit 3
   fi
 
@@ -60,10 +60,15 @@ if [ ! -x "$BIN" ]; then
   rm -rf "$INSTALL_DIR"
   mkdir -p "$(dirname "$INSTALL_DIR")"
   mv "$EXTRACTED" "$INSTALL_DIR"
-  rm -rf "$TMP"
 fi
 
 sudo ln -sf "$BIN" /usr/local/bin/blender
+
+ACTUAL_VERSION="$(blender --version | head -n 1 | awk '{print $2}')"
+if [ "$ACTUAL_VERSION" != "$VERSION" ]; then
+  echo "ERROR: expected Blender $VERSION but installed $ACTUAL_VERSION"
+  exit 4
+fi
 
 echo "==> Blender binary: $BIN"
 blender --version | head -n 3

@@ -14,7 +14,7 @@ output = pathlib.Path(args[args.index("--") + 1]).resolve()
 output.parent.mkdir(parents=True, exist_ok=True)
 scene = bpy.context.scene
 policy = os.environ.get("BLENDER_SIMULATION_POLICY", "unknown")
-pack_resources = os.environ.get("BLENDER_PACK_RESOURCES", "1") == "1"
+pack_resources = os.environ.get("BLENDER_PACK_RESOURCES", "1").strip().lower() in {"1", "true", "yes", "on"}
 
 deps = []
 missing = []

@@ -4,5 +4,14 @@
   "compositionId": "TemplateVideo",
   "driveProjectDir": "template-remotion",
   "studioPort": 3000,
-  "outputFile": "out/render.mp4"
+  "outputFile": "out/render.mp4",
+  "render": {
+    "concurrency": "100%",
+    "expectedCodec": "h264",
+    "expectedWidth": 1080,
+    "expectedHeight": 1920,
+    "expectedFps": 30,
+    "requireAudio": false,
+    "minDurationSeconds": 0.03
+  }
 }

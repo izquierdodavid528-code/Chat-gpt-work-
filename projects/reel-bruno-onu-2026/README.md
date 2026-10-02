@@ -17,4 +17,4 @@ Ejecutar `Remotion Drive Render` con:
 - `drive_project_dir`: `01 - Reel Bruno ONU 2026`
 
 ## Estado
-Primer corte tecnico/visual. Los cues de subtitulos son un pase inicial y deben ajustarse contra el audio antes del cierre editorial.
+Primer corte tecnico/visual sobre un fragmento continuo del primer bloque sustantivo del discurso. Texto contrastado con la transcripcion de Naciones Unidas y temporizacion afinada con pausas detectadas en el audio. Falta el pase visual del render para microajustes de sincronizacion y encuadre.

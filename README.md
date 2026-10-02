@@ -4,6 +4,7 @@ For any new ChatGPT/Codex session working on multimedia projects, **read [STUDIO
 
 The reusable production architecture, Blender render contract, Drive/GitHub division of responsibilities, and canonical workflows are documented in:
 - `STUDIO_CONTEXT.md` — concise cross-chat state and operating rules.
+- `WORKSPACE_AUDIT.md` — latest validated production audit and known limits.
 - `WORKSPACE_GUIDE.md` — detailed workspace documentation.
 - `.github/workflows/blender-smart-render.yml` — canonical audited Blender final render.
 - `.github/workflows/blender-workspace-selftest.yml` — infrastructure regression test.

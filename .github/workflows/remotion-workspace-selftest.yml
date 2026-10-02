@@ -52,3 +52,4 @@ jobs:
     with:
       project_slug: _template-remotion
       validation_frames: "0-0"
+      skip_drive: true

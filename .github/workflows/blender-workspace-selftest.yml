@@ -31,6 +31,14 @@ jobs:
           bash -n scripts/blender/install-pinned.sh
           python3 -m json.tool projects/_template-blender/project.config.json >/dev/null
 
+      - name: Validate GitHub Actions workflows
+        shell: bash
+        run: |
+          ACTIONLINT_VERSION="1.7.7"
+          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_x86_64.tar.gz"             -o "$RUNNER_TEMP/actionlint.tar.gz"
+          tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint"             .github/workflows/blender-smart-render.yml             .github/workflows/blender-workspace-selftest.yml
+
       - name: Validate template render plan
         shell: bash
         run: |

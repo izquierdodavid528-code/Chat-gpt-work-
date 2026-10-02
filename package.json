@@ -18,7 +18,8 @@
     "blender:test": "bash scripts/blender/test-headless.sh",
     "blender:new": "bash scripts/workspace/new-blender-project.sh",
     "blender:render": "bash scripts/workspace/render-blender.sh",
-    "blender:open": "bash scripts/workspace/open-blender.sh"
+    "blender:open": "bash scripts/workspace/open-blender.sh",
+    "blender:plan": "bash scripts/workspace/plan-blender.sh"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "2.0.0",

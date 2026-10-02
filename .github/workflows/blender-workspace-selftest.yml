@@ -70,16 +70,7 @@ jobs:
         run: |
           blender -b projects/_template-blender/out/scene.blend             -o "$RUNNER_TEMP/frame-####"             -F PNG             -f 1
           test -s "$RUNNER_TEMP/frame-0001.png"
-          python3 - <<'PY'
-import struct
-from pathlib import Path
-p=Path("/home/runner/work/_temp/frame-0001.png")
-with p.open("rb") as f:
-    sig=f.read(24)
-w,h=struct.unpack(">II", sig[16:24])
-assert (w,h)==(1080,1080), (w,h)
-print("template-frame", w, h)
-PY
+          python3 -c 'import struct, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/frame-0001.png"); data=p.read_bytes()[:24]; w,h=struct.unpack(">II", data[16:24]); assert (w,h)==(1080,1080), (w,h); print("template-frame", w, h)'
 
       - name: Self-test summary
         run: |

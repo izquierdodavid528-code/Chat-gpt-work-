@@ -2,6 +2,20 @@
 
 Este repositorio funciona como workspace central para proyectos multimedia creados desde ChatGPT/Codex y trabajados desde Android mediante GitHub Codespaces.
 
+## START HERE FOR ANY CHAT
+
+Para continuar el workspace desde un chat nuevo, usar este orden como fuente de verdad:
+
+1. leer `STUDIO_CONTEXT.md`;
+2. inspeccionar `projects/<slug>/project.config.json` del proyecto objetivo;
+3. revisar `WORKSPACE_AUDIT.md` para el último estado validado y las limitaciones conocidas;
+4. usar esta guía para la arquitectura completa;
+5. revisar el estado real de GitHub Actions y Drive antes de rerenderizar o modificar el pipeline;
+6. usar `Blender Smart Render` para Blender y no crear workflows específicos por proyecto salvo que exista una necesidad que el workflow genérico no pueda representar;
+7. no declarar una entrega final hasta que hayan pasado el contrato del master, integridad de frames, fidelity gate cuando aplique, verificación de video y entrega de producción.
+
+GitHub es la fuente de verdad para código, configuración, historial y estado de automatización. Drive es la fuente de verdad para assets pesados y entregas finales.
+
 ## Arquitectura
 
 - **GitHub**: codigo, historial, configuracion y automatizaciones.
@@ -120,34 +134,20 @@ Workflow canonico: `Blender Smart Render`.
 El antiguo `Blender Drive Render` fue retirado para evitar rutas de produccion duplicadas. `Blender Smart Render` incluye master unico, auditoria, fingerprint, seleccion automatica secuencial/paralela y verificacion final.
 
 
-## Progreso de render de Blender
+## Estado, checkpoints y recuperación de Blender
 
-Todos los renders nuevos de Blender pasan por `scripts/blender/render-with-progress.py`.
+`Blender Smart Render` trabaja por jobs y artifacts de GitHub Actions, no mediante un JSON de progreso publicado cada 30 segundos en Drive.
 
-Durante una animacion se genera:
+En un render paralelo, cada bloque terminado sube un artifact temporal con sus PNG y su reporte de tiempo. El master auditado también queda como artifact. Estos artifacts funcionan como checkpoints dentro de la ejecución y se conservan actualmente durante 14 días.
 
-```text
-<proyecto>/out/render-progress.json
-```
+Política de recuperación:
+- antes de rerenderizar, revisar si el run actual o un run reciente conserva artifacts utilizables;
+- usar los artifacts como evidencia y checkpoints cuando una recuperación manual o un rerun de jobs pueda evitar repetir trabajo;
+- no mezclar frames de masters distintos: el SHA-256 del master debe coincidir;
+- no asumir que existe resume automático entre ejecuciones independientes: el workflow genérico todavía no reconstruye por sí solo un run nuevo a partir de bloques de un run antiguo;
+- una entrega de producción completa se publica en Drive solo después de superar QA.
 
-El archivo informa:
-- estado: starting, rendering, completed, cancelled o failed;
-- frame actual;
-- frames totales;
-- porcentaje completado;
-- tiempo transcurrido;
-- ETA estimada;
-- fecha/hora de la ultima actualizacion.
-
-En GitHub Actions, el workflow publica ese JSON en Drive aproximadamente cada 30 segundos:
-
-```text
-Remotion Projects/<carpeta-del-proyecto>/renders/render-progress.json
-```
-
-Esto permite consultar el avance desde ChatGPT sin esperar a que termine el job. La estimacion restante es orientativa porque distintos frames pueden tardar tiempos diferentes.
-
-Nota: los jobs que ya estaban ejecutandose antes de incorporar este sistema no pueden mostrar porcentaje retroactivamente. Solo aplica a renders iniciados con la version nueva del workspace.
+El script `scripts/blender/render-with-progress.py` pertenece al flujo local/legacy de render directo y no es el mecanismo de progreso del Smart Render canónico.
 
 ## Crear proyectos desde GitHub sin terminal
 
@@ -197,14 +197,20 @@ npm run blender:test
 
 ## Criterio de finalizacion
 
-Un proyecto no se considera terminado hasta que:
-- abre correctamente en su herramienta visual;
-- compila o genera escena sin errores;
-- el render termina con codigo 0;
-- el archivo de salida existe;
-- el entorno de render queda registrado;
-- el resultado fue revisado visualmente;
-- el render final esta respaldado en Drive y/o GitHub Actions.
+Un render Blender de producción no se considera terminado hasta que:
+- el planner acepta la configuración;
+- el master se construye una sola vez y pasa `master-audit.py`;
+- `verify-master-contract.py` confirma versión, motor, rango, FPS, resolución y SHA-256;
+- todos los workers verifican el mismo master;
+- existen exactamente los PNG esperados con el padding configurado;
+- en paralelo, los frames de control pasan el fidelity gate;
+- FFmpeg genera el MP4 y ffprobe confirma propiedades esperadas;
+- `verify-delivery.py` emite PASS;
+- los reportes de trazabilidad quedan guardados;
+- para un run de producción, la entrega se sube a Drive y queda además un artifact temporal en Actions;
+- el resultado recibe revisión visual/artística cuando la entrega lo requiera.
+
+Una validación económica de pocos frames comprueba infraestructura y fidelidad, pero no sustituye la entrega completa de producción.
 
 
 ## Blender Smart Render canonico
@@ -217,6 +223,7 @@ Inputs:
 - `project_slug`: carpeta bajo `projects/`.
 - `mode`: `auto`, `sequential` o `parallel`.
 - `drive_project_dir`: override opcional de la carpeta de Drive.
+- `validation_frame_count`: `0` para producción completa; un entero positivo ejecuta una validación económica de los primeros N frames y no publica en Drive.
 
 Usar `auto` por defecto.
 
@@ -230,7 +237,7 @@ El workflow de regresion de infraestructura es:
 
 `.github/workflows/blender-workspace-selftest.yml`
 
-Ese self-test valida sintaxis, contrato de la plantilla, planner, instalacion exacta de Blender, construccion del master, auditoria y un frame real de prueba.
+Ese self-test valida sintaxis, contrato de la plantilla, planner, instalación exacta de Blender, construcción del master, auditoría, helpers de QA y un render real. Además invoca el mismo `Blender Smart Render` como workflow reutilizable con Neon Core en modo de validación de pocos frames; así se prueba el pipeline genérico sin lanzar un render final completo en cada cambio de infraestructura.
 
 Para contexto rapido en un chat nuevo, leer primero:
 
@@ -261,11 +268,12 @@ Para trabajos finales de Blender, el objetivo ya no es simplemente "terminar un 
 4. **Dependencias y simulaciones**
    - Un proyecto solo puede marcar `render.parallel.safe=true` despues de auditarlo.
    - Escenas sin simulacion secuencial usan `simulationPolicy: "none"`.
-   - Humo, fluidos, cloth, soft body, dynamic paint, particulas dependientes del tiempo o Geometry Nodes con simulation zones deben hornearse primero y usar `simulationPolicy: "baked"`.
-   - Si el auditor detecta una simulacion incompatible con la politica declarada, el render paralelo se rechaza.
+   - Humo, fluidos, cloth, soft body, dynamic paint, partículas dependientes del tiempo, rigid bodies o Geometry Nodes con simulation zones deben hornearse primero y usar `simulationPolicy: "baked"`.
+   - Los proyectos `baked` deben declarar `simulationCacheDir`. En producción, Smart Render recupera ese cache desde la carpeta del proyecto en Drive y lo distribuye junto al master conservando la ruta relativa.
+   - Si el auditor detecta una simulación incompatible, un cache ausente o dependencias externas que no quedaron empaquetadas, el render paralelo se rechaza.
 
 5. **Render paralelo por frames**
-   - `scripts/blender/parallel-plan.py` genera automaticamente bloques desde `project.config.json`.
+   - `scripts/blender/render-plan.py` valida `project.config.json`, decide la estrategia y genera automáticamente los bloques.
    - Todos los bloques usan el mismo maestro, la misma version de Blender, el mismo motor, color management, compositor y resolucion.
    - Los workers producen PNG, no videos parciales. Esto evita cortes de GOP, diferencias de codec y problemas al concatenar segmentos.
 
@@ -288,10 +296,12 @@ Para trabajos finales de Blender, el objetivo ya no es simplemente "terminar un 
    Cada entrega verificada debe incluir:
    - `master-manifest.json`;
    - `master-blend.sha256`;
+   - `master-contract-report.json`;
    - `render-environment.txt`;
    - `fidelity-report.txt`;
    - `block-timings.txt`;
    - `video-probe.json`;
+   - `delivery-report.json`;
    - video final.
 
 ### Configuracion de proyecto

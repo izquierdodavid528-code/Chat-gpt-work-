@@ -74,11 +74,11 @@ jobs:
       - name: Install pinned rclone
         run: |
           set -euo pipefail
-          RCLONE_VERSION="1.75.1"
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          PINNED_RCLONE_VERSION="1.75.1"
+          ARCHIVE="rclone-v${PINNED_RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${PINNED_RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v${PINNED_RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Ensure Drive project structure
         env:

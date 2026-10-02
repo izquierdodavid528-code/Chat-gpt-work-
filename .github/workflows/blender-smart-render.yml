@@ -63,7 +63,7 @@ concurrency:
 
 env:
   DRIVE_BASE: Remotion Projects
-  RCLONE_VERSION: "1.75.1"
+  PINNED_RCLONE_VERSION: "1.75.1"
 
 jobs:
   plan:
@@ -183,10 +183,10 @@ jobs:
         if: env.VALIDATION_ONLY != 'true'
         run: |
           set -euo pipefail
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          ARCHIVE="rclone-v${PINNED_RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${PINNED_RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v${PINNED_RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Pull project assets
         if: env.VALIDATION_ONLY != 'true'
@@ -544,10 +544,10 @@ jobs:
       - name: Install pinned rclone
         if: env.VALIDATION_ONLY != 'true'
         run: |
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          ARCHIVE="rclone-v${PINNED_RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${PINNED_RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v${PINNED_RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Upload final delivery to Drive
         if: env.VALIDATION_ONLY != 'true'
@@ -673,10 +673,10 @@ jobs:
       - name: Install pinned rclone
         if: env.VALIDATION_ONLY != 'true'
         run: |
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          ARCHIVE="rclone-v${PINNED_RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${PINNED_RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v${PINNED_RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Upload verified delivery to Drive
         if: env.VALIDATION_ONLY != 'true'
@@ -848,10 +848,10 @@ jobs:
       - name: Install pinned rclone
         run: |
           set -euo pipefail
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          ARCHIVE="rclone-v${PINNED_RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${PINNED_RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v${PINNED_RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Upload recovered delivery to Drive
         run: |

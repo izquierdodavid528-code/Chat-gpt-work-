@@ -63,7 +63,10 @@ scene.render.film_transparent = False
 scene.world.color = DARK[:3]
 
 # Color management: restrained contrast, not hyper-saturated.
-try:\n    scene.view_settings.look = "AgX - Medium High Contrast"\nexcept Exception:\n    pass
+try:
+    scene.view_settings.look = "AgX - Medium High Contrast"
+except Exception:
+    pass
 
 red = mat("Memorial Red", RED, metallic=0.1, roughness=0.28, emission=RED, strength=2.4)
 white = mat("Type White", WHITE, metallic=0.0, roughness=0.38)

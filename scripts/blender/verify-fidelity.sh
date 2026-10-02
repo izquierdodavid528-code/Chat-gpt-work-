@@ -15,8 +15,8 @@ test -s "$REF"
 test -s "$ACTUAL"
 mkdir -p "$(dirname "$REPORT")"
 
-REF_MD5="$(ffmpeg -v error -i "$REF" -f framemd5 - | tail -n 1 | awk -F\', \' \'{print $NF}\')"
-ACTUAL_MD5="$(ffmpeg -v error -i "$ACTUAL" -f framemd5 - | tail -n 1 | awk -F\', \' \'{print $NF}\')"
+REF_MD5="$(ffmpeg -v error -i "$REF" -f framemd5 - | tail -n 1 | sed \'s/.*,//; s/^ *//\')"
+ACTUAL_MD5="$(ffmpeg -v error -i "$ACTUAL" -f framemd5 - | tail -n 1 | sed \'s/.*,//; s/^ *//\')"
 
 WIDTH="$(identify -format "%w" "$REF")"
 HEIGHT="$(identify -format "%h" "$REF")"

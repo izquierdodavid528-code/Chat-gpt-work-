@@ -15,7 +15,10 @@
     "blender:install": "bash scripts/blender/install.sh && bash scripts/blender/install-gui.sh",
     "blender:start": "bash scripts/blender/start-gui.sh",
     "blender:stop": "bash scripts/blender/stop-gui.sh",
-    "blender:test": "bash scripts/blender/test-headless.sh"
+    "blender:test": "bash scripts/blender/test-headless.sh",
+    "blender:new": "bash scripts/workspace/new-blender-project.sh",
+    "blender:render": "bash scripts/workspace/render-blender.sh",
+    "blender:open": "bash scripts/workspace/open-blender.sh"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "2.0.0",

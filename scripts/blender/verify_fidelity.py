@@ -6,7 +6,10 @@ import sys
 from pathlib import Path
 
 if len(sys.argv) != 5:
-    raise SystemExit("Usage: verify_fidelity.py <reference.png> <actual.png> <frame-number> <report-file>")
+    raise SystemExit(
+        "Usage: verify_fidelity.py <reference.png> <actual.png> "
+        "<frame-number> <report-file>"
+    )
 
 ref = Path(sys.argv[1])
 actual = Path(sys.argv[2])
@@ -22,6 +25,12 @@ rmse_max = float(os.environ.get("FIDELITY_RMSE_MAX", "2e-5"))
 changed_fraction_max = float(
     os.environ.get("FIDELITY_CHANGED_FRACTION_MAX", "1e-4")
 )
+if not 0 <= rmse_max <= 1:
+    raise SystemExit("FIDELITY_RMSE_MAX must be between 0 and 1.")
+if not 0 <= changed_fraction_max <= 1:
+    raise SystemExit(
+        "FIDELITY_CHANGED_FRACTION_MAX must be between 0 and 1."
+    )
 
 def run_capture(cmd):
     p = subprocess.run(
@@ -33,15 +42,37 @@ def run_capture(cmd):
     )
     return (p.stdout + "\n" + p.stderr).strip(), p.returncode
 
-dims, _ = run_capture(["identify", "-format", "%w %h", str(ref)])
-parts = dims.strip().split()
-if len(parts) < 2:
-    raise SystemExit(f"Could not read image dimensions: {dims!r}")
-width, height = int(parts[0]), int(parts[1])
+def dimensions(path):
+    raw, rc = run_capture(["identify", "-format", "%w %h", str(path)])
+    parts = raw.strip().split()
+    if rc != 0 or len(parts) < 2:
+        raise SystemExit(f"Could not read image dimensions for {path}: {raw!r}")
+    return int(parts[0]), int(parts[1])
+
+ref_width, ref_height = dimensions(ref)
+actual_width, actual_height = dimensions(actual)
+if (ref_width, ref_height) != (actual_width, actual_height):
+    raise SystemExit(
+        "Fidelity comparison requires identical dimensions: "
+        f"reference={ref_width}x{ref_height}, "
+        f"actual={actual_width}x{actual_height}"
+    )
+
+width, height = ref_width, ref_height
 total_pixels = width * height
 
-ae_raw, _ = run_capture(["compare", "-metric", "AE", str(ref), str(actual), "null:"])
-rmse_raw, _ = run_capture(["compare", "-metric", "RMSE", str(ref), str(actual), "null:"])
+ae_raw, ae_rc = run_capture(
+    ["compare", "-metric", "AE", str(ref), str(actual), "null:"]
+)
+rmse_raw, rmse_rc = run_capture(
+    ["compare", "-metric", "RMSE", str(ref), str(actual), "null:"]
+)
+# ImageMagick compare returns 0 for identical images and 1 when pixels differ.
+# Values >1 mean the comparison itself failed and must never be treated as QA data.
+if ae_rc not in (0, 1):
+    raise SystemExit(f"ImageMagick AE comparison failed: {ae_raw!r}")
+if rmse_rc not in (0, 1):
+    raise SystemExit(f"ImageMagick RMSE comparison failed: {rmse_raw!r}")
 
 m_ae = re.search(r"([0-9]+(?:\.[0-9]+)?)", ae_raw)
 if not m_ae:

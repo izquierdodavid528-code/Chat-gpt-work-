@@ -2,348 +2,227 @@
 
 Last audit: 2026-10-02
 
-## Result
+## Executive conclusion
 
-The Blender production path is consolidated into one canonical production workflow:
+The workspace now has one reusable production architecture for video work:
+
+- ChatGPT/Codex plans, edits, researches, writes code and can place supplied or downloaded assets directly into the mounted Google Drive workspace.
+- GitHub is the source of truth for project code, render requests, configuration and automation.
+- Google Drive is the source of truth for heavy assets and final deliveries.
+- Remotion Smart Render is the canonical 2D/video assembly renderer.
+- Blender Smart Render is the canonical 3D/motion renderer.
+- Studio Render Request is the canonical single entrypoint that routes a project to the correct renderer from `projects/<slug>/render.request.json`.
+- New project creation also creates the standard Drive structure: `assets`, `renders`, `references`, `notes`.
+
+The old project-specific Remotion workflows have been retired. Active production workflows are intentionally small and generic.
+
+## Proven user-facing flow
+
+For a normal project the intended flow is:
+
+1. user provides media in ChatGPT, Drive or a public source;
+2. ChatGPT places chosen assets in `Remotion Projects/<project>/assets`;
+3. ChatGPT edits the project source in GitHub and may use the Remotion MCP for rapid frame-driven prototyping/preview;
+4. if 3D or complex motion is useful, a Blender project is built and rendered through Blender Smart Render;
+5. final assembly is rendered through the canonical renderer;
+6. FFmpeg/ffprobe and project-specific QA verify the output;
+7. the production result and reports are copied into the project's Drive `renders` folder;
+8. GitHub Actions keeps temporary artifacts/checkpoints.
+
+A direct ChatGPT-to-Drive ingest probe was executed successfully during this audit: a file was created in the runtime, uploaded into the mounted `Remotion Projects/_template/assets` folder, confirmed in Drive, and then deleted.
+
+## Canonical active workflows
+
+- `.github/workflows/studio-render-request.yml`
+- `.github/workflows/remotion-drive-render.yml` (workflow name: Remotion Smart Render)
+- `.github/workflows/remotion-workspace-selftest.yml`
+- `.github/workflows/blender-smart-render.yml`
+- `.github/workflows/blender-workspace-selftest.yml`
+- `.github/workflows/new-project.yml`
+
+Retired as redundant:
+- `remotion-render.yml`
+- `wow-demo-render.yml`
+- `generate-bruno-lock.yml`
+- legacy/project-specific Blender production workflows described below
+
+## Unified render entrypoint
+
+`Studio Render Request` watches:
+
+`projects/*/render.request.json`
+
+A request declares the engine and project. The workflow resolves the request and calls the reusable renderer. The tested Remotion route correctly:
+- resolved the request;
+- selected Remotion;
+- skipped Blender;
+- planned the render;
+- rendered the requested frame range;
+- ran technical QA;
+- stored a GitHub Actions delivery artifact.
+
+Successful unified-entrypoint validation:
+
+`37067771797` — SUCCESS
+
+## Remotion production path
+
+Canonical workflow:
+
+`.github/workflows/remotion-drive-render.yml`
+
+The workflow now:
+- reads `project.config.json` through `scripts/remotion/render-plan.py`;
+- uses exact Node/npm/Remotion versions;
+- requires a lockfile for reproducible installs;
+- pulls shared/project assets from Drive;
+- supports Remotion concurrency declared in project config;
+- supports economical frame-range validation;
+- renders H.264/YUV420p;
+- runs ffprobe;
+- runs `scripts/remotion/verify-delivery.py`;
+- writes `video-probe.json`, `delivery-report.json`, `render-environment.txt`;
+- publishes only full production deliveries to Drive;
+- keeps a GitHub artifact backup;
+- cleans temporary rclone credentials.
+
+Remotion template contract now includes:
+- `render.concurrency`
+- expected codec/dimensions/FPS
+- audio requirement
+- minimum duration
+
+Successful Remotion infrastructure validation:
+
+`37067871048` — SUCCESS
+
+This self-test includes syntax/config validation and a real reusable Smart Render integration render.
+
+Historical evidence also remains:
+- Remotion Drive Render `36955546882` — SUCCESS
+- delivery artifact ~25 MB
+
+## Blender production path
+
+Canonical workflow:
 
 `.github/workflows/blender-smart-render.yml`
 
-and one canonical infrastructure regression workflow:
-
-`.github/workflows/blender-workspace-selftest.yml`
-
-Project-specific Neon Core / Haaland experiment workflows and the legacy Blender Drive Render workflow are no longer present in the active workflow directory.
-
-Current validated main commit at the end of this audit:
-
-`ce576de6f2154c6f5240a13b1bbae5a145ca0d4a`
-
-## Canonical workflows
-
-### Blender Smart Render
-
-`.github/workflows/blender-smart-render.yml`
-
-Supported entry modes:
-- `workflow_dispatch` for normal manual production use.
-- `workflow_call` for regression/integration testing and reuse.
-
-Inputs:
-- `project_slug`
-- `mode = auto | sequential | parallel`
-- optional `drive_project_dir`
-- `validation_frame_count=0` for production; positive values render only the first N frames and do not publish to Drive.
-- optional `recovery_run_id` for compatible production artifact recovery.
-
-Concurrency:
-- production runs for the same project are serialized;
-- validation runs may cancel superseded validation work;
-- documentation-only changes do not trigger the Blender self-test or a heavy render.
-
-### Blender Workspace Self-Test
-
-`.github/workflows/blender-workspace-selftest.yml`
-
-It validates:
-- Python syntax;
-- shell syntax;
-- workflow syntax with actionlint;
-- template JSON;
-- planner behavior;
-- forced-parallel refusal for an unsafe template;
-- Neon Core and Haaland auto planning;
-- recovery-plan compatibility rules;
-- exact Blender 4.5.14 installation;
-- template build-only behavior;
-- master audit;
-- master/config contract verification;
-- real PNG rendering;
-- fidelity verifier;
-- FFmpeg assembly / ffprobe;
-- final delivery verifier;
-- a real reusable-workflow integration render of Neon Core with three frames.
-
-## Configuration and planning
-
-Canonical planner:
-
-`scripts/blender/render-plan.py`
-
-It:
-- requires a Blender `project.config.json`;
-- validates safe project-relative paths;
-- validates exact Blender version format;
-- validates frame count, FPS, resolution, frame padding and fidelity ranges;
-- refuses forced parallel unless `render.parallel.safe=true`;
-- requires `simulationPolicy=none|baked` for verified parallel;
-- requires `simulationCacheDir` for baked simulations;
-- chooses `sequential` vs `verified_parallel` in auto mode;
-- emits a machine-readable render plan and GitHub Actions outputs;
-- supports an economical validation frame count without changing the real master scene contract.
-
-New projects still start with:
-
-`render.parallel.safe=false`
-
-Parallel safety remains an explicit scene-audit decision.
-
-## Reproducible Blender
-
-Canonical installer:
-
-`scripts/blender/install-pinned.sh`
-
-Current baseline:
-- Blender 4.5.14
-- rclone 1.75.1
-- Ubuntu 24.04 GitHub-hosted runners
-
-The installer now verifies that the installed Blender version exactly matches the requested pinned version.
-
-## Immutable master contract
-
-A production run builds the project scene once with:
-
-`BLENDER_BUILD_ONLY=1`
-
-and then audits that single master with:
-
-`scripts/blender/master-audit.py`
-
-The audit:
-- checks missing external resources;
-- packs compatible resources;
-- rejects a supposedly immutable master that still depends on non-portable external files;
-- records render engine, frame range, FPS, resolution, compositor and color management;
-- detects common simulation signals including cloth, fluids, soft body, dynamic paint, particles, rigid bodies and Geometry Nodes simulation signals;
-- validates a declared baked cache;
-- fingerprints the final saved `.blend` with SHA-256.
-
-The master is then checked against `project.config.json` by:
-
-`scripts/blender/verify-master-contract.py`
-
-This blocks delivery when the actual master does not match the declared:
-- Blender version;
-- render engine;
-- full configured frame range;
-- FPS;
-- resolution;
-- simulation policy;
-- SHA-256.
-
-Every render worker verifies the same master SHA-256 before rendering.
-
-## Stateful simulations
-
-Verified parallel rendering is allowed only when:
-- `render.parallel.safe=true`;
-- the simulation policy is explicit;
-- unbaked stateful simulation is not distributed.
-
-For `simulationPolicy: "baked"`:
-- `simulationCacheDir` is mandatory;
-- production Smart Render can retrieve that cache from the project folder in Drive;
-- the cache is distributed with the immutable master while preserving its project-relative path.
-
-Baking itself remains a project preparation step; Smart Render does not create a correct simulation bake automatically.
-
-## Frames, fidelity and video delivery
-
-Workers render PNG frame sequences, not partial videos.
-
-The configured `framePadding` is used consistently for:
-- Blender output names;
-- completeness verification;
-- fidelity controls;
-- FFmpeg input.
-
-Parallel fidelity uses:
-
-`scripts/blender/verify_fidelity.py`
-
-Default strict EEVEE policy:
-- exact equality passes immediately;
-- otherwise normalized RMSE <= `2e-5`;
-- changed-pixel fraction <= `1e-4` (0.01%).
-
-Final delivery uses FFmpeg and ffprobe, then:
-
-`scripts/blender/verify-delivery.py`
-
-which verifies:
-- exact expected PNG numbering;
-- no missing or unexpected PNG frames;
-- final width / height;
-- frame rate;
-- frame count when available;
-- duration within frame-based tolerance.
-
-A verified delivery records:
-- `master-manifest.json`
-- `master-blend.sha256`
-- `master-contract-report.json`
-- `render-environment.txt`
-- `fidelity-report.txt`
-- `block-timings.txt`
-- `video-probe.json`
-- `delivery-report.json`
-- final MP4
-
-## Real generic workflow validation
-
-Successful GitHub Actions run:
-
-`37063214685`
-
-Result:
-
-`SUCCESS`
-
-This run is important because it did not execute the retired Neon-specific workflow. The self-test invoked the current reusable `Blender Smart Render` itself with:
-- project: `blender-neon-core-demo`
-- mode: `auto`
-- validation frame count: 3
-
-Successful jobs:
-- validate
-- integration-neon / plan
-- integration-neon / build-master
-- integration-neon / render-blocks (frames 1-3)
-- integration-neon / deliver-parallel
-
-The resulting delivery artifact was inspected after the run.
-
-Observed technical result:
-- frame range: 1-3
-- frame count: 3/3
-- padding: 4
-- missing frames: 0
-- unexpected frames: 0
-- codec: H.264
-- resolution: 720x1280
-- frame rate: 24 fps
-- duration: 0.125 s
-- master contract: PASS
-- delivery report: PASS
-
-Fidelity:
-- frame 1: 40 changed pixels, RMSE 1.49162e-5, PASS
-- frame 2: 61 changed pixels, RMSE 1.84201e-5, PASS
-- frame 3: 46 changed pixels, RMSE 1.59958e-5, PASS
-- final fidelity status: PASS
-
-This is a real integration validation of the current generic production pipeline while avoiding an unnecessary second 120-frame render.
-
-## Proven full Neon Core reference
-
-The earlier full production experiment remains the end-to-end reference for the complete 120-frame workload.
-
-Verified production characteristics:
-- H.264
-- 720x1280
-- 24 fps
-- 120 frames
-- 5.0 seconds
-- final fidelity PASS
-
-Historical successful recovery run:
-
-`37046777826`
-
-Historical successful full parallel run:
-
-`37057341934`
-
-Those runs proved the full-frame architecture and strict EEVEE tolerance, while the newer run `37063214685` proves that the current generic Smart Render implementation still executes the same master / block / fidelity / delivery architecture.
-
-## Recovery and resume
-
-Generic recovery is implemented in Smart Render through:
-
-`recovery_run_id=<source run id>`
-
-Compatibility is checked by:
-
-`scripts/blender/verify-recovery-plan.py`
-
-The verifier rejects:
-- validation-only sources;
-- changed `projectConfig`;
-- changed render contract;
-- changed frame range / dimensions / FPS / codec / fidelity settings.
-
-The recovery path is designed to:
-- reuse a compatible generic Smart Render master and frame artifacts;
-- verify the master fingerprint;
-- rerun fidelity and delivery QA;
-- reassemble and deliver without rerendering the frames.
-
-Current evidence level:
-- recovery contract logic is covered by the self-test;
-- the current generic normal render path is integration-tested end-to-end;
-- the current generic cross-run recovery path has not yet been exercised end-to-end with a full prior generic production run.
-
-This is intentional: the available new generic source run is validation-only and is correctly rejected as a production recovery source. Running another full 120-frame generic render only to create a recovery fixture would waste substantial compute.
-
-## Active Blender workflow cleanup
-
-Active Blender workflows:
-- `blender-smart-render.yml`
-- `blender-workspace-selftest.yml`
-
-Retired/removed project-specific or legacy Blender production workflows include the previous Neon-specific parallel, recovery, forensic and auto workflows, the Haaland-specific auto workflow, and the legacy Blender Drive Render workflow.
-
-Other active workflows in the repository are Remotion/project-management workflows and are not duplicate Blender production paths.
-
-## Source of truth for any new chat
-
-Read in this order:
-1. `STUDIO_CONTEXT.md`
-2. target `projects/<slug>/project.config.json`
-3. `WORKSPACE_AUDIT.md`
-4. `WORKSPACE_GUIDE.md`
-
-Operating rules:
-- inspect the real current `main` branch and Actions state before changing anything;
-- use `Blender Smart Render`, normally with `mode=auto`;
-- do not create project-specific Blender render workflows unless the generic contract genuinely cannot represent the requirement;
-- inspect recent artifacts before rerendering expensive frames;
-- never mix frames from different master SHA-256 values;
-- use Drive for heavy assets and final production deliveries;
-- do not expose `RCLONE_CONFIG_B64`;
-- do not call a render final until QA and delivery have succeeded.
-
-## Remaining limitations
-
-- GitHub-hosted CPU performance varies between runners.
-- EEVEE can show tiny host-to-host floating-point differences; the strict fidelity gate addresses this within the measured threshold.
-- `render.parallel.safe=true` is not inferred automatically; it remains an explicit scene-review decision.
-- Baking a stateful simulation remains a preparation step.
-- Validation mode skips Drive publication and is intended for infrastructure verification, not final delivery.
-- Generic recovery requires an explicit compatible `recovery_run_id`; automatic historical-run discovery is not implemented.
-- Generic recovery is contract-tested but not yet end-to-end integration-tested against a full generic production source run.
-- Automated technical QA does not replace subjective visual/artistic review.
-- GitHub Actions artifacts are temporary checkpoints (currently retained 14 days), not archival storage.
-
-## Final audit conclusion
-
-The generic Blender production architecture is operational and reusable.
-
-The current Smart Render workflow has real evidence for:
-- planning;
-- immutable master creation;
-- master/config contract verification;
-- parallel block rendering;
-- SHA-256 integrity;
-- PNG numbering;
-- strict EEVEE fidelity;
+The Blender path remains the stricter heavy-render path:
+- one immutable master `.blend`;
+- exact Blender version;
+- dependency/simulation audit;
+- master SHA-256;
+- master/config contract check;
+- sequential or verified parallel mode;
+- PNG frame output;
+- per-worker master verification;
+- fidelity gate for parallel EEVEE renders;
 - FFmpeg assembly;
-- ffprobe;
-- final delivery QA;
+- ffprobe/delivery QA;
 - artifacts/checkpoints;
-- cleanup;
-- concurrency;
-- reusable workflow invocation.
+- Drive production delivery;
+- optional compatible cross-run recovery.
 
-The remaining uncertainty is narrow and documented: generic cross-run recovery still needs a future full generic production source run before that branch can be called end-to-end integration-tested.
+Successful current generic integration validation:
+
+`37063214685` — SUCCESS
+
+That run used the current generic Smart Render itself on Neon Core and passed planner, master build, block render, fidelity and delivery.
+
+## Parallel rendering conclusion
+
+Parallel rendering was a good architectural decision for Blender scenes whose frames are independent after scene audit.
+
+It is especially useful when:
+- the scene is EEVEE/keyframe driven;
+- frames do not depend on unbaked temporal simulation state;
+- per-frame compute is substantial enough to amortize runner overhead.
+
+It should NOT be forced for:
+- short jobs where startup/upload overhead dominates;
+- unsafe/unbaked simulations;
+- workloads where a benchmark shows no wall-clock benefit.
+
+The design deliberately parallelizes frame calculation while preserving one artistic master.
+
+Remotion uses its own internal concurrency on a runner rather than the Blender block-matrix strategy. That is the simpler and normally faster default for React/Chromium rendering.
+
+## Asset ingestion contract
+
+Assets should live in:
+
+`Remotion Projects/<driveProjectDir>/assets`
+
+ChatGPT can ingest:
+- current conversation uploads;
+- Library files;
+- mounted Google Drive files;
+- runtime/generated files;
+- public assets downloaded after source/licensing review.
+
+This removes the previous manual requirement to download a ChatGPT attachment and re-upload it to GitHub.
+
+Large binaries should not be committed to GitHub unless there is a compelling repository reason.
+
+## New project contract
+
+`Create Workspace Project` creates code from the appropriate template and now creates the Drive subfolders:
+
+- `assets`
+- `renders`
+- `references`
+- `notes`
+
+New Remotion projects inherit the audited render contract and lockfile.
+New Blender projects inherit `render.parallel.safe=false` until audited.
+
+## What "autonomous" means here
+
+The infrastructure is autonomous for deterministic production operations:
+- project setup;
+- asset placement when ChatGPT has access to the source file;
+- code/config editing;
+- renderer selection;
+- render execution;
+- technical QA;
+- Drive delivery;
+- artifact/checkpoint retention;
+- cleanup.
+
+Human/artistic judgment is intentionally not automated away. ChatGPT still decides editorial choices from the brief/materials, and a user may choose to review previews/finals.
+
+## Hybrid Blender + Remotion work
+
+Both engines are available in the same workspace and can be used in one production.
+
+Current canonical pattern:
+1. Blender renders the 3D/motion element into Drive;
+2. that result becomes an asset for the Remotion final project;
+3. Remotion performs final edit, text/subtitles/audio/graphics/assembly;
+4. final QA publishes the Remotion output to Drive.
+
+This handoff is operable without user file shuffling because ChatGPT/Drive access can move the intermediate render into the final project's assets. It is not yet represented as one single `engine: hybrid` Actions job; ChatGPT orchestrates the two generic render requests when a production actually needs both engines. This avoids adding untested complexity to every project.
+
+## Remaining real limitations
+
+1. Remotion MCP is a rapid creation/preview surface, not the repository itself. Code used there must also be committed to the GitHub project for reproducible production. ChatGPT can do both in the same workflow.
+2. A public asset found on the web still needs source/licensing judgment before reuse.
+3. Subjective visual QA remains separate from technical ffprobe/fidelity QA.
+4. GitHub-hosted runner performance varies.
+5. Blender generic recovery is contract-tested but a future full generic production source run is still the ideal fixture for an end-to-end recovery test.
+6. Hybrid Blender→Remotion is automated from the assistant/operator perspective but is not yet a single monolithic GitHub Actions job.
+7. GitHub Actions artifacts are temporary checkpoints, not long-term storage; Drive remains the archive/delivery store.
+
+## Final status
+
+The workspace is now suitable as the default production system for future video projects.
+
+For most jobs, the user-facing interaction can be reduced to:
+- provide the brief/materials;
+- optionally review a preview;
+- receive the verified final in Drive.
+
+The user should not need to manually move media into GitHub, create Drive project folders, choose render workers, assemble Blender frame blocks, or upload final renders.
+
+The preferred operating rule is: use generic infrastructure and configuration; do not introduce project-specific workflows unless a project proves the generic contract is insufficient.

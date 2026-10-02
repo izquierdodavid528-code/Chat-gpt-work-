@@ -18,12 +18,37 @@ on:
         required: false
         default: ""
         type: string
+      validation_frame_count:
+        description: "0 = full render; positive = economical first-N-frame validation"
+        required: false
+        default: "0"
+        type: string
+  workflow_call:
+    inputs:
+      project_slug:
+        required: true
+        type: string
+      mode:
+        required: false
+        default: auto
+        type: string
+      drive_project_dir:
+        required: false
+        default: ""
+        type: string
+      validation_frame_count:
+        required: false
+        default: "0"
+        type: string
+    secrets:
+      RCLONE_CONFIG_B64:
+        required: false
 
 permissions:
   contents: read
 
 concurrency:
-  group: blender-smart-${{ inputs.project_slug }}
+  group: blender-smart-\${{ inputs.project_slug }}
   cancel-in-progress: false
 
 env:
@@ -34,30 +59,37 @@ jobs:
   plan:
     runs-on: ubuntu-24.04
     outputs:
-      project_slug: ${{ steps.plan.outputs.project_slug }}
-      project_dir: ${{ steps.plan.outputs.project_dir }}
-      drive_project: ${{ steps.plan.outputs.drive_project }}
-      scene_script: ${{ steps.plan.outputs.scene_script }}
-      blend_file: ${{ steps.plan.outputs.blend_file }}
-      video_file: ${{ steps.plan.outputs.video_file }}
-      blender_version: ${{ steps.plan.outputs.blender_version }}
-      frame_start: ${{ steps.plan.outputs.frame_start }}
-      frame_end: ${{ steps.plan.outputs.frame_end }}
-      frame_count: ${{ steps.plan.outputs.frame_count }}
-      fps: ${{ steps.plan.outputs.fps }}
-      render_mode: ${{ steps.plan.outputs.render_mode }}
-      simulation_policy: ${{ steps.plan.outputs.simulation_policy }}
-      simulation_cache_dir: ${{ steps.plan.outputs.simulation_cache_dir }}
-      pack_resources: ${{ steps.plan.outputs.pack_resources }}
-      control_frames: ${{ steps.plan.outputs.control_frames }}
-      matrix: ${{ steps.plan.outputs.matrix }}
-      max_parallel: ${{ steps.plan.outputs.max_parallel }}
-      video_codec: ${{ steps.plan.outputs.video_codec }}
-      video_preset: ${{ steps.plan.outputs.video_preset }}
-      video_crf: ${{ steps.plan.outputs.video_crf }}
-      video_pix_fmt: ${{ steps.plan.outputs.video_pix_fmt }}
-      fidelity_rmse_max: ${{ steps.plan.outputs.fidelity_rmse_max }}
-      fidelity_changed_fraction_max: ${{ steps.plan.outputs.fidelity_changed_fraction_max }}
+      project_slug: \${{ steps.plan.outputs.project_slug }}
+      project_dir: \${{ steps.plan.outputs.project_dir }}
+      drive_project: \${{ steps.plan.outputs.drive_project }}
+      scene_script: \${{ steps.plan.outputs.scene_script }}
+      blend_file: \${{ steps.plan.outputs.blend_file }}
+      video_file: \${{ steps.plan.outputs.video_file }}
+      blender_version: \${{ steps.plan.outputs.blender_version }}
+      config_frame_start: \${{ steps.plan.outputs.config_frame_start }}
+      config_frame_end: \${{ steps.plan.outputs.config_frame_end }}
+      config_frame_count: \${{ steps.plan.outputs.config_frame_count }}
+      frame_start: \${{ steps.plan.outputs.frame_start }}
+      frame_end: \${{ steps.plan.outputs.frame_end }}
+      frame_count: \${{ steps.plan.outputs.frame_count }}
+      frame_padding: \${{ steps.plan.outputs.frame_padding }}
+      fps: \${{ steps.plan.outputs.fps }}
+      width: \${{ steps.plan.outputs.width }}
+      height: \${{ steps.plan.outputs.height }}
+      render_mode: \${{ steps.plan.outputs.render_mode }}
+      validation_only: \${{ steps.plan.outputs.validation_only }}
+      simulation_policy: \${{ steps.plan.outputs.simulation_policy }}
+      simulation_cache_dir: \${{ steps.plan.outputs.simulation_cache_dir }}
+      pack_resources: \${{ steps.plan.outputs.pack_resources }}
+      control_frames: \${{ steps.plan.outputs.control_frames }}
+      matrix: \${{ steps.plan.outputs.matrix }}
+      max_parallel: \${{ steps.plan.outputs.max_parallel }}
+      video_codec: \${{ steps.plan.outputs.video_codec }}
+      video_preset: \${{ steps.plan.outputs.video_preset }}
+      video_crf: \${{ steps.plan.outputs.video_crf }}
+      video_pix_fmt: \${{ steps.plan.outputs.video_pix_fmt }}
+      fidelity_rmse_max: \${{ steps.plan.outputs.fidelity_rmse_max }}
+      fidelity_changed_fraction_max: \${{ steps.plan.outputs.fidelity_changed_fraction_max }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -65,17 +97,29 @@ jobs:
       - name: Resolve audited render plan
         id: plan
         shell: bash
+        env:
+          INPUT_PROJECT_SLUG: \${{ inputs.project_slug }}
+          INPUT_MODE: \${{ inputs.mode }}
+          INPUT_DRIVE_PROJECT_DIR: \${{ inputs.drive_project_dir }}
+          INPUT_VALIDATION_FRAME_COUNT: \${{ inputs.validation_frame_count }}
         run: |
-          PROJECT_DIR="projects/${{ inputs.project_slug }}"
+          set -euo pipefail
+          PROJECT_DIR="projects/$INPUT_PROJECT_SLUG"
           test -f "$PROJECT_DIR/project.config.json"
-          python3 scripts/blender/render-plan.py             "$PROJECT_DIR"             "$GITHUB_OUTPUT"             "$RUNNER_TEMP/render-plan.json"             "${{ inputs.mode }}"             "${{ inputs.drive_project_dir }}"
+          python3 scripts/blender/render-plan.py \
+            "$PROJECT_DIR" \
+            "$GITHUB_OUTPUT" \
+            "$RUNNER_TEMP/render-plan.json" \
+            "$INPUT_MODE" \
+            "$INPUT_DRIVE_PROJECT_DIR" \
+            "$INPUT_VALIDATION_FRAME_COUNT"
           cat "$RUNNER_TEMP/render-plan.json"
 
       - name: Upload render plan
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: blender-render-plan-${{ github.run_id }}
-          path: ${{ runner.temp }}/render-plan.json
+          name: blender-render-plan-\${{ github.run_id }}
+          path: \${{ runner.temp }}/render-plan.json
           retention-days: 14
           if-no-files-found: error
 
@@ -83,109 +127,178 @@ jobs:
     needs: plan
     runs-on: ubuntu-24.04
     env:
-      PROJECT_DIR: ${{ needs.plan.outputs.project_dir }}
-      DRIVE_PROJECT: ${{ needs.plan.outputs.drive_project }}
-      SCENE_SCRIPT: ${{ needs.plan.outputs.scene_script }}
-      BLEND_FILE: ${{ needs.plan.outputs.blend_file }}
-      BLENDER_VERSION: ${{ needs.plan.outputs.blender_version }}
-      RENDER_MODE: ${{ needs.plan.outputs.render_mode }}
-      CONTROL_FRAMES: ${{ needs.plan.outputs.control_frames }}
-      SIMULATION_POLICY: ${{ needs.plan.outputs.simulation_policy }}
-      SIMULATION_CACHE_DIR: ${{ needs.plan.outputs.simulation_cache_dir }}
-      PACK_RESOURCES: ${{ needs.plan.outputs.pack_resources }}
+      PROJECT_DIR: \${{ needs.plan.outputs.project_dir }}
+      DRIVE_PROJECT: \${{ needs.plan.outputs.drive_project }}
+      SCENE_SCRIPT: \${{ needs.plan.outputs.scene_script }}
+      BLEND_FILE: \${{ needs.plan.outputs.blend_file }}
+      BLENDER_VERSION: \${{ needs.plan.outputs.blender_version }}
+      RENDER_MODE: \${{ needs.plan.outputs.render_mode }}
+      FRAME_PADDING: \${{ needs.plan.outputs.frame_padding }}
+      CONTROL_FRAMES: \${{ needs.plan.outputs.control_frames }}
+      SIMULATION_POLICY: \${{ needs.plan.outputs.simulation_policy }}
+      SIMULATION_CACHE_DIR: \${{ needs.plan.outputs.simulation_cache_dir }}
+      PACK_RESOURCES: \${{ needs.plan.outputs.pack_resources }}
+      VALIDATION_ONLY: \${{ needs.plan.outputs.validation_only }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
+      - name: Download render plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: blender-render-plan-\${{ github.run_id }}
+          path: \${{ runner.temp }}/plan
+
       - name: Cache exact Blender
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
-          path: ~/.cache/chatgpt-work/blender/${{ env.BLENDER_VERSION }}
-          key: blender-${{ env.BLENDER_VERSION }}-linux-x64
+          path: ~/.cache/chatgpt-work/blender/\${{ env.BLENDER_VERSION }}
+          key: blender-\${{ env.BLENDER_VERSION }}-linux-x64
 
       - name: Install exact Blender
         run: bash scripts/blender/install-pinned.sh "$BLENDER_VERSION"
 
       - name: Restore rclone config
+        if: env.VALIDATION_ONLY != 'true'
         env:
-          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
+          RCLONE_CONFIG_B64: \${{ secrets.RCLONE_CONFIG_B64 }}
         run: |
+          set -euo pipefail
           test -n "$RCLONE_CONFIG_B64"
           printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$RUNNER_TEMP/rclone.conf"
           chmod 600 "$RUNNER_TEMP/rclone.conf"
 
       - name: Install pinned rclone
+        if: env.VALIDATION_ONLY != 'true'
         run: |
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          set -euo pipefail
+          ARCHIVE="rclone-v\${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v\${RCLONE_VERSION}/\${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v\${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Pull project assets
+        if: env.VALIDATION_ONLY != 'true'
         run: |
+          set -euo pipefail
           mkdir -p "$PROJECT_DIR/assets"
           if rclone --config "$RUNNER_TEMP/rclone.conf" lsf "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets" >/dev/null 2>&1; then
-            rclone --config "$RUNNER_TEMP/rclone.conf" copy               "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets"               "$PROJECT_DIR/assets"               --create-empty-src-dirs --transfers 8 --checkers 16
+            rclone --config "$RUNNER_TEMP/rclone.conf" copy \
+              "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets" \
+              "$PROJECT_DIR/assets" \
+              --create-empty-src-dirs --transfers 8 --checkers 16
           fi
 
-      - name: Verify baked simulation cache
-        if: env.SIMULATION_POLICY == 'baked'
+      - name: Pull and verify baked simulation cache
+        if: env.VALIDATION_ONLY != 'true' && env.SIMULATION_POLICY == 'baked'
         run: |
+          set -euo pipefail
           test -n "$SIMULATION_CACHE_DIR"
-          test -e "$PROJECT_DIR/$SIMULATION_CACHE_DIR"
+          mkdir -p "$PROJECT_DIR/$SIMULATION_CACHE_DIR"
+          if rclone --config "$RUNNER_TEMP/rclone.conf" lsf "drive:$DRIVE_BASE/$DRIVE_PROJECT/$SIMULATION_CACHE_DIR" >/dev/null 2>&1; then
+            rclone --config "$RUNNER_TEMP/rclone.conf" copy \
+              "drive:$DRIVE_BASE/$DRIVE_PROJECT/$SIMULATION_CACHE_DIR" \
+              "$PROJECT_DIR/$SIMULATION_CACHE_DIR" \
+              --create-empty-src-dirs --transfers 8 --checkers 16
+          fi
+          test -d "$PROJECT_DIR/$SIMULATION_CACHE_DIR"
+          test -n "$(find "$PROJECT_DIR/$SIMULATION_CACHE_DIR" -type f -print -quit)"
+
+      - name: Refuse baked validation without local cache
+        if: env.VALIDATION_ONLY == 'true' && env.SIMULATION_POLICY == 'baked'
+        run: |
+          set -euo pipefail
+          test -n "$SIMULATION_CACHE_DIR"
+          test -d "$PROJECT_DIR/$SIMULATION_CACHE_DIR"
+          test -n "$(find "$PROJECT_DIR/$SIMULATION_CACHE_DIR" -type f -print -quit)"
 
       - name: Build scene without final render
         env:
           BLENDER_BUILD_ONLY: "1"
           BLENDER_SKIP_POSTER: "1"
         run: |
-          rm -rf "$PROJECT_DIR/out"
-          mkdir -p "$PROJECT_DIR/out"
+          set -euo pipefail
+          mkdir -p "$(dirname "$PROJECT_DIR/$BLEND_FILE")" "$PROJECT_DIR/out"
+          rm -f "$PROJECT_DIR/$BLEND_FILE"
+          rm -f "$PROJECT_DIR/out/master-manifest.json" "$PROJECT_DIR/out/master-blend.sha256"
+          rm -rf "$PROJECT_DIR/out/reference"
           blender -b --python "$PROJECT_DIR/$SCENE_SCRIPT"
           test -s "$PROJECT_DIR/$BLEND_FILE"
 
       - name: Audit and fingerprint immutable master
         env:
-          BLENDER_SIMULATION_POLICY: ${{ env.SIMULATION_POLICY }}
-          BLENDER_PACK_RESOURCES: ${{ env.PACK_RESOURCES }}
+          BLENDER_SIMULATION_POLICY: \${{ env.SIMULATION_POLICY }}
+          BLENDER_SIMULATION_CACHE_DIR: \${{ env.SIMULATION_CACHE_DIR }}
+          BLENDER_PACK_RESOURCES: \${{ env.PACK_RESOURCES }}
+          BLENDER_PROJECT_ROOT: \${{ env.PROJECT_DIR }}
         run: |
-          blender -b "$PROJECT_DIR/$BLEND_FILE"             --python scripts/blender/master-audit.py             -- "$PROJECT_DIR/out/master-manifest.json"
+          set -euo pipefail
+          blender -b "$PROJECT_DIR/$BLEND_FILE" \
+            --python scripts/blender/master-audit.py \
+            -- "$PROJECT_DIR/out/master-manifest.json"
           sha256sum "$PROJECT_DIR/$BLEND_FILE" | tee "$PROJECT_DIR/out/master-blend.sha256"
+
+      - name: Verify master matches project contract
+        run: |
+          set -euo pipefail
+          python3 scripts/blender/verify-master-contract.py \
+            "$RUNNER_TEMP/plan/render-plan.json" \
+            "$PROJECT_DIR/out/master-manifest.json" \
+            "$PROJECT_DIR/out/master-blend.sha256" \
+            "$PROJECT_DIR/out/master-contract-report.json"
 
       - name: Render reference control frames
         if: env.RENDER_MODE == 'verified_parallel'
         run: |
+          set -euo pipefail
           mkdir -p "$PROJECT_DIR/out/reference"
+          HASHES="$(printf '%*s' "$FRAME_PADDING" '' | tr ' ' '#')"
           for FRAME in $CONTROL_FRAMES; do
-            blender -b "$PROJECT_DIR/$BLEND_FILE"               -o "$PROJECT_DIR/out/reference/####"               -F PNG               -f "$FRAME"
+            blender -b "$PROJECT_DIR/$BLEND_FILE" \
+              -o "$PROJECT_DIR/out/reference/$HASHES" \
+              -F PNG \
+              -f "$FRAME"
           done
 
       - name: Record master environment
         run: |
           {
             echo "mode=$RENDER_MODE"
+            echo "validation_only=$VALIDATION_ONLY"
             echo "runner=ubuntu-24.04"
+            echo "source_commit=$GITHUB_SHA"
             blender --version | head -n 3
-            echo "rclone=$(rclone version | head -n 1)"
+            if command -v rclone >/dev/null 2>&1; then
+              echo "rclone=$(rclone version | head -n 1)"
+            else
+              echo "rclone=not-used"
+            fi
             uname -a
           } > "$PROJECT_DIR/out/render-environment.txt"
 
       - name: Stage immutable master bundle
         run: |
-          mkdir -p "$RUNNER_TEMP/master/reference"
-          cp "$PROJECT_DIR/$BLEND_FILE" "$RUNNER_TEMP/master/master.blend"
-          cp "$PROJECT_DIR/out/master-manifest.json" "$RUNNER_TEMP/master/"
-          cp "$PROJECT_DIR/out/master-blend.sha256" "$RUNNER_TEMP/master/"
-          cp "$PROJECT_DIR/out/render-environment.txt" "$RUNNER_TEMP/master/"
+          set -euo pipefail
+          MASTER_ROOT="$RUNNER_TEMP/master"
+          mkdir -p "$MASTER_ROOT/project/$(dirname "$BLEND_FILE")" "$MASTER_ROOT/meta/reference"
+          cp "$PROJECT_DIR/$BLEND_FILE" "$MASTER_ROOT/project/$BLEND_FILE"
+          cp "$PROJECT_DIR/out/master-manifest.json" "$MASTER_ROOT/meta/"
+          cp "$PROJECT_DIR/out/master-blend.sha256" "$MASTER_ROOT/meta/"
+          cp "$PROJECT_DIR/out/master-contract-report.json" "$MASTER_ROOT/meta/"
+          cp "$PROJECT_DIR/out/render-environment.txt" "$MASTER_ROOT/meta/"
           if compgen -G "$PROJECT_DIR/out/reference/*.png" > /dev/null; then
-            cp "$PROJECT_DIR"/out/reference/*.png "$RUNNER_TEMP/master/reference/"
+            cp "$PROJECT_DIR"/out/reference/*.png "$MASTER_ROOT/meta/reference/"
+          fi
+          if [ "$SIMULATION_POLICY" = "baked" ]; then
+            mkdir -p "$MASTER_ROOT/project/$SIMULATION_CACHE_DIR"
+            cp -a "$PROJECT_DIR/$SIMULATION_CACHE_DIR/." "$MASTER_ROOT/project/$SIMULATION_CACHE_DIR/"
           fi
 
       - name: Upload immutable master bundle
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: blender-master-${{ github.run_id }}
-          path: ${{ runner.temp }}/master/
+          name: blender-master-\${{ github.run_id }}
+          path: \${{ runner.temp }}/master/
           retention-days: 14
           if-no-files-found: error
 
@@ -198,9 +311,11 @@ jobs:
     if: needs.plan.outputs.render_mode == 'sequential'
     runs-on: ubuntu-24.04
     env:
-      BLENDER_VERSION: ${{ needs.plan.outputs.blender_version }}
-      FRAME_START: ${{ needs.plan.outputs.frame_start }}
-      FRAME_END: ${{ needs.plan.outputs.frame_end }}
+      BLENDER_VERSION: \${{ needs.plan.outputs.blender_version }}
+      BLEND_FILE: \${{ needs.plan.outputs.blend_file }}
+      FRAME_START: \${{ needs.plan.outputs.frame_start }}
+      FRAME_END: \${{ needs.plan.outputs.frame_end }}
+      FRAME_PADDING: \${{ needs.plan.outputs.frame_padding }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -208,8 +323,8 @@ jobs:
       - name: Cache exact Blender
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
-          path: ~/.cache/chatgpt-work/blender/${{ env.BLENDER_VERSION }}
-          key: blender-${{ env.BLENDER_VERSION }}-linux-x64
+          path: ~/.cache/chatgpt-work/blender/\${{ env.BLENDER_VERSION }}
+          key: blender-\${{ env.BLENDER_VERSION }}-linux-x64
 
       - name: Install exact Blender
         run: bash scripts/blender/install-pinned.sh "$BLENDER_VERSION"
@@ -217,37 +332,45 @@ jobs:
       - name: Download immutable master
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: blender-master-${{ github.run_id }}
-          path: ${{ runner.temp }}/master
+          name: blender-master-\${{ github.run_id }}
+          path: \${{ runner.temp }}/master
 
       - name: Verify master fingerprint
         run: |
-          EXPECTED="$(cut -d' ' -f1 "$RUNNER_TEMP/master/master-blend.sha256")"
-          ACTUAL="$(sha256sum "$RUNNER_TEMP/master/master.blend" | cut -d' ' -f1)"
+          set -euo pipefail
+          EXPECTED="$(cut -d' ' -f1 "$RUNNER_TEMP/master/meta/master-blend.sha256")"
+          ACTUAL="$(sha256sum "$RUNNER_TEMP/master/project/$BLEND_FILE" | cut -d' ' -f1)"
           test "$EXPECTED" = "$ACTUAL"
 
-      - name: Render all frames sequentially
+      - name: Render all effective frames sequentially
         run: |
+          set -euo pipefail
           mkdir -p "$RUNNER_TEMP/frames"
+          HASHES="$(printf '%*s' "$FRAME_PADDING" '' | tr ' ' '#')"
           START_TS="$(date +%s)"
-          blender -b "$RUNNER_TEMP/master/master.blend"             -s "$FRAME_START"             -e "$FRAME_END"             -o "$RUNNER_TEMP/frames/####"             -F PNG             -a
+          blender -b "$RUNNER_TEMP/master/project/$BLEND_FILE" \
+            -s "$FRAME_START" \
+            -e "$FRAME_END" \
+            -o "$RUNNER_TEMP/frames/$HASHES" \
+            -F PNG \
+            -a
           END_TS="$(date +%s)"
           {
             echo "mode=sequential"
             echo "start=$FRAME_START"
             echo "end=$FRAME_END"
             echo "elapsed_seconds=$((END_TS-START_TS))"
-            echo "runner=${{ runner.name }}"
-            echo "master_sha256=$(cut -d' ' -f1 "$RUNNER_TEMP/master/master-blend.sha256")"
+            echo "runner=\${{ runner.name }}"
+            echo "master_sha256=$(cut -d' ' -f1 "$RUNNER_TEMP/master/meta/master-blend.sha256")"
           } > "$RUNNER_TEMP/frames/block-sequential.txt"
 
       - name: Upload sequential frames
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: blender-frames-sequential-${{ github.run_id }}
+          name: blender-frames-sequential-\${{ github.run_id }}
           path: |
-            ${{ runner.temp }}/frames/*.png
-            ${{ runner.temp }}/frames/block-sequential.txt
+            \${{ runner.temp }}/frames/*.png
+            \${{ runner.temp }}/frames/block-sequential.txt
           retention-days: 14
           if-no-files-found: error
 
@@ -257,10 +380,12 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
-      max-parallel: ${{ fromJSON(needs.plan.outputs.max_parallel) }}
-      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+      max-parallel: \${{ fromJSON(needs.plan.outputs.max_parallel) }}
+      matrix: \${{ fromJSON(needs.plan.outputs.matrix) }}
     env:
-      BLENDER_VERSION: ${{ needs.plan.outputs.blender_version }}
+      BLENDER_VERSION: \${{ needs.plan.outputs.blender_version }}
+      BLEND_FILE: \${{ needs.plan.outputs.blend_file }}
+      FRAME_PADDING: \${{ needs.plan.outputs.frame_padding }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -268,8 +393,8 @@ jobs:
       - name: Cache exact Blender
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
-          path: ~/.cache/chatgpt-work/blender/${{ env.BLENDER_VERSION }}
-          key: blender-${{ env.BLENDER_VERSION }}-linux-x64
+          path: ~/.cache/chatgpt-work/blender/\${{ env.BLENDER_VERSION }}
+          key: blender-\${{ env.BLENDER_VERSION }}-linux-x64
 
       - name: Install exact Blender
         run: bash scripts/blender/install-pinned.sh "$BLENDER_VERSION"
@@ -277,40 +402,48 @@ jobs:
       - name: Download immutable master
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: blender-master-${{ github.run_id }}
-          path: ${{ runner.temp }}/master
+          name: blender-master-\${{ github.run_id }}
+          path: \${{ runner.temp }}/master
 
       - name: Verify master fingerprint
         run: |
-          EXPECTED="$(cut -d' ' -f1 "$RUNNER_TEMP/master/master-blend.sha256")"
-          ACTUAL="$(sha256sum "$RUNNER_TEMP/master/master.blend" | cut -d' ' -f1)"
+          set -euo pipefail
+          EXPECTED="$(cut -d' ' -f1 "$RUNNER_TEMP/master/meta/master-blend.sha256")"
+          ACTUAL="$(sha256sum "$RUNNER_TEMP/master/project/$BLEND_FILE" | cut -d' ' -f1)"
           test "$EXPECTED" = "$ACTUAL"
 
-      - name: Render block ${{ matrix.block }} frames ${{ matrix.start }}-${{ matrix.end }}
+      - name: Render block \${{ matrix.block }} frames \${{ matrix.start }}-\${{ matrix.end }}
         run: |
+          set -euo pipefail
           mkdir -p "$RUNNER_TEMP/frames"
+          HASHES="$(printf '%*s' "$FRAME_PADDING" '' | tr ' ' '#')"
           START_TS="$(date +%s)"
-          blender -b "$RUNNER_TEMP/master/master.blend"             -s "${{ matrix.start }}"             -e "${{ matrix.end }}"             -o "$RUNNER_TEMP/frames/####"             -F PNG             -a
+          blender -b "$RUNNER_TEMP/master/project/$BLEND_FILE" \
+            -s "\${{ matrix.start }}" \
+            -e "\${{ matrix.end }}" \
+            -o "$RUNNER_TEMP/frames/$HASHES" \
+            -F PNG \
+            -a
           END_TS="$(date +%s)"
-          EXPECTED_COUNT=$(( ${{ matrix.end }} - ${{ matrix.start }} + 1 ))
+          EXPECTED_COUNT=$(( \${{ matrix.end }} - \${{ matrix.start }} + 1 ))
           ACTUAL_COUNT="$(find "$RUNNER_TEMP/frames" -maxdepth 1 -name '*.png' | wc -l)"
           test "$ACTUAL_COUNT" -eq "$EXPECTED_COUNT"
           {
-            echo "block=${{ matrix.block }}"
-            echo "start=${{ matrix.start }}"
-            echo "end=${{ matrix.end }}"
+            echo "block=\${{ matrix.block }}"
+            echo "start=\${{ matrix.start }}"
+            echo "end=\${{ matrix.end }}"
             echo "elapsed_seconds=$((END_TS-START_TS))"
-            echo "runner=${{ runner.name }}"
-            echo "master_sha256=$(cut -d' ' -f1 "$RUNNER_TEMP/master/master-blend.sha256")"
-          } > "$RUNNER_TEMP/frames/block-${{ matrix.block }}.txt"
+            echo "runner=\${{ runner.name }}"
+            echo "master_sha256=$(cut -d' ' -f1 "$RUNNER_TEMP/master/meta/master-blend.sha256")"
+          } > "$RUNNER_TEMP/frames/block-\${{ matrix.block }}.txt"
 
       - name: Upload block artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: blender-frames-${{ matrix.block }}-${{ github.run_id }}
+          name: blender-frames-\${{ matrix.block }}-\${{ github.run_id }}
           path: |
-            ${{ runner.temp }}/frames/*.png
-            ${{ runner.temp }}/frames/block-${{ matrix.block }}.txt
+            \${{ runner.temp }}/frames/*.png
+            \${{ runner.temp }}/frames/block-\${{ matrix.block }}.txt
           retention-days: 14
           if-no-files-found: error
 
@@ -319,17 +452,20 @@ jobs:
     if: needs.plan.outputs.render_mode == 'sequential'
     runs-on: ubuntu-24.04
     env:
-      PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
-      DRIVE_PROJECT: ${{ needs.plan.outputs.drive_project }}
-      FRAME_START: ${{ needs.plan.outputs.frame_start }}
-      FRAME_END: ${{ needs.plan.outputs.frame_end }}
-      FRAME_COUNT: ${{ needs.plan.outputs.frame_count }}
-      FPS: ${{ needs.plan.outputs.fps }}
-      VIDEO_FILE: ${{ needs.plan.outputs.video_file }}
-      VIDEO_CODEC: ${{ needs.plan.outputs.video_codec }}
-      VIDEO_PRESET: ${{ needs.plan.outputs.video_preset }}
-      VIDEO_CRF: ${{ needs.plan.outputs.video_crf }}
-      VIDEO_PIX_FMT: ${{ needs.plan.outputs.video_pix_fmt }}
+      PROJECT_SLUG: \${{ needs.plan.outputs.project_slug }}
+      DRIVE_PROJECT: \${{ needs.plan.outputs.drive_project }}
+      FRAME_START: \${{ needs.plan.outputs.frame_start }}
+      FRAME_END: \${{ needs.plan.outputs.frame_end }}
+      FRAME_PADDING: \${{ needs.plan.outputs.frame_padding }}
+      FPS: \${{ needs.plan.outputs.fps }}
+      WIDTH: \${{ needs.plan.outputs.width }}
+      HEIGHT: \${{ needs.plan.outputs.height }}
+      VIDEO_FILE: \${{ needs.plan.outputs.video_file }}
+      VIDEO_CODEC: \${{ needs.plan.outputs.video_codec }}
+      VIDEO_PRESET: \${{ needs.plan.outputs.video_preset }}
+      VIDEO_CRF: \${{ needs.plan.outputs.video_crf }}
+      VIDEO_PIX_FMT: \${{ needs.plan.outputs.video_pix_fmt }}
+      VALIDATION_ONLY: \${{ needs.plan.outputs.validation_only }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -337,14 +473,14 @@ jobs:
       - name: Download immutable master
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: blender-master-${{ github.run_id }}
-          path: ${{ runner.temp }}/master
+          name: blender-master-\${{ github.run_id }}
+          path: \${{ runner.temp }}/master
 
       - name: Download sequential frames
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: blender-frames-sequential-${{ github.run_id }}
-          path: ${{ runner.temp }}/frames
+          name: blender-frames-sequential-\${{ github.run_id }}
+          path: \${{ runner.temp }}/frames
 
       - name: Install FFmpeg
         run: |
@@ -353,37 +489,57 @@ jobs:
 
       - name: Verify, assemble and inspect
         run: |
-          COUNT="$(find "$RUNNER_TEMP/frames" -maxdepth 1 -name '*.png' | wc -l)"
-          test "$COUNT" -eq "$FRAME_COUNT"
-          for FRAME in $(seq "$FRAME_START" "$FRAME_END"); do
-            NAME="$(printf '%04d.png' "$FRAME")"
-            test -s "$RUNNER_TEMP/frames/$NAME"
-          done
+          set -euo pipefail
           mkdir -p out
+          PATTERN="%0\${FRAME_PADDING}d.png"
           OUTPUT_NAME="$(basename "$VIDEO_FILE")"
-          ffmpeg -y             -framerate "$FPS"             -start_number "$FRAME_START"             -i "$RUNNER_TEMP/frames/%04d.png"             -c:v "$VIDEO_CODEC"             -preset "$VIDEO_PRESET"             -crf "$VIDEO_CRF"             -pix_fmt "$VIDEO_PIX_FMT"             -movflags +faststart             -an             -metadata creation_time=1970-01-01T00:00:00Z             "out/$OUTPUT_NAME"
-          ffprobe -v error             -show_entries stream=codec_name,width,height,r_frame_rate,nb_frames             -show_entries format=duration,size             -of json             "out/$OUTPUT_NAME" > out/video-probe.json
-          cp "$RUNNER_TEMP/master/master-manifest.json" out/
-          cp "$RUNNER_TEMP/master/master-blend.sha256" out/
-          cp "$RUNNER_TEMP/master/render-environment.txt" out/
+          ffmpeg -y \
+            -framerate "$FPS" \
+            -start_number "$FRAME_START" \
+            -i "$RUNNER_TEMP/frames/$PATTERN" \
+            -c:v "$VIDEO_CODEC" \
+            -preset "$VIDEO_PRESET" \
+            -crf "$VIDEO_CRF" \
+            -pix_fmt "$VIDEO_PIX_FMT" \
+            -movflags +faststart \
+            -an \
+            -metadata creation_time=1970-01-01T00:00:00Z \
+            "out/$OUTPUT_NAME"
+          test -s "out/$OUTPUT_NAME"
+          ffprobe -v error \
+            -show_entries stream=codec_type,codec_name,width,height,r_frame_rate,nb_frames \
+            -show_entries format=duration,size \
+            -of json \
+            "out/$OUTPUT_NAME" > out/video-probe.json
+          python3 scripts/blender/verify-delivery.py \
+            "$RUNNER_TEMP/frames" "$FRAME_START" "$FRAME_END" "$FRAME_PADDING" \
+            out/video-probe.json "$WIDTH" "$HEIGHT" "$FPS" out/delivery-report.json
+          printf 'mode=sequential\nresult=NOT_APPLICABLE\n' > out/fidelity-report.txt
+          cp "$RUNNER_TEMP/master/meta/master-manifest.json" out/
+          cp "$RUNNER_TEMP/master/meta/master-blend.sha256" out/
+          cp "$RUNNER_TEMP/master/meta/master-contract-report.json" out/
+          cp "$RUNNER_TEMP/master/meta/render-environment.txt" out/
           cp "$RUNNER_TEMP/frames/block-sequential.txt" out/block-timings.txt
 
       - name: Restore rclone config
+        if: env.VALIDATION_ONLY != 'true'
         env:
-          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
+          RCLONE_CONFIG_B64: \${{ secrets.RCLONE_CONFIG_B64 }}
         run: |
           test -n "$RCLONE_CONFIG_B64"
           printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$RUNNER_TEMP/rclone.conf"
           chmod 600 "$RUNNER_TEMP/rclone.conf"
 
       - name: Install pinned rclone
+        if: env.VALIDATION_ONLY != 'true'
         run: |
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          ARCHIVE="rclone-v\${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v\${RCLONE_VERSION}/\${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v\${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Upload final delivery to Drive
+        if: env.VALIDATION_ONLY != 'true'
         run: |
           rclone --config "$RUNNER_TEMP/rclone.conf" mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"
           rclone --config "$RUNNER_TEMP/rclone.conf" copy out "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders" --transfers 4 --checkers 8
@@ -391,7 +547,7 @@ jobs:
       - name: Upload final artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: blender-sequential-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
+          name: blender-delivery-\${{ env.PROJECT_SLUG }}-\${{ github.run_id }}
           path: out/
           retention-days: 14
           if-no-files-found: error
@@ -405,20 +561,23 @@ jobs:
     if: needs.plan.outputs.render_mode == 'verified_parallel'
     runs-on: ubuntu-24.04
     env:
-      PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
-      DRIVE_PROJECT: ${{ needs.plan.outputs.drive_project }}
-      FRAME_START: ${{ needs.plan.outputs.frame_start }}
-      FRAME_END: ${{ needs.plan.outputs.frame_end }}
-      FRAME_COUNT: ${{ needs.plan.outputs.frame_count }}
-      FPS: ${{ needs.plan.outputs.fps }}
-      CONTROL_FRAMES: ${{ needs.plan.outputs.control_frames }}
-      VIDEO_FILE: ${{ needs.plan.outputs.video_file }}
-      VIDEO_CODEC: ${{ needs.plan.outputs.video_codec }}
-      VIDEO_PRESET: ${{ needs.plan.outputs.video_preset }}
-      VIDEO_CRF: ${{ needs.plan.outputs.video_crf }}
-      VIDEO_PIX_FMT: ${{ needs.plan.outputs.video_pix_fmt }}
-      FIDELITY_RMSE_MAX: ${{ needs.plan.outputs.fidelity_rmse_max }}
-      FIDELITY_CHANGED_FRACTION_MAX: ${{ needs.plan.outputs.fidelity_changed_fraction_max }}
+      PROJECT_SLUG: \${{ needs.plan.outputs.project_slug }}
+      DRIVE_PROJECT: \${{ needs.plan.outputs.drive_project }}
+      FRAME_START: \${{ needs.plan.outputs.frame_start }}
+      FRAME_END: \${{ needs.plan.outputs.frame_end }}
+      FRAME_PADDING: \${{ needs.plan.outputs.frame_padding }}
+      FPS: \${{ needs.plan.outputs.fps }}
+      WIDTH: \${{ needs.plan.outputs.width }}
+      HEIGHT: \${{ needs.plan.outputs.height }}
+      CONTROL_FRAMES: \${{ needs.plan.outputs.control_frames }}
+      VIDEO_FILE: \${{ needs.plan.outputs.video_file }}
+      VIDEO_CODEC: \${{ needs.plan.outputs.video_codec }}
+      VIDEO_PRESET: \${{ needs.plan.outputs.video_preset }}
+      VIDEO_CRF: \${{ needs.plan.outputs.video_crf }}
+      VIDEO_PIX_FMT: \${{ needs.plan.outputs.video_pix_fmt }}
+      FIDELITY_RMSE_MAX: \${{ needs.plan.outputs.fidelity_rmse_max }}
+      FIDELITY_CHANGED_FRACTION_MAX: \${{ needs.plan.outputs.fidelity_changed_fraction_max }}
+      VALIDATION_ONLY: \${{ needs.plan.outputs.validation_only }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -426,14 +585,14 @@ jobs:
       - name: Download immutable master
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          name: blender-master-${{ github.run_id }}
-          path: ${{ runner.temp }}/master
+          name: blender-master-\${{ github.run_id }}
+          path: \${{ runner.temp }}/master
 
       - name: Download all frame blocks
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
-          pattern: blender-frames-*-${{ github.run_id }}
-          path: ${{ runner.temp }}/frames
+          pattern: blender-frames-*-\${{ github.run_id }}
+          path: \${{ runner.temp }}/frames
           merge-multiple: true
 
       - name: Install verification tools
@@ -443,49 +602,73 @@ jobs:
 
       - name: Verify all frames and fidelity controls
         run: |
-          COUNT="$(find "$RUNNER_TEMP/frames" -maxdepth 1 -name '*.png' | wc -l)"
-          test "$COUNT" -eq "$FRAME_COUNT"
-          for FRAME in $(seq "$FRAME_START" "$FRAME_END"); do
-            NAME="$(printf '%04d.png' "$FRAME")"
-            test -s "$RUNNER_TEMP/frames/$NAME"
-          done
+          set -euo pipefail
           REPORT="$RUNNER_TEMP/fidelity-report.txt"
           : > "$REPORT"
           for FRAME in $CONTROL_FRAMES; do
-            NAME="$(printf '%04d.png' "$FRAME")"
-            bash scripts/blender/verify-fidelity.sh               "$RUNNER_TEMP/master/reference/$NAME"               "$RUNNER_TEMP/frames/$NAME"               "$FRAME"               "$REPORT"
+            NAME="$(printf "%0\${FRAME_PADDING}d.png" "$FRAME")"
+            bash scripts/blender/verify-fidelity.sh \
+              "$RUNNER_TEMP/master/meta/reference/$NAME" \
+              "$RUNNER_TEMP/frames/$NAME" \
+              "$FRAME" \
+              "$REPORT"
           done
           echo "FIDELITY_CHECK=PASS" | tee -a "$REPORT"
           cat "$REPORT"
 
       - name: Assemble and inspect verified MP4
         run: |
+          set -euo pipefail
           mkdir -p out
+          PATTERN="%0\${FRAME_PADDING}d.png"
           OUTPUT_NAME="$(basename "$VIDEO_FILE")"
-          ffmpeg -y             -framerate "$FPS"             -start_number "$FRAME_START"             -i "$RUNNER_TEMP/frames/%04d.png"             -c:v "$VIDEO_CODEC"             -preset "$VIDEO_PRESET"             -crf "$VIDEO_CRF"             -pix_fmt "$VIDEO_PIX_FMT"             -movflags +faststart             -an             -metadata creation_time=1970-01-01T00:00:00Z             "out/$OUTPUT_NAME"
-          ffprobe -v error             -show_entries stream=codec_name,width,height,r_frame_rate,nb_frames             -show_entries format=duration,size             -of json             "out/$OUTPUT_NAME" > out/video-probe.json
+          ffmpeg -y \
+            -framerate "$FPS" \
+            -start_number "$FRAME_START" \
+            -i "$RUNNER_TEMP/frames/$PATTERN" \
+            -c:v "$VIDEO_CODEC" \
+            -preset "$VIDEO_PRESET" \
+            -crf "$VIDEO_CRF" \
+            -pix_fmt "$VIDEO_PIX_FMT" \
+            -movflags +faststart \
+            -an \
+            -metadata creation_time=1970-01-01T00:00:00Z \
+            "out/$OUTPUT_NAME"
+          test -s "out/$OUTPUT_NAME"
+          ffprobe -v error \
+            -show_entries stream=codec_type,codec_name,width,height,r_frame_rate,nb_frames \
+            -show_entries format=duration,size \
+            -of json \
+            "out/$OUTPUT_NAME" > out/video-probe.json
+          python3 scripts/blender/verify-delivery.py \
+            "$RUNNER_TEMP/frames" "$FRAME_START" "$FRAME_END" "$FRAME_PADDING" \
+            out/video-probe.json "$WIDTH" "$HEIGHT" "$FPS" out/delivery-report.json
           cp "$RUNNER_TEMP/fidelity-report.txt" out/
-          cp "$RUNNER_TEMP/master/master-manifest.json" out/
-          cp "$RUNNER_TEMP/master/master-blend.sha256" out/
-          cp "$RUNNER_TEMP/master/render-environment.txt" out/
+          cp "$RUNNER_TEMP/master/meta/master-manifest.json" out/
+          cp "$RUNNER_TEMP/master/meta/master-blend.sha256" out/
+          cp "$RUNNER_TEMP/master/meta/master-contract-report.json" out/
+          cp "$RUNNER_TEMP/master/meta/render-environment.txt" out/
           cat "$RUNNER_TEMP"/frames/block-*.txt > out/block-timings.txt
 
       - name: Restore rclone config
+        if: env.VALIDATION_ONLY != 'true'
         env:
-          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
+          RCLONE_CONFIG_B64: \${{ secrets.RCLONE_CONFIG_B64 }}
         run: |
           test -n "$RCLONE_CONFIG_B64"
           printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$RUNNER_TEMP/rclone.conf"
           chmod 600 "$RUNNER_TEMP/rclone.conf"
 
       - name: Install pinned rclone
+        if: env.VALIDATION_ONLY != 'true'
         run: |
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          ARCHIVE="rclone-v\${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v\${RCLONE_VERSION}/\${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v\${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Upload verified delivery to Drive
+        if: env.VALIDATION_ONLY != 'true'
         run: |
           rclone --config "$RUNNER_TEMP/rclone.conf" mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"
           rclone --config "$RUNNER_TEMP/rclone.conf" copy out "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders" --transfers 4 --checkers 8
@@ -493,7 +676,7 @@ jobs:
       - name: Upload verified artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: blender-verified-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
+          name: blender-delivery-\${{ env.PROJECT_SLUG }}-\${{ github.run_id }}
           path: out/
           retention-days: 14
           if-no-files-found: error

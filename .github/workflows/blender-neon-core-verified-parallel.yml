@@ -7,6 +7,7 @@ on:
       - "scripts/blender/install-pinned.sh"
       - "scripts/blender/master-audit.py"
       - "scripts/blender/parallel-plan.py"
+      - "scripts/blender/verify-fidelity.sh"
       - "projects/blender-neon-core-demo/project.config.json"
       - "projects/blender-neon-core-demo/scene.py"
   workflow_dispatch:

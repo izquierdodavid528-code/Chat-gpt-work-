@@ -5,7 +5,7 @@
   "concept": "EL PULSO DE LA SALA",
   "targetDurationSeconds": {
     "min": 58,
-    "max": 62
+    "max": 58
   },
   "output": {
     "width": 1080,
@@ -52,7 +52,7 @@
       "id": "blender-bridge",
       "timeline": {
         "start": 4.8,
-        "end": 6.3
+        "end": 6
       },
       "sourceWindowApprox": null,
       "purpose": "Premium identity bridge",
@@ -62,22 +62,22 @@
     {
       "id": "context",
       "timeline": {
-        "start": 6.3,
-        "end": 8.5
+        "start": 4.8,
+        "end": 6
       },
       "sourceWindowApprox": {
         "startSec": 0,
         "endSec": 20
       },
-      "purpose": "Identify speaker/event/date",
+      "purpose": "Speaker/date/context integrated into the bridge; no separate context card.",
       "visual": "wide UN shot in documentary window",
       "audio": "music enters under room tone"
     },
     {
       "id": "principle",
       "timeline": {
-        "start": 8.5,
-        "end": 20.5
+        "start": 6,
+        "end": 18
       },
       "sourceWindowApprox": {
         "startSec": 49.9,
@@ -95,8 +95,8 @@
     {
       "id": "consequence",
       "timeline": {
-        "start": 20.5,
-        "end": 33.5
+        "start": 18,
+        "end": 31
       },
       "sourceWindowApprox": {
         "startSec": 120,
@@ -114,8 +114,8 @@
     {
       "id": "dialogue",
       "timeline": {
-        "start": 33.5,
-        "end": 44.5
+        "start": 31,
+        "end": 42
       },
       "sourceWindowApprox": {
         "startSec": 780,
@@ -132,8 +132,8 @@
     {
       "id": "payoff",
       "timeline": {
-        "start": 44.5,
-        "end": 55
+        "start": 42,
+        "end": 52.5
       },
       "sourceWindowApprox": {
         "startSec": 1180,
@@ -151,8 +151,8 @@
     {
       "id": "end-card",
       "timeline": {
-        "start": 55,
-        "end": 60
+        "start": 52.5,
+        "end": 58
       },
       "sourceWindowApprox": null,
       "purpose": "Source/context + Memorial identity",
@@ -182,7 +182,17 @@
         "SourceBug",
         "EndCard",
         "AudioMaster"
-      ]
+      ],
+      "audio": {
+        "bed": "music-bed-v3.wav",
+        "durationSeconds": 58,
+        "sampleRateHz": 48000,
+        "policy": "continuous editorial underscore with ducking under voice and near-silence under final quote"
+      },
+      "chapterTransitions": {
+        "style": "4-8 frame restrained red-line editorial transition",
+        "voiceMicrofadeFrames": 4
+      }
     },
     "qa": [
       "visual-review",

@@ -33,7 +33,7 @@ Debe ser evidente cuándo una cifra o afirmación procede del discurso.
 
 Abrir con el final.
 
-Primeros 2–2.5 s:
+Primeros 4–5 s:
 - no logo de entrada;
 - no saludo;
 - no placa institucional larga;
@@ -56,13 +56,13 @@ El hook debe funcionar también sin audio.
 
 ## Estructura temporal objetivo
 
-### 0:00–0:02.5 — Cold open
+### 0:00–0:04.8 — Cold open
 Frase final del discurso. Rostro + voz original + subtítulo. Sin música durante las primeras palabras.
 
-### 0:02.5–0:04.2 — Motion bridge Blender
+### 0:04.8–0:06.3 — Motion bridge Blender
 Opener 3D breve. No superar 1.7 s. Objetivo: identidad premium y pattern interrupt, no espectáculo.
 
-### 0:04.2–0:07 — Contexto
+### 0:06.3–0:08.5 — Contexto
 Plano abierto real de la Asamblea.
 Texto:
 BRUNO RODRÍGUEZ PARRILLA
@@ -71,7 +71,7 @@ NACIONES UNIDAS · 26 SEP 2026
 
 Secundario opcional: INTERVENCIÓN: ~21 MIN
 
-### 0:07–0:20 — CAPÍTULO 1 · PRINCIPIO
+### 0:08.5–0:20.5 — CAPÍTULO 1 · PRINCIPIO
 Usar el pasaje inicial sobre expansionismo, uso de la fuerza, derecho internacional y soberanía.
 
 No usar los 34 s continuos del V2. Extraer únicamente las frases necesarias para construir una idea completa.
@@ -85,7 +85,7 @@ Visual:
 
 Capítulo: 01 · DERECHO INTERNACIONAL
 
-### 0:20–0:34 — CAPÍTULO 2 · CONSECUENCIA
+### 0:20.5–0:33.5 — CAPÍTULO 2 · CONSECUENCIA
 Seleccionar una frase concreta de la sección sobre presión económica.
 
 Candidato principal:
@@ -99,7 +99,7 @@ Tratamiento obligatorio:
 
 Capítulo: 02 · PRESIÓN ECONÓMICA
 
-### 0:34–0:47 — CAPÍTULO 3 · DIÁLOGO
+### 0:33.5–0:44.5 — CAPÍTULO 3 · DIÁLOGO
 Usar la parte en la que declara disposición a dialogar con Estados Unidos sobre diferencias bilaterales y a mantener relaciones comerciales.
 
 Este bloque es esencial porque evita un montaje unidimensional.
@@ -112,7 +112,7 @@ Visual:
 
 Capítulo: 03 · DIÁLOGO
 
-### 0:47–0:59 — PAYOFF
+### 0:44.5–0:55 — PAYOFF
 Volver al cierre del discurso. Usar una versión más completa de la secuencia que culmina en:
 “La ley de la selva no puede ser el futuro de la humanidad.”
 
@@ -122,7 +122,7 @@ En los últimos 1.5–2 s:
 - pasar de close-up a plano abierto o viceversa;
 - no añadir CTA.
 
-### 0:59–1:03/1:06 — End card
+### 0:55–0:59/1:01 — End card
 Negro.
 Logo Memorial con respiración.
 Texto:

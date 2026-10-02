@@ -193,6 +193,7 @@ jobs:
           fi
           "$CHROME_BIN" --version
           "$CHROME_BIN" --version | grep -F "149.0.7790.0"
+          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
 
       - name: Record render environment
         shell: bash

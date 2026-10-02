@@ -39,10 +39,10 @@ type Segment = {
 const SEGMENTS: Segment[] = [
   // Until the master source is upgraded from 640x360, every real shot stays in a
   // native 16:9 documentary window. Fake vertical close-ups exaggerate softness.
-  {id: "cold", from: 0, duration: 4.8, sourceStart: 1160.88, mode: "window"},
+  {id: "cold", from: 0, duration: 4.8, sourceStart: 1160.43, mode: "window"},
   {id: "principle", from: 8.5, duration: 12, sourceStart: 49.883, chapter: "DERECHO INTERNACIONAL", chapterIndex: "01", mode: "window"},
   {id: "containers", from: 20.5, duration: 13, sourceStart: 208.68, chapter: "PRESIÓN ECONÓMICA", chapterIndex: "02", mode: "window"},
-  {id: "dialogue", from: 33.5, duration: 11, sourceStart: 747.88, chapter: "DIÁLOGO", chapterIndex: "03", mode: "window"},
+  {id: "dialogue", from: 33.5, duration: 11, sourceStart: 745.50, chapter: "DIÁLOGO", chapterIndex: "03", mode: "window"},
   {id: "payoff", from: 44.5, duration: 10.5, sourceStart: 1156.88, mode: "window"},
 ];
 

@@ -60,10 +60,10 @@ scene.frame_start = 1
 scene.frame_end = 45
 scene.render.image_settings.file_format = "PNG"
 scene.render.film_transparent = False
-scene.world.color = DARK
+scene.world.color = DARK[:3]
 
 # Color management: restrained contrast, not hyper-saturated.
-scene.view_settings.look = "AgX - Medium High Contrast"
+try:\n    scene.view_settings.look = "AgX - Medium High Contrast"\nexcept Exception:\n    pass
 
 red = mat("Memorial Red", RED, metallic=0.1, roughness=0.28, emission=RED, strength=2.4)
 white = mat("Type White", WHITE, metallic=0.0, roughness=0.38)

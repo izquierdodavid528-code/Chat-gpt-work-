@@ -40,7 +40,7 @@
         "endSec": 1217
       },
       "purpose": "Open with final universal line; exact IN/OUT must be verified.",
-      "visual": "close-up or strongest real shot, no logo intro",
+      "visual": "native 16:9 documentary window over subdued extended background; no fake SD close-up",
       "audio": "room tone + original voice, no music first beat",
       "sourceWindowCandidate": {
         "startSec": 1160.43,
@@ -70,7 +70,7 @@
         "endSec": 20
       },
       "purpose": "Speaker/date/context integrated into the bridge; no separate context card.",
-      "visual": "wide UN shot in documentary window",
+      "visual": "context integrated into the 81 bridge; no separate context card",
       "audio": "music enters under room tone"
     },
     {
@@ -174,11 +174,11 @@
       "master": true,
       "components": [
         "ColdOpen",
-        "BlenderBridge",
-        "ContextCard",
+        "Bridge",
         "SpeechChapter",
         "DynamicCaptions",
         "AttributedDataCard",
+        "ChapterCut",
         "SourceBug",
         "EndCard",
         "AudioMaster"
@@ -192,6 +192,11 @@
       "chapterTransitions": {
         "style": "4-8 frame restrained red-line editorial transition",
         "voiceMicrofadeFrames": 4
+      },
+      "overlayPolicy": {
+        "chapterLabelVisibleSeconds": 2.65,
+        "attributedDataCardVisibleSeconds": 6,
+        "rule": "Overlays introduce information, then clear the frame so attention returns to the speaker."
       }
     },
     "qa": [

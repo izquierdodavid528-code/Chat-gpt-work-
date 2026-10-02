@@ -18,7 +18,11 @@
     "currentFps": 25,
     "sourceUpgradePriority": "high",
     "preferredSource": "UN Web TV Day 5 General Debate, 81st Session",
-    "finalTimingStatus": "pending exact audio verification"
+    "finalTimingStatus": "pending exact audio verification",
+    "referenceTranscriptOffsetSeconds": {
+      "note": "Derived from V2: source second 49.8827 aligns with transcript 00:55; verify manually before master.",
+      "transcriptMinusProjectSource": 5.1173
+    }
   },
   "chapters": [
     {
@@ -33,7 +37,12 @@
       },
       "purpose": "Open with final universal line; exact IN/OUT must be verified.",
       "visual": "close-up or strongest real shot, no logo intro",
-      "audio": "room tone + original voice, no music first beat"
+      "audio": "room tone + original voice, no music first beat",
+      "sourceWindowCandidate": {
+        "startSec": 1160.883,
+        "endSec": 1166,
+        "note": "Derived from transcript 19:26; exact Spanish phrase boundary pending audio verification."
+      }
     },
     {
       "id": "blender-bridge",
@@ -72,7 +81,12 @@
       },
       "purpose": "International law / force / sovereignty",
       "visual": "real footage + chapter label 01 DERECHO INTERNACIONAL",
-      "notes": "Use a shorter semantic selection than V2; do not reuse full 34 s block."
+      "notes": "Use a shorter semantic selection than V2; do not reuse full 34 s block.",
+      "sourceWindowCandidate": {
+        "startSec": 49.883,
+        "endSec": 78,
+        "note": "Derived from 00:55 transcript anchor; final semantic cut pending audio verification."
+      }
     },
     {
       "id": "consequence",
@@ -86,7 +100,12 @@
       },
       "purpose": "Economic pressure section with one attributed concrete figure",
       "visual": "AttributedDataCard + restrained footage",
-      "notes": "If using 7,000+ containers, label clearly as a figure cited in the speech."
+      "notes": "If using 7,000+ containers, label clearly as a figure cited in the speech.",
+      "sourceWindowCandidate": {
+        "startSec": 208.883,
+        "endSec": 226,
+        "note": "Derived from transcript 03:34–03:51; includes attributed 7,000+ container statement."
+      }
     },
     {
       "id": "dialogue",
@@ -99,7 +118,12 @@
         "endSec": 960
       },
       "purpose": "Declared willingness to dialogue and commercial relations",
-      "visual": "slower pacing, fewer overlays, chapter 03 DIÁLOGO"
+      "visual": "slower pacing, fewer overlays, chapter 03 DIÁLOGO",
+      "sourceWindowCandidate": {
+        "startSec": 747.883,
+        "endSec": 774,
+        "note": "Derived from transcript 12:33–12:59; final shortened selection pending audio verification."
+      }
     },
     {
       "id": "payoff",
@@ -113,7 +137,12 @@
       },
       "purpose": "Return to final UN / law-of-the-jungle argument",
       "visual": "simplify overlays and slow down",
-      "audio": "music nearly disappears for final line"
+      "audio": "music nearly disappears for final line",
+      "sourceWindowCandidate": {
+        "startSec": 1145.883,
+        "endSec": 1190,
+        "note": "Derived from transcript 19:01 onward; choose final 10–12 s semantically complete passage."
+      }
     },
     {
       "id": "end-card",

@@ -45,31 +45,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg >/dev/null
-          cat > "$RUNNER_TEMP/audio-config.json" <<'JSON'
-          {
-            "render": {
-              "requireAudio": true,
-              "audioQa": {
-                "enabled": true,
-                "requireAudio": true,
-                "expectedCodec": "aac",
-                "expectedSampleRateHz": 48000,
-                "minChannels": 1,
-                "maxChannels": 2,
-                "targetIntegratedLufs": -14.0,
-                "integratedLufsTolerance": 2.0,
-                "maxTruePeakDbfs": -1.0,
-                "maxDurationDeltaSeconds": 0.12,
-                "silence": {
-                  "enabled": true,
-                  "enforce": false,
-                  "noiseDb": -50.0,
-                  "minDurationSeconds": 0.5
-                }
-              }
-            }
-          }
-JSON
+          printf '%s\n' '{"render":{"requireAudio":true,"audioQa":{"enabled":true,"requireAudio":true,"expectedCodec":"aac","expectedSampleRateHz":48000,"minChannels":1,"maxChannels":2,"targetIntegratedLufs":-14.0,"integratedLufsTolerance":2.0,"maxTruePeakDbfs":-1.0,"maxDurationDeltaSeconds":0.12,"silence":{"enabled":true,"enforce":false,"noiseDb":-50.0,"minDurationSeconds":0.5}}}}' > "$RUNNER_TEMP/audio-config.json"
           ffmpeg -y \
             -f lavfi -i "color=c=black:s=320x240:r=30:d=3" \
             -f lavfi -i "sine=frequency=1000:sample_rate=48000:duration=3" \

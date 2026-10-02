@@ -11,6 +11,8 @@ on:
       - "scripts/blender/verify-fidelity.sh"
       - "scripts/blender/install-pinned.sh"
       - "projects/_template-blender/**"
+      - "projects/blender-neon-core-demo/project.config.json"
+      - "projects/haaland-goal-cinematic-test/project.config.json"
   workflow_dispatch:
 
 permissions:
@@ -46,6 +48,14 @@ jobs:
           python3 scripts/blender/render-plan.py             projects/_template-blender             "$RUNNER_TEMP/github-output.txt"             "$RUNNER_TEMP/render-plan.json"             auto             ""
           grep -q '"render_mode": "sequential"' "$RUNNER_TEMP/render-plan.json"
           grep -q '"blender_version": "4.5.14"' "$RUNNER_TEMP/render-plan.json"
+
+          : > "$RUNNER_TEMP/neon-output.txt"
+          python3 scripts/blender/render-plan.py             projects/blender-neon-core-demo             "$RUNNER_TEMP/neon-output.txt"             "$RUNNER_TEMP/neon-plan.json"             auto             ""
+          grep -q '"render_mode": "verified_parallel"' "$RUNNER_TEMP/neon-plan.json"
+
+          : > "$RUNNER_TEMP/haaland-output.txt"
+          python3 scripts/blender/render-plan.py             projects/haaland-goal-cinematic-test             "$RUNNER_TEMP/haaland-output.txt"             "$RUNNER_TEMP/haaland-plan.json"             auto             ""
+          grep -q '"render_mode": "verified_parallel"' "$RUNNER_TEMP/haaland-plan.json"
 
       - name: Cache exact Blender
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830

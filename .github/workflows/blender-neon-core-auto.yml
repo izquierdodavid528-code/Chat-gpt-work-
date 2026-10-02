@@ -52,7 +52,29 @@ jobs:
 
       - name: Render Blender scene
         shell: bash
-        run: bash scripts/workspace/render-blender.sh "$PROJECT_SLUG"
+        run: |
+          mkdir -p "$PROJECT_DIR/out"
+          bash scripts/workspace/render-blender.sh "$PROJECT_SLUG" &
+          RENDER_PID=$!
+
+          while kill -0 "$RENDER_PID" 2>/dev/null; do
+            if [ -f "$PROJECT_DIR/out/render-progress.json" ]; then
+              rclone --config "$RUNNER_TEMP/rclone.conf" copyto \
+                "$PROJECT_DIR/out/render-progress.json" \
+                "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders/render-progress.json" \
+                --no-traverse || true
+            fi
+            sleep 30
+          done
+
+          wait "$RENDER_PID"
+
+          if [ -f "$PROJECT_DIR/out/render-progress.json" ]; then
+            rclone --config "$RUNNER_TEMP/rclone.conf" copyto \
+              "$PROJECT_DIR/out/render-progress.json" \
+              "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders/render-progress.json" \
+              --no-traverse || true
+          fi
 
       - name: Record environment
         shell: bash

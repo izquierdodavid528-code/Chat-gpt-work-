@@ -7,6 +7,9 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "out")
 os.makedirs(OUT, exist_ok=True)
 
+BUILD_ONLY = os.environ.get("BLENDER_BUILD_ONLY") == "1"
+SKIP_POSTER = os.environ.get("BLENDER_SKIP_POSTER") == "1"
+
 # Reset
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
@@ -273,14 +276,21 @@ scene.render.ffmpeg.ffmpeg_preset = "GOOD"
 scene.render.ffmpeg.audio_codec = "NONE"
 scene.render.filepath = os.path.join(OUT, "neon-core-demo.mp4")
 
-# Poster first
-scene.frame_set(74)
-scene.render.image_settings.file_format = "PNG"
-scene.render.filepath = os.path.join(OUT, "neon-core-poster.png")
-bpy.ops.render.render(write_still=True)
+if not SKIP_POSTER:
+    # Poster first
+    scene.frame_set(74)
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.filepath = os.path.join(OUT, "neon-core-poster.png")
+    bpy.ops.render.render(write_still=True)
+else:
+    print("BLENDER_POSTER_SKIPPED")
 
 # Save source
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT, "neon-core-demo.blend"))
+
+if BUILD_ONLY:
+    print("BLENDER_BUILD_ONLY_READY")
+    raise SystemExit(0)
 
 # Render movie
 scene.render.image_settings.file_format = "FFMPEG"

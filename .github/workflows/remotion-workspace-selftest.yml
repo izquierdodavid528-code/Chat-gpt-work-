@@ -1,0 +1,52 @@
+name: Remotion Workspace Self-Test
+
+on:
+  push:
+    paths:
+      - ".github/workflows/remotion-drive-render.yml"
+      - ".github/workflows/remotion-workspace-selftest.yml"
+      - "scripts/remotion/**"
+      - "projects/_template-remotion/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: remotion-workspace-selftest
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Validate Python and JSON
+        run: |
+          python3 -m py_compile scripts/remotion/render-plan.py scripts/remotion/verify-delivery.py
+          python3 -m json.tool projects/_template-remotion/project.config.json >/dev/null
+
+      - name: Validate workflows
+        run: |
+          ACTIONLINT_VERSION="1.7.12"
+          printf -v ACTIONLINT_ARCHIVE 'actionlint_%s_linux_amd64.tar.gz' "$ACTIONLINT_VERSION"
+          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v$ACTIONLINT_VERSION/$ACTIONLINT_ARCHIVE"             -o "$RUNNER_TEMP/actionlint.tar.gz"
+          tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint"             .github/workflows/remotion-drive-render.yml             .github/workflows/remotion-workspace-selftest.yml
+
+      - name: Validate planner
+        run: |
+          : > "$RUNNER_TEMP/out.txt"
+          python3 scripts/remotion/render-plan.py             projects/_template-remotion             "$RUNNER_TEMP/out.txt"             "$RUNNER_TEMP/plan.json"             "0-0"
+          grep -q '"validation_only": true' "$RUNNER_TEMP/plan.json"
+          grep -q '"composition_id": "TemplateVideo"' "$RUNNER_TEMP/plan.json"
+          grep -q '"concurrency": "100%"' "$RUNNER_TEMP/plan.json"
+
+  integration-template:
+    needs: validate
+    uses: ./.github/workflows/remotion-drive-render.yml
+    with:
+      project_slug: _template-remotion
+      validation_frames: "0-0"

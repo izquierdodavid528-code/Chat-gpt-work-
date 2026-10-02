@@ -15,84 +15,64 @@ test -s "$REF"
 test -s "$ACTUAL"
 mkdir -p "$(dirname "$REPORT")"
 
-REF_MD5="$(ffmpeg -v error -i "$REF" -f framemd5 - | tail -n 1 | sed \'s/.*,//; s/^ *//\')"
-ACTUAL_MD5="$(ffmpeg -v error -i "$ACTUAL" -f framemd5 - | tail -n 1 | sed \'s/.*,//; s/^ *//\')"
-
-WIDTH="$(identify -format "%w" "$REF")"
-HEIGHT="$(identify -format "%h" "$REF")"
+read -r WIDTH HEIGHT <<EOF
+$(identify -format "%w %h" "$REF")
+EOF
 TOTAL_PIXELS=$((WIDTH * HEIGHT))
 
-{
-  echo "frame=$FRAME"
-  echo "reference_framemd5=$REF_MD5"
-  echo "parallel_framemd5=$ACTUAL_MD5"
-  echo "dimensions=${WIDTH}x${HEIGHT}"
-} >> "$REPORT"
-
-if [ "$REF_MD5" = "$ACTUAL_MD5" ]; then
-  {
-    echo "mode=exact"
-    echo "changed_pixels=0"
-    echo "changed_fraction=0"
-    echo "rmse_normalized=0"
-    echo "result=PASS"
-    echo
-  } >> "$REPORT"
-  exit 0
-fi
-
-RMSE_RAW="$(compare -metric RMSE "$REF" "$ACTUAL" null: 2>&1 || true)"
 AE_RAW="$(compare -metric AE "$REF" "$ACTUAL" null: 2>&1 || true)"
-RMSE_NORM="$(printf "%s" "$RMSE_RAW" | sed -n "s/.*(\\([^)]*\\)).*/\\1/p")"
-CHANGED_PIXELS="$(printf "%s" "$AE_RAW" | tr -cd "0-9")"
+RMSE_RAW="$(compare -metric RMSE "$REF" "$ACTUAL" null: 2>&1 || true)"
 
-if [ -z "$RMSE_NORM" ] || [ -z "$CHANGED_PIXELS" ]; then
-  echo "Unable to parse fidelity metrics." >&2
-  echo "RMSE_RAW=$RMSE_RAW" >&2
-  echo "AE_RAW=$AE_RAW" >&2
-  exit 3
-fi
+PARSED="$(python3 - "$AE_RAW" "$RMSE_RAW" "$TOTAL_PIXELS" <<\'PY\'
+import re, sys
+ae_raw, rmse_raw, total = sys.argv[1], sys.argv[2], int(sys.argv[3])
 
-CHANGED_FRACTION="$(python3 - "$CHANGED_PIXELS" "$TOTAL_PIXELS" <<\'PY\'
-import sys
-changed = int(sys.argv[1])
-total = int(sys.argv[2])
-print(changed / total)
+m_ae = re.search(r"([0-9]+(?:\\.[0-9]+)?)", ae_raw)
+if not m_ae:
+    raise SystemExit("Could not parse AE: " + ae_raw)
+changed = int(round(float(m_ae.group(1))))
+
+m_rmse = re.search(r"\\(([-+0-9.eE]+)\\)", rmse_raw)
+if m_rmse:
+    rmse = float(m_rmse.group(1))
+else:
+    m_rmse = re.search(r"([-+0-9.eE]+)", rmse_raw)
+    if not m_rmse:
+        raise SystemExit("Could not parse RMSE: " + rmse_raw)
+    rmse = float(m_rmse.group(1))
+
+fraction = changed / total
+mode = "exact" if changed == 0 and rmse == 0 else "strict-tolerance"
+passed = (changed == 0 and rmse == 0) or (rmse <= 2e-5 and fraction <= 1e-4)
+
+print(changed)
+print(f"{fraction:.12g}")
+print(f"{rmse:.12g}")
+print(mode)
+print("PASS" if passed else "FAIL")
 PY
 )"
+
+CHANGED_PIXELS="$(printf "%s\\n" "$PARSED" | sed -n "1p")"
+CHANGED_FRACTION="$(printf "%s\\n" "$PARSED" | sed -n "2p")"
+RMSE_NORM="$(printf "%s\\n" "$PARSED" | sed -n "3p")"
+MODE="$(printf "%s\\n" "$PARSED" | sed -n "4p")"
+RESULT="$(printf "%s\\n" "$PARSED" | sed -n "5p")"
 
 PSNR_LINE="$(ffmpeg -v info -i "$REF" -i "$ACTUAL" -lavfi psnr -f null - 2>&1 | grep -E "PSNR.*average:" | tail -n 1 || true)"
 SSIM_LINE="$(ffmpeg -v info -i "$REF" -i "$ACTUAL" -lavfi ssim -f null - 2>&1 | grep -E "SSIM.*All:" | tail -n 1 || true)"
 
-# Strict tolerance measured from the same immutable Eevee master across hosted runners.
-# Exact matches pass immediately. Non-exact matches must stay below both limits.
-PASS="$(python3 - "$RMSE_NORM" "$CHANGED_FRACTION" <<\'PY\'
-import sys
-rmse = float(sys.argv[1])
-fraction = float(sys.argv[2])
-print("1" if rmse <= 2e-5 and fraction <= 1e-4 else "0")
-PY
-)"
-
 {
-  echo "mode=strict-tolerance"
+  echo "frame=$FRAME"
+  echo "dimensions=${WIDTH}x${HEIGHT}"
+  echo "mode=$MODE"
   echo "changed_pixels=$CHANGED_PIXELS"
   echo "changed_fraction=$CHANGED_FRACTION"
   echo "rmse_normalized=$RMSE_NORM"
   echo "psnr=$PSNR_LINE"
   echo "ssim=$SSIM_LINE"
-} >> "$REPORT"
-
-if [ "$PASS" = "1" ]; then
-  {
-    echo "result=PASS"
-    echo
-  } >> "$REPORT"
-  exit 0
-fi
-
-{
-  echo "result=FAIL"
+  echo "result=$RESULT"
   echo
 } >> "$REPORT"
-exit 1
+
+test "$RESULT" = "PASS"

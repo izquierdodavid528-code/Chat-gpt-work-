@@ -213,6 +213,7 @@ jobs:
           rclone --config "$RUNNER_TEMP/rclone.conf" copyto             "$PROJECT_DIR/$OUTPUT_FILE"             "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders/$(basename "$OUTPUT_FILE")"
 
       - name: Upload GitHub artifact
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: remotion-delivery-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
@@ -222,7 +223,7 @@ jobs:
             ${{ env.PROJECT_DIR }}/out/delivery-report.json
             ${{ env.PROJECT_DIR }}/out/audio-qa-report.json
             ${{ env.PROJECT_DIR }}/out/render-environment.txt
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
 
       - name: Cleanup credential

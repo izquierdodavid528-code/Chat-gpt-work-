@@ -1,17 +1,21 @@
 # Blender en GitHub Codespaces
 
-## Qué sí es viable
+## Estado validado
 
-Blender puede ejecutarse en Codespaces por línea de comandos, sin interfaz gráfica:
+**Validado el 2 de octubre de 2026 desde Android.**
+
+Funcionan las dos rutas:
+
+1. **Blender headless** para scripts, automatización y renders por CPU.
+2. **Blender con interfaz gráfica en el navegador** mediante Xvfb + Openbox + x11vnc + noVNC/websockify, expuesto por el puerto 6080 de Codespaces.
+
+## Blender headless
+
+Ejemplos:
 
 ```bash
 blender -b escena.blend -f 1
 blender -b escena.blend -a
-```
-
-También puede ejecutar scripts Python:
-
-```bash
 blender -b --python scripts/crear_escena.py
 ```
 
@@ -22,23 +26,72 @@ Esto permite:
 - generar fotogramas o animaciones;
 - automatizar tareas desde Codex.
 
-## Limitación principal
+Scripts del workspace:
 
-Codespaces estándar es una máquina Linux remota orientada a desarrollo. Normalmente no dispone de GPU para Blender.
+```bash
+bash scripts/blender/install.sh
+bash scripts/blender/test-headless.sh
+```
 
-El editor gráfico completo requiere una capa de escritorio remoto, por ejemplo:
-- Xvfb;
-- un gestor de ventanas ligero;
-- x11vnc;
-- noVNC/websockify.
+La prueba genera:
 
-Eso puede exponer Blender en una pestaña del navegador, pero con renderizado por software y rendimiento limitado, especialmente desde móvil.
+```
+out/blender-test.blend
+out/blender-test.png
+```
 
-## Estrategia recomendada
+## Blender gráfico desde Android
 
-1. Usar Codespaces + Blender headless para automatización y pruebas.
-2. Renderizar previews pequeños por CPU.
-3. Mantener modelos y texturas grandes en Drive u otro almacenamiento externo.
-4. Para escenas pesadas, usar GPU externa solo cuando sea necesario.
+Instalar la capa gráfica:
 
-No instalar una capa gráfica permanente hasta comprobar primero que Blender headless funciona correctamente en el Codespace.
+```bash
+bash scripts/blender/install-gui.sh
+```
+
+Iniciar:
+
+```bash
+bash scripts/blender/start-gui.sh
+```
+
+Abrir el puerto **6080** desde Codespaces y entrar en:
+
+```
+/vnc.html
+```
+
+Detener:
+
+```bash
+bash scripts/blender/stop-gui.sh
+```
+
+## Arquitectura validada
+
+```
+Android
+  ↓
+GitHub Codespaces
+  ↓
+Xvfb + Openbox
+  ↓
+x11vnc
+  ↓
+noVNC / websockify :6080
+  ↓
+Blender GUI
+```
+
+## Limitaciones
+
+Codespaces estándar no ofrece una GPU dedicada para este flujo. El viewport usa **Mesa llvmpipe**, es decir, renderizado gráfico por CPU.
+
+Consecuencias:
+- viable para modelado ligero, revisión de escenas, cámaras, materiales y automatización;
+- previews y renders simples funcionan;
+- escenas pesadas, Cycles complejo, simulaciones o proyectos con mucha geometría pueden ser lentos;
+- para trabajo 3D pesado conviene usar una GPU externa solo cuando sea necesario.
+
+## Regla del workspace
+
+Usar Blender headless para automatización repetible y el GUI remoto para revisión/interacción visual. Guardar proyectos y scripts en GitHub; evitar usar el repositorio como almacén principal de texturas, vídeos o assets pesados.

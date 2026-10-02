@@ -234,7 +234,7 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update -qq
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg >/dev/null
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg imagemagick >/dev/null
 
       - name: Verify frame completeness
         shell: bash
@@ -247,7 +247,7 @@ jobs:
             test -s "$RUNNER_TEMP/frames/$NAME"
           done
 
-      - name: Verify control frames pixel-for-pixel
+      - name: Verify control frames with strict fidelity gate
         shell: bash
         env:
           CONTROL_FRAMES: ${{ needs.build-master.outputs.control_frames }}
@@ -256,21 +256,14 @@ jobs:
           : > "$REPORT"
 
           for FRAME in $CONTROL_FRAMES; do
-            NAME="$(printf '%04d.png' "$FRAME")"
+            NAME="$(printf \'%04d.png\' "$FRAME")"
             REF="$RUNNER_TEMP/master/reference/$NAME"
             ACTUAL="$RUNNER_TEMP/frames/$NAME"
-            test -s "$REF"
-            test -s "$ACTUAL"
-
-            REF_HASH="$(ffmpeg -v error -i "$REF" -f framemd5 - | tail -n 1 | awk -F', ' '{print $NF}')"
-            ACTUAL_HASH="$(ffmpeg -v error -i "$ACTUAL" -f framemd5 - | tail -n 1 | awk -F', ' '{print $NF}')"
-
-            echo "frame=$FRAME reference=$REF_HASH parallel=$ACTUAL_HASH" | tee -a "$REPORT"
-            test "$REF_HASH" = "$ACTUAL_HASH"
+            bash scripts/blender/verify-fidelity.sh "$REF" "$ACTUAL" "$FRAME" "$REPORT"
           done
 
           echo "FIDELITY_CHECK=PASS" | tee -a "$REPORT"
-
+          cat "$REPORT"
       - name: Assemble deterministic delivery MP4
         shell: bash
         env:

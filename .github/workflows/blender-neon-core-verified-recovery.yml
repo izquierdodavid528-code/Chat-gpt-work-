@@ -1,5 +1,5 @@
 name: Blender Neon Core Verified Recovery
-# recovery-version: 2
+# recovery-version: 3
 
 on:
   push:

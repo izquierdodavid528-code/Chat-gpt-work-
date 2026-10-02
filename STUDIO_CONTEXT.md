@@ -119,7 +119,10 @@ New Blender projects should start from:
 - `projects/_template-blender`
 - `npm run blender:new -- <slug> ["Drive folder"]`
 
-New projects default to `render.parallel.safe=false` until audited.\n\nLocal planning check:\n- `npm run blender:plan -- <slug> [auto|sequential|parallel]`
+New projects default to `render.parallel.safe=false` until audited.
+
+Local planning check:
+- `npm run blender:plan -- <slug> [auto|sequential|parallel]`
 
 ## Important files
 

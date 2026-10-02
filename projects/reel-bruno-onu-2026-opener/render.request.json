@@ -1,8 +1,8 @@
 {
-  "requestId": "bruno-v3-opener-validation-4",
+  "requestId": "bruno-v3-opener-full-45f-1",
   "engine": "blender",
   "projectSlug": "reel-bruno-onu-2026-opener",
   "blenderMode": "auto",
-  "validationFrameCount": "15",
+  "validationFrameCount": "0",
   "recoveryRunId": "0"
 }

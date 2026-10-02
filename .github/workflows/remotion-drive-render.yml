@@ -43,7 +43,7 @@ concurrency:
 
 env:
   DRIVE_BASE: "Remotion Projects"
-  RCLONE_VERSION: "1.75.1"
+  PINNED_RCLONE_VERSION: "1.75.1"
 
 jobs:
   plan:
@@ -111,11 +111,11 @@ jobs:
         if: env.SKIP_DRIVE != 'true'
         run: |
           set -euo pipefail
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          ARCHIVE="rclone-v${PINNED_RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${PINNED_RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
-          rclone version | head -n 1 | grep -F "rclone v${RCLONE_VERSION}"
+          sudo install -m 0755 "rclone-v${PINNED_RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          rclone version | head -n 1 | grep -F "rclone v${PINNED_RCLONE_VERSION}"
 
       - name: Download shared and project assets
         if: env.SKIP_DRIVE != 'true'

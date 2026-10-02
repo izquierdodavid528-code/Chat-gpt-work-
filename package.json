@@ -6,7 +6,16 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "start": "wrangler dev"
+    "start": "wrangler dev",
+    "workspace:setup": "bash scripts/workspace/bootstrap.sh",
+    "project:new": "bash scripts/workspace/new-remotion-project.sh",
+    "studio": "bash scripts/workspace/open-remotion.sh",
+    "drive:pull": "bash scripts/workspace/sync-drive.sh",
+    "drive:push-render": "bash scripts/workspace/sync-drive.sh",
+    "blender:install": "bash scripts/blender/install.sh && bash scripts/blender/install-gui.sh",
+    "blender:start": "bash scripts/blender/start-gui.sh",
+    "blender:stop": "bash scripts/blender/stop-gui.sh",
+    "blender:test": "bash scripts/blender/test-headless.sh"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "2.0.0",

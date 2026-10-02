@@ -20,7 +20,7 @@ const GRAY = "#77787B";
 
 const SOURCE = staticFile("source-bruno-onu-2026.mp4");
 const LOGO = staticFile("logo_memorial_blanco.png");
-const MUSIC = staticFile("music-bed-v2.wav");
+const MUSIC = staticFile("music-bed-v3.wav");
 const WHOOSH = staticFile("transition-whoosh-v2.wav");
 
 export const V3_FPS = 30;

@@ -1,88 +1,177 @@
-# ChatGPT Work - patrón de trabajo
+# ChatGPT Work - workspace automatizado
 
-Este repositorio funciona como workspace central para proyectos de ChatGPT/Codex ejecutados en GitHub Codespaces desde Android.
+Este repositorio funciona como workspace central para proyectos multimedia creados desde ChatGPT/Codex y trabajados desde Android mediante GitHub Codespaces.
 
 ## Arquitectura
 
-- **GitHub**: código, historial, configuración y automatizaciones.
-- **Codespaces**: entorno Linux remoto para desarrollo, Remotion, FFmpeg, Python y herramientas de línea de comandos.
-- **Google Drive**: materiales grandes, fuentes y renders finales cuando el workflow de Drive esté configurado.
-- **GitHub Actions**: renders reproducibles y tareas que no necesitan mantener abierto el Codespace.
-- **ChatGPT/Codex**: edición, automatización y mantenimiento del código.
-- **Remotion Studio**: previsualización visual e interacción con las composiciones desde el navegador.
+- **GitHub**: codigo, historial, configuracion y automatizaciones.
+- **Codespaces / VS Code Web**: entorno Linux remoto interactivo.
+- **Remotion Studio**: previsualizacion visual de composiciones en el puerto 3000.
+- **Blender GUI**: interfaz completa de Blender via noVNC en el puerto 6080.
+- **Google Drive**: assets grandes y renders.
+- **GitHub Actions**: renders reproducibles y tareas autonomas.
+- **ChatGPT/Codex**: planificacion, edicion, codigo y mantenimiento.
 
-## Regla principal
+## Arranque automatico de Codespaces
 
-Cada trabajo nuevo debe vivir en:
+Al crear o reconstruir el Codespace, `.devcontainer/devcontainer.json` ejecuta:
 
+```bash
+bash scripts/workspace/bootstrap.sh
 ```
-projects/<project-slug>/
+
+El bootstrap:
+- prepara todos los proyectos Remotion;
+- usa `npm ci` cuando hay lockfile;
+- instala rclone 1.75.1;
+- puede restaurar rclone automaticamente si existe el secreto de Codespaces `RCLONE_CONFIG_B64`;
+- instala Blender si falta;
+- instala la capa grafica Xvfb/Openbox/x11vnc/noVNC si falta.
+
+## Crear proyectos
+
+### Remotion
+
+```bash
+npm run project:new -- mi-proyecto
 ```
 
-No mezclar dos proyectos dentro de la misma carpeta.
+Opcionalmente indicar carpeta de Drive:
 
-## Patrón Remotion
+```bash
+npm run project:new -- mi-proyecto "02 - Mi proyecto"
+```
 
-Para un proyecto nuevo:
+Esto copia `projects/_template-remotion`, actualiza package.json, package-lock.json y project.config.json e instala dependencias reproducibles.
 
-1. Copiar `projects/_template-remotion/` a `projects/<project-slug>/`.
-2. Cambiar el nombre del paquete, el ID de la composición y el nombre del archivo de salida.
-3. Instalar dependencias dentro de la carpeta del proyecto:
-   ```bash
-   cd projects/<project-slug>
-   npm install
-   ```
-4. Validar:
-   ```bash
-   npm run compositions
-   ```
-5. Abrir Remotion Studio:
-   ```bash
-   npm run start
-   ```
-6. Render local:
-   ```bash
-   npm run render
-   ```
+### Blender
 
-El puerto estándar del Studio es **3000** y ya está declarado en `.devcontainer/devcontainer.json`.
+```bash
+npm run blender:new -- mi-escena
+```
 
-## Assets y archivos grandes
+## Abrir herramientas visuales
 
-No usar GitHub como almacén principal de vídeos pesados.
+### Remotion Studio
 
-Preferencias:
-- código y assets pequeños -> GitHub;
-- vídeos/fotos/audio grandes -> Drive;
-- renders -> Drive y/o artefactos de GitHub Actions.
+```bash
+npm run studio -- mi-proyecto
+```
 
-El workflow `.github/workflows/remotion-drive-render.yml` sigue el patrón:
-- código: `projects/<project-slug>`;
-- assets: `Drive/Remotion Projects/<project-slug>/assets`;
-- salida: `Drive/Remotion Projects/<project-slug>/renders`.
+Abrir el puerto 3000 de Codespaces.
 
-## Versionado
+### Blender
 
-Los proyectos Remotion deben mantener versiones fijadas. El patrón actual usa:
+```bash
+npm run blender:open -- mi-escena
+```
+
+Si la escena aun no tiene archivo .blend, se genera primero en modo headless. Luego se abre Blender en el puerto 6080 mediante noVNC.
+
+Mantener el puerto 6080 como **Private**.
+
+## Drive desde Codespaces
+
+Descargar assets:
+
+```bash
+npm run drive:pull -- mi-proyecto
+```
+
+Subir renders locales:
+
+```bash
+npm run drive:push-render -- mi-proyecto
+```
+
+Para que esto funcione sin autenticacion manual en cada Codespace, crear un secreto de Codespaces llamado `RCLONE_CONFIG_B64` con el mismo contenido seguro usado por el workflow. Nunca guardar ese valor en archivos del repositorio.
+
+## Renders automaticos
+
+### Remotion
+
+Workflow: `Remotion Drive Render`
+
+Con proyectos que incluyen `project.config.json`, normalmente basta indicar:
+
+```text
+project_slug: mi-proyecto
+repo_project_dir: vacio
+drive_project_dir: vacio
+```
+
+El workflow resuelve la carpeta de Drive desde los metadatos del proyecto.
+
+Entorno fijado:
+- Ubuntu 24.04
 - Node 20.20.2
 - npm 10.8.2
+- rclone 1.75.1
 - Remotion 4.0.530
+- Chrome Headless Shell 149.0.7790.0
+- dependencias npm mediante package-lock.json + npm ci
 
-No actualizar dependencias de un proyecto en producción sin probar primero `npm run compositions` y `npm run render`.
+Cada render guarda `render-environment.txt`.
 
-## Criterio de finalización
+### Blender
 
-Un proyecto se considera terminado solo cuando:
-- la composición abre en Remotion Studio;
-- `npm run compositions` termina sin error;
-- `npm run render` termina con código 0;
-- el archivo de salida existe y no está vacío;
-- el resultado visual fue revisado.
+Workflow: `Blender Drive Render`
 
-## Blender
+Toma el proyecto, descarga sus assets desde Drive, ejecuta Blender en headless, sube `out/` a Drive y conserva artifact de GitHub Actions.
 
-Codespaces puede ejecutar Blender en **modo headless** por línea de comandos y scripts de Python. Es útil para generar escenas, automatizar Blender y renderizar por CPU.
+## Crear proyectos desde GitHub sin terminal
 
-El editor gráfico completo de Blender dentro de Codespaces requiere una capa remota adicional (X11/VNC/noVNC) y normalmente trabaja sin GPU. Por eso se considera experimental y no debe ser la ruta principal hasta validarlo.
+Workflow: `Create Workspace Project`
 
-Véase `BLENDER_CODESPACES.md`.
+Inputs:
+- project_slug
+- project_type: remotion o blender
+- drive_project_dir opcional
+
+El workflow crea la estructura, actualiza metadatos y hace commit automaticamente.
+
+## Estructura
+
+```text
+projects/
+  _template-remotion/
+  _template-blender/
+  <proyecto>/
+    project.config.json
+    ...
+```
+
+Los archivos grandes no deben vivir en GitHub.
+
+- codigo y configuracion -> GitHub
+- assets grandes -> Google Drive
+- previews locales -> Codespaces
+- renders definitivos -> Drive + artifact Actions
+
+## Comandos principales
+
+```bash
+npm run workspace:setup
+npm run project:new -- slug
+npm run studio -- slug
+npm run drive:pull -- slug
+npm run drive:push-render -- slug
+
+npm run blender:new -- slug
+npm run blender:render -- slug
+npm run blender:open -- slug
+npm run blender:start
+npm run blender:stop
+npm run blender:test
+```
+
+## Criterio de finalizacion
+
+Un proyecto no se considera terminado hasta que:
+- abre correctamente en su herramienta visual;
+- compila o genera escena sin errores;
+- el render termina con codigo 0;
+- el archivo de salida existe;
+- el entorno de render queda registrado;
+- el resultado fue revisado visualmente;
+- el render final esta respaldado en Drive y/o GitHub Actions.

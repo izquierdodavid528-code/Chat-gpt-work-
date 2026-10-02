@@ -256,7 +256,7 @@ jobs:
           : > "$REPORT"
 
           for FRAME in $CONTROL_FRAMES; do
-            NAME="$(printf \'%04d.png\' "$FRAME")"
+            NAME="$(printf '%04d.png' "$FRAME")"
             REF="$RUNNER_TEMP/master/reference/$NAME"
             ACTUAL="$RUNNER_TEMP/frames/$NAME"
             bash scripts/blender/verify-fidelity.sh "$REF" "$ACTUAL" "$FRAME" "$REPORT"

@@ -19,7 +19,7 @@ const BLACK = "#000000";
 const GRAY = "#77787B";
 const WHITE = "#FFFFFF";
 const SOURCE = staticFile("source-bruno-onu-2026.mp4");
-const LOGO = staticFile("logo_memorial_denuncia.png");
+const LOGO = staticFile("logo_memorial_blanco.png");
 
 type Cue = {
   start: number;
@@ -28,23 +28,21 @@ type Cue = {
   accent?: string;
 };
 
-// Primer pase de sincronizacion basado en la transcripcion de apoyo de la ONU.
-// Se ajustara cue por cue contra el audio antes del cierre final.
+// Fragmento continuo verificado contra la transcripcion de apoyo de Naciones Unidas.
+// La fuente de la ONU es una transcripcion automatica; el ajuste temporal se apoya ademas
+// en pausas reales detectadas en el audio del video fuente.
 const cues: Cue[] = [
-  {start: 0.0, end: 4.2, text: "Sin embargo, es alarmante el avance del expansionismo,", accent: "expansionismo"},
-  {start: 4.2, end: 7.7, text: "los actos de usurpación y conquista,"},
-  {start: 7.7, end: 11.3, text: "la agresión militar y económica."},
-  {start: 11.3, end: 17.6, text: "Es absurda e irrealizable la pretensión del gobierno de Estados Unidos"},
-  {start: 17.6, end: 21.8, text: "de imponer la paz mediante la fuerza."},
-  {start: 21.8, end: 27.7, text: "Pilares fundamentales del derecho internacional", accent: "derecho internacional"},
-  {start: 27.7, end: 31.8, text: "y de la Organización de Naciones Unidas,", accent: "Naciones Unidas"},
-  {start: 31.8, end: 35.2, text: "como la igualdad soberana entre los Estados,", accent: "igualdad soberana"},
-  {start: 35.2, end: 38.0, text: "están bajo permanente ataque."},
-  {start: 38.0, end: 43.7, text: "También son reflejo de la crisis de identidad y relevancia"},
-  {start: 43.7, end: 49.6, text: "que se ha impuesto a la Organización de las Naciones Unidas,"},
-  {start: 49.6, end: 54.5, text: "incluso a esta Asamblea General,"},
-  {start: 54.5, end: 60.0, text: "el órgano más universal, democrático y representativo de la comunidad internacional."},
-  {start: 60.0, end: 62.0, text: "Estamos convencidos de la indispensable necesidad de preservar y fortalecer la ONU."},
+  {start: 0.0, end: 1.75, text: "Sin embargo,"},
+  {start: 1.75, end: 5.15, text: "es alarmante el avance del expansionismo,"},
+  {start: 5.15, end: 8.75, text: "los actos de usurpación y conquista,"},
+  {start: 8.75, end: 12.8, text: "la agresión militar y económica."},
+  {start: 12.8, end: 16.7, text: "Es absurda e irrealizable la pretensión"},
+  {start: 16.7, end: 19.75, text: "del gobierno de Estados Unidos"},
+  {start: 19.75, end: 22.25, text: "de imponer la paz mediante la fuerza."},
+  {start: 22.25, end: 27.8, text: "Pilares fundamentales del derecho internacional", accent: "derecho internacional"},
+  {start: 27.8, end: 31.65, text: "y de la Organización de Naciones Unidas,", accent: "Naciones Unidas"},
+  {start: 31.65, end: 35.1, text: "como la igualdad soberana entre los Estados,"},
+  {start: 35.1, end: 40.3, text: "están bajo permanente ataque."},
 ];
 
 const fitText = (text: string, accent?: string) => {
@@ -91,6 +89,7 @@ const IntroScene: React.FC = () => {
     <AbsoluteFill style={{backgroundColor: BLACK, overflow: "hidden"}}>
       <Video
         src={SOURCE}
+        startFrom={50 * fps}
         muted
         style={{
           width: "100%",
@@ -339,7 +338,7 @@ const MainScene: React.FC = () => {
     <AbsoluteFill style={{backgroundColor: BLACK, overflow: "hidden"}}>
       <Video
         src={SOURCE}
-        startFrom={45 * fps}
+        startFrom={Math.round(49.9 * fps)}
         style={{
           width: "100%",
           height: "100%",
@@ -467,7 +466,7 @@ export default function BrunoONUReel() {
         presentation={wipe({direction: "from-right"})}
         timing={linearTiming({durationInFrames: 12})}
       />
-      <TransitionSeries.Sequence durationInFrames={1860}>
+      <TransitionSeries.Sequence durationInFrames={1210}>
         <MainScene />
       </TransitionSeries.Sequence>
       <TransitionSeries.Transition

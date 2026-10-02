@@ -1,0 +1,9 @@
+{
+  "slug": "template-blender",
+  "type": "blender",
+  "driveProjectDir": "template-blender",
+  "sceneScript": "scene.py",
+  "blendFile": "out/scene.blend",
+  "previewFile": "out/preview.png",
+  "renderEngine": "BLENDER_EEVEE_NEXT"
+}

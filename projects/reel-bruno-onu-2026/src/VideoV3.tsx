@@ -24,7 +24,7 @@ const MUSIC = staticFile("music-bed-v3.wav");
 const WHOOSH = staticFile("transition-whoosh-v2.wav");
 
 export const V3_FPS = 30;
-export const V3_DURATION_FRAMES = 58 * V3_FPS;
+export const V3_DURATION_FRAMES = Math.round(55.5 * V3_FPS);
 
 type Segment = {
   id: string;
@@ -309,8 +309,8 @@ const MusicBed: React.FC = () => {
   // across chapter changes, then deliberately collapses under the final quote.
   const volume = interpolate(
     t,
-    [0, 0.7, 3.8, 4.8, 6.0, 18.0, 31.0, 42.0, 48.5, 52.5, 58.0],
-    [0, 0.025, 0.045, 0.11, 0.085, 0.105, 0.08, 0.055, 0.022, 0.0, 0.0],
+    [0, 0.7, 3.8, 4.8, 6.0, 18.0, 31.0, 42.0, 48.5, 51.3, 52.5, 54.7, 55.5],
+    [0, 0.025, 0.045, 0.11, 0.085, 0.105, 0.08, 0.055, 0.022, 0.004, 0.015, 0.010, 0.0],
     {extrapolateLeft: "clamp", extrapolateRight: "clamp"}
   );
   return <Audio src={MUSIC} volume={volume} />;
@@ -330,7 +330,7 @@ export default function BrunoONUReelV3() {
       <Sequence from={Math.round(4.8 * V3_FPS)} durationInFrames={Math.round(1.2 * V3_FPS)}><Bridge /><Audio src={WHOOSH} volume={0.10} /></Sequence>
       <Sequence from={Math.round(18.0 * V3_FPS)} durationInFrames={8}><ChapterCut /><Audio src={WHOOSH} volume={0.045} /></Sequence>
       <Sequence from={Math.round(31.0 * V3_FPS)} durationInFrames={8}><ChapterCut /><Audio src={WHOOSH} volume={0.045} /></Sequence>
-      <Sequence from={Math.round(52.5 * V3_FPS)} durationInFrames={Math.round(5.5 * V3_FPS)}><EndCard /></Sequence>
+      <Sequence from={Math.round(52.5 * V3_FPS)} durationInFrames={Math.round(3.0 * V3_FPS)}><EndCard /></Sequence>
       <Sequence from={Math.round(6.0 * V3_FPS)} durationInFrames={Math.round(46.5 * V3_FPS)}><MemorialBug /></Sequence>
       <Captions />
     </AbsoluteFill>

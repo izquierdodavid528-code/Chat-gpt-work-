@@ -11,7 +11,28 @@
     "expectedWidth": 1080,
     "expectedHeight": 1920,
     "expectedFps": 30,
-    "requireAudio": false,
-    "minDurationSeconds": 0.03
+    "requireAudio": true,
+    "minDurationSeconds": 0.03,
+    "audioQa": {
+      "enabled": true,
+      "requireAudio": true,
+      "expectedCodec": "aac",
+      "expectedSampleRateHz": 48000,
+      "minChannels": 1,
+      "maxChannels": 2,
+      "targetIntegratedLufs": -14,
+      "integratedLufsTolerance": 2,
+      "maxTruePeakDbfs": -1,
+      "maxDurationDeltaSeconds": 0.12,
+      "silence": {
+        "enabled": true,
+        "enforce": false,
+        "noiseDb": -50,
+        "minDurationSeconds": 0.5,
+        "maxLeadingSeconds": 1.5,
+        "maxTrailingSeconds": 2,
+        "maxContinuousSeconds": 4
+      }
+    }
   }
 }

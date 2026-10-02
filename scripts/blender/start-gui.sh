@@ -2,6 +2,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+BLEND_FILE="${1:-}"
 RUN_DIR="$ROOT/.blender-gui"
 LOG_DIR="$RUN_DIR/logs"
 mkdir -p "$LOG_DIR"
@@ -56,7 +57,11 @@ echo $! > "$RUN_DIR/websockify.pid"
 sleep 2
 
 echo "==> Starting Blender GUI with software rendering"
-DISPLAY=:1 LIBGL_ALWAYS_SOFTWARE=1 MESA_LOADER_DRIVER_OVERRIDE=llvmpipe   blender   >"$LOG_DIR/blender.log" 2>&1 &
+if [ -n "$BLEND_FILE" ]; then
+  DISPLAY=:1 LIBGL_ALWAYS_SOFTWARE=1 MESA_LOADER_DRIVER_OVERRIDE=llvmpipe blender "$BLEND_FILE" >"$LOG_DIR/blender.log" 2>&1 &
+else
+  DISPLAY=:1 LIBGL_ALWAYS_SOFTWARE=1 MESA_LOADER_DRIVER_OVERRIDE=llvmpipe blender >"$LOG_DIR/blender.log" 2>&1 &
+fi
 echo $! > "$RUN_DIR/blender.pid"
 
 echo

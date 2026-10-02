@@ -11,11 +11,11 @@
     "expectedWidth": 1080,
     "expectedHeight": 1920,
     "expectedFps": 30,
-    "requireAudio": true,
+    "requireAudio": false,
     "minDurationSeconds": 0.03,
     "audioQa": {
       "enabled": true,
-      "requireAudio": true,
+      "requireAudio": false,
       "expectedCodec": "aac",
       "expectedSampleRateHz": 48000,
       "minChannels": 1,

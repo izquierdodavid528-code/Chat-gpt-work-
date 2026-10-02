@@ -4,5 +4,35 @@
   "compositionId": "BrunoONUReel",
   "driveProjectDir": "01 - Reel Bruno ONU 2026",
   "studioPort": 3000,
-  "outputFile": "out/reel-bruno-onu-2026-v2.mp4"
+  "outputFile": "out/reel-bruno-onu-2026-v3.mp4",
+  "render": {
+    "concurrency": "100%",
+    "expectedCodec": "h264",
+    "expectedWidth": 1080,
+    "expectedHeight": 1920,
+    "expectedFps": 30,
+    "requireAudio": true,
+    "minDurationSeconds": 45,
+    "audioQa": {
+      "enabled": true,
+      "requireAudio": true,
+      "expectedCodec": "aac",
+      "expectedSampleRateHz": 48000,
+      "minChannels": 1,
+      "maxChannels": 2,
+      "targetIntegratedLufs": -14,
+      "integratedLufsTolerance": 2,
+      "maxTruePeakDbfs": -1,
+      "maxDurationDeltaSeconds": 0.12,
+      "silence": {
+        "enabled": true,
+        "enforce": false,
+        "noiseDb": -50,
+        "minDurationSeconds": 0.5,
+        "maxLeadingSeconds": 1.5,
+        "maxTrailingSeconds": 2,
+        "maxContinuousSeconds": 4
+      }
+    }
+  }
 }

@@ -22,6 +22,10 @@
     "referenceTranscriptOffsetSeconds": {
       "note": "Derived from V2: source second 49.8827 aligns with transcript 00:55; verify manually before master.",
       "transcriptMinusProjectSource": 5.1173
+    },
+    "audioPauseAnalysis": {
+      "method": "ffmpeg silencedetect -38 dB, 0.22 s",
+      "status": "development alignment aid only"
     }
   },
   "chapters": [
@@ -39,9 +43,9 @@
       "visual": "close-up or strongest real shot, no logo intro",
       "audio": "room tone + original voice, no music first beat",
       "sourceWindowCandidate": {
-        "startSec": 1160.883,
-        "endSec": 1166,
-        "note": "Derived from transcript 19:26; exact Spanish phrase boundary pending audio verification."
+        "startSec": 1160.43,
+        "endSec": 1165.23,
+        "note": "Aligned to silence-end in project source; verify spoken phrase boundary in final source."
       }
     },
     {
@@ -120,9 +124,9 @@
       "purpose": "Declared willingness to dialogue and commercial relations",
       "visual": "slower pacing, fewer overlays, chapter 03 DIÁLOGO",
       "sourceWindowCandidate": {
-        "startSec": 747.883,
-        "endSec": 774,
-        "note": "Derived from transcript 12:33–12:59; final shortened selection pending audio verification."
+        "startSec": 745.5,
+        "endSec": 756.5,
+        "note": "Moved earlier to natural pause before target dialogue sentence; prior 747.88 start landed mid-phrase."
       }
     },
     {

@@ -36,8 +36,12 @@ if cfg.get("type") != "blender":
     raise SystemExit("project.config.json type must be 'blender'")
 
 slug = str(cfg.get("slug") or project.name)
-if slug != project.name:
-    raise SystemExit("project.config.json slug must match its projects/<slug> directory")
+expected_slug = project.name[1:] if project.name.startswith("_template-") else project.name
+if slug != expected_slug:
+    raise SystemExit(
+        "project.config.json slug must match its projects/<slug> directory "
+        "(starter templates may omit the leading underscore)"
+    )
 if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", slug):
     raise SystemExit("slug contains unsupported characters")
 

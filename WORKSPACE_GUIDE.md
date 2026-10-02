@@ -115,9 +115,9 @@ Cada render guarda `render-environment.txt`.
 
 ### Blender
 
-Workflow: `Blender Drive Render`
+Workflow legado: `Blender Drive Render`.
 
-Toma el proyecto, descarga sus assets desde Drive, ejecuta Blender en headless, sube `out/` a Drive y conserva artifact de GitHub Actions.
+Se conserva para compatibilidad con proyectos antiguos. Para proyectos nuevos y renders finales usar `Blender Smart Render`, que incluye master unico, auditoria, fingerprint, seleccion automatica secuencial/paralela y verificacion final.
 
 
 ## Progreso de render de Blender
@@ -206,6 +206,35 @@ Un proyecto no se considera terminado hasta que:
 - el resultado fue revisado visualmente;
 - el render final esta respaldado en Drive y/o GitHub Actions.
 
+
+## Blender Smart Render canonico
+
+El workflow de produccion para nuevos renders de Blender es:
+
+`.github/workflows/blender-smart-render.yml`
+
+Inputs:
+- `project_slug`: carpeta bajo `projects/`.
+- `mode`: `auto`, `sequential` o `parallel`.
+- `drive_project_dir`: override opcional de la carpeta de Drive.
+
+Usar `auto` por defecto.
+
+El planner `scripts/blender/render-plan.py` valida el contrato del proyecto y decide:
+- `verified_parallel` cuando `render.parallel.safe=true` y el proyecto supera `minFrames`;
+- `sequential` en los demas casos.
+
+Ambos modos comparten un master `.blend` construido una sola vez con `BLENDER_BUILD_ONLY=1`, auditado y fingerprinted. El final se renderiza a PNG y se ensambla con FFmpeg. Esto evita depender de la codificacion directa de Blender y hace la entrega mas reproducible.
+
+El workflow de regresion de infraestructura es:
+
+`.github/workflows/blender-workspace-selftest.yml`
+
+Ese self-test valida sintaxis, contrato de la plantilla, planner, instalacion exacta de Blender, construccion del master, auditoria y un frame real de prueba.
+
+Para contexto rapido en un chat nuevo, leer primero:
+
+`STUDIO_CONTEXT.md`
 
 ## Blender: flujo maestro de render verificado
 

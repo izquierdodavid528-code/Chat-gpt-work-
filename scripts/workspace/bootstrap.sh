@@ -28,6 +28,28 @@ for project in "$ROOT"/projects/*; do
   fi
 done
 
+# Install the same rclone version used by GitHub Actions.
+if ! command -v rclone >/dev/null 2>&1 || ! rclone version | head -n 1 | grep -Fq "rclone v1.75.1"; then
+  echo
+  echo "==> Installing rclone 1.75.1"
+  TMP_RCLONE="$(mktemp -d)"
+  (
+    cd "$TMP_RCLONE"
+    curl -fsSLO "https://downloads.rclone.org/v1.75.1/rclone-v1.75.1-linux-amd64.zip"
+    unzip -q rclone-v1.75.1-linux-amd64.zip
+    sudo install -m 0755 rclone-v1.75.1-linux-amd64/rclone /usr/local/bin/rclone
+  )
+  rm -rf "$TMP_RCLONE"
+fi
+
+# Optional: define RCLONE_CONFIG_B64 as a Codespaces secret to make Drive ready automatically.
+if [ -n "${RCLONE_CONFIG_B64:-}" ]; then
+  mkdir -p "$HOME/.config/rclone"
+  printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$HOME/.config/rclone/rclone.conf"
+  chmod 600 "$HOME/.config/rclone/rclone.conf"
+  echo "==> Restored rclone config from Codespaces secret"
+fi
+
 # Install Blender + browser GUI layer only when missing.
 if ! command -v blender >/dev/null 2>&1; then
   echo

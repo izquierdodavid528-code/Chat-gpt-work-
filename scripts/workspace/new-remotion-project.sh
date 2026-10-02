@@ -45,6 +45,17 @@ cfg.outputFile = `out/${slug}.mp4`;
 fs.writeFileSync(file, JSON.stringify(cfg, null, 2) + "\n");
 NODE
 
+node - "$DST/package-lock.json" "$SLUG" <<'NODE'
+const fs = require("fs");
+const [file, slug] = process.argv.slice(2);
+const lock = JSON.parse(fs.readFileSync(file, "utf8"));
+lock.name = slug;
+if (lock.packages && lock.packages[""]) {
+  lock.packages[""].name = slug;
+}
+fs.writeFileSync(file, JSON.stringify(lock, null, 2) + "\n");
+NODE
+
 mkdir -p "$DST/public" "$DST/out"
 
 (cd "$DST" && npm ci --no-audit --no-fund)

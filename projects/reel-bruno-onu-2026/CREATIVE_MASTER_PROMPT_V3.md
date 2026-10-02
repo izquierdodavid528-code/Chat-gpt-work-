@@ -158,20 +158,20 @@ Cada corte debe responder a cambio semántico, gesto, énfasis vocal, cambio de 
 
 ## Imagen
 
-Orden de preferencia:
-1. crop inteligente real del orador;
-2. plano completo vertical en ventana;
-3. side-by-side contextual;
-4. background extension documental;
-5. freeze-frame breve con tratamiento editorial.
+Política de encuadre condicionada por la calidad real de la fuente:
 
-No usar zoom digital extremo sobre la fuente 640×360.
+Si la fuente es SD (como el archivo actual 640×360):
+1. usar el video real como ventana documental 16:9 nativa dentro del lienzo 9:16;
+2. extender el fondo de forma discreta con una copia desenfocada/oscurecida;
+3. evitar close-ups verticales fabricados mediante crop agresivo;
+4. no aplicar sharpening extremo ni reconstrucción generativa de detalle;
+5. crear variedad mediante composición, tipografía, datos atribuidos, pausas, ritmo y sonido;
+6. mantener visibles los elementos que ya formen parte de la fuente original en vez de ocultarlos artificialmente.
 
-Si la fuente sigue siendo 640×360:
-- limitar close-ups;
-- upscale moderado;
-- sharpening conservador;
-- ocultar limitaciones mediante composición, no oversharpening.
+Si se consigue una fuente oficial 720p/1080p o superior:
+1. revaluar crops close/medium conservadores;
+2. conservar la ventana documental para planos contextuales;
+3. no escalar el rostro más allá de lo que soporte la nitidez real.
 
 Prioridad de producción: conseguir señal oficial UN Web TV de mayor calidad antes del master público.
 

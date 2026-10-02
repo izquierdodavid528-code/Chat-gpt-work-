@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/remotion-drive-render.yml"
       - ".github/workflows/remotion-workspace-selftest.yml"
+      - ".github/workflows/studio-render-request.yml"
       - "scripts/remotion/**"
       - "projects/_template-remotion/**"
   workflow_dispatch:
@@ -34,7 +35,8 @@ jobs:
           printf -v ACTIONLINT_ARCHIVE 'actionlint_%s_linux_amd64.tar.gz' "$ACTIONLINT_VERSION"
           curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v$ACTIONLINT_VERSION/$ACTIONLINT_ARCHIVE"             -o "$RUNNER_TEMP/actionlint.tar.gz"
           tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$RUNNER_TEMP" actionlint
-          "$RUNNER_TEMP/actionlint"             .github/workflows/remotion-drive-render.yml             .github/workflows/remotion-workspace-selftest.yml
+          "$RUNNER_TEMP/actionlint"             .github/workflows/remotion-drive-render.yml             .github/workflows/remotion-workspace-selftest.yml \
+            .github/workflows/studio-render-request.yml
 
       - name: Validate planner
         run: |

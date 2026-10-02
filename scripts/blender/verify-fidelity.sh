@@ -18,8 +18,8 @@ mkdir -p "$(dirname "$REPORT")"
 REF_MD5="$(ffmpeg -v error -i "$REF" -f framemd5 - | tail -n 1 | awk -F\', \' \'{print $NF}\')"
 ACTUAL_MD5="$(ffmpeg -v error -i "$ACTUAL" -f framemd5 - | tail -n 1 | awk -F\', \' \'{print $NF}\')"
 
-WIDTH="$(identify -format \'%w\' "$REF")"
-HEIGHT="$(identify -format \'%h\' "$REF")"
+WIDTH="$(identify -format "%w" "$REF")"
+HEIGHT="$(identify -format "%h" "$REF")"
 TOTAL_PIXELS=$((WIDTH * HEIGHT))
 
 {
@@ -43,8 +43,8 @@ fi
 
 RMSE_RAW="$(compare -metric RMSE "$REF" "$ACTUAL" null: 2>&1 || true)"
 AE_RAW="$(compare -metric AE "$REF" "$ACTUAL" null: 2>&1 || true)"
-RMSE_NORM="$(printf \'%s\' "$RMSE_RAW" | sed -n \'s/.*(\\([^)]*\\)).*/\\1/p\')"
-CHANGED_PIXELS="$(printf \'%s\' "$AE_RAW" | tr -cd \'0-9\')"
+RMSE_NORM="$(printf "%s" "$RMSE_RAW" | sed -n "s/.*(\\([^)]*\\)).*/\\1/p")"
+CHANGED_PIXELS="$(printf "%s" "$AE_RAW" | tr -cd "0-9")"
 
 if [ -z "$RMSE_NORM" ] || [ -z "$CHANGED_PIXELS" ]; then
   echo "Unable to parse fidelity metrics." >&2
@@ -55,18 +55,22 @@ fi
 
 CHANGED_FRACTION="$(python3 - "$CHANGED_PIXELS" "$TOTAL_PIXELS" <<\'PY\'
 import sys
-changed=int(sys.argv[1]); total=int(sys.argv[2])
-print(changed/total)
+changed = int(sys.argv[1])
+total = int(sys.argv[2])
+print(changed / total)
 PY
 )"
 
-PSNR_LINE="$(ffmpeg -v info -i "$REF" -i "$ACTUAL" -lavfi psnr -f null - 2>&1 | grep -E \'PSNR.*average:\' | tail -n 1 || true)"
-SSIM_LINE="$(ffmpeg -v info -i "$REF" -i "$ACTUAL" -lavfi ssim -f null - 2>&1 | grep -E \'SSIM.*All:\' | tail -n 1 || true)"
+PSNR_LINE="$(ffmpeg -v info -i "$REF" -i "$ACTUAL" -lavfi psnr -f null - 2>&1 | grep -E "PSNR.*average:" | tail -n 1 || true)"
+SSIM_LINE="$(ffmpeg -v info -i "$REF" -i "$ACTUAL" -lavfi ssim -f null - 2>&1 | grep -E "SSIM.*All:" | tail -n 1 || true)"
 
+# Strict tolerance measured from the same immutable Eevee master across hosted runners.
+# Exact matches pass immediately. Non-exact matches must stay below both limits.
 PASS="$(python3 - "$RMSE_NORM" "$CHANGED_FRACTION" <<\'PY\'
 import sys
-rmse=float(sys.argv[1]); frac=float(sys.argv[2])
-print("1" if rmse <= 2e-5 and frac <= 1e-4 else "0")
+rmse = float(sys.argv[1])
+fraction = float(sys.argv[2])
+print("1" if rmse <= 2e-5 and fraction <= 1e-4 else "0")
 PY
 )"
 
@@ -80,9 +84,15 @@ PY
 } >> "$REPORT"
 
 if [ "$PASS" = "1" ]; then
-  { echo "result=PASS"; echo; } >> "$REPORT"
+  {
+    echo "result=PASS"
+    echo
+  } >> "$REPORT"
   exit 0
 fi
 
-{ echo "result=FAIL"; echo; } >> "$REPORT"
+{
+  echo "result=FAIL"
+  echo
+} >> "$REPORT"
 exit 1

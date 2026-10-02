@@ -1,250 +1,201 @@
-name: Remotion Drive Render
+name: Remotion Smart Render
 
 on:
   workflow_dispatch:
     inputs:
       project_slug:
-        description: "Project slug, e.g. che-octubre or documental-01"
+        description: "Remotion project slug under projects/"
         required: true
         type: string
-      repo_project_dir:
-        description: "Optional repo path. Default: projects/<project_slug>"
+      validation_frames:
+        description: "Empty = full production. Example validation: 0-29"
         required: false
         default: ""
         type: string
-      drive_project_dir:
-        description: "Optional Drive folder under Remotion Projects. Default: <project_slug>"
+  workflow_call:
+    inputs:
+      project_slug:
+        required: true
+        type: string
+      validation_frames:
         required: false
         default: ""
         type: string
+    secrets:
+      RCLONE_CONFIG_B64:
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: remotion-smart-${{ inputs.project_slug }}
+  cancel-in-progress: ${{ inputs.validation_frames != '' }}
+
+env:
+  DRIVE_BASE: "Remotion Projects"
+  RCLONE_VERSION: "1.75.1"
 
 jobs:
-  render:
+  plan:
     runs-on: ubuntu-24.04
-
-    env:
-      DRIVE_BASE: "Remotion Projects"
-
+    outputs:
+      project_slug: ${{ steps.plan.outputs.project_slug }}
+      project_dir: ${{ steps.plan.outputs.project_dir }}
+      composition_id: ${{ steps.plan.outputs.composition_id }}
+      drive_project: ${{ steps.plan.outputs.drive_project }}
+      output_file: ${{ steps.plan.outputs.output_file }}
+      concurrency: ${{ steps.plan.outputs.concurrency }}
+      validation_frames: ${{ steps.plan.outputs.validation_frames }}
+      validation_only: ${{ steps.plan.outputs.validation_only }}
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
-      - name: Resolve project paths
-        shell: bash
+      - name: Resolve render plan
+        id: plan
+        env:
+          PROJECT_SLUG: ${{ inputs.project_slug }}
+          VALIDATION_FRAMES: ${{ inputs.validation_frames }}
         run: |
-          SLUG="${{ inputs.project_slug }}"
-          REPO_DIR="${{ inputs.repo_project_dir }}"
-          DRIVE_DIR="${{ inputs.drive_project_dir }}"
+          set -euo pipefail
+          python3 scripts/remotion/render-plan.py             "projects/$PROJECT_SLUG"             "$GITHUB_OUTPUT"             "$RUNNER_TEMP/render-plan.json"             "$VALIDATION_FRAMES"
+          cat "$RUNNER_TEMP/render-plan.json"
 
-          if [ -z "$SLUG" ]; then
-            echo "::error::project_slug is required"
-            exit 1
-          fi
+      - name: Upload render plan
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: remotion-render-plan-${{ github.run_id }}
+          path: ${{ runner.temp }}/render-plan.json
+          retention-days: 14
+          if-no-files-found: error
 
-          if [ -z "$REPO_DIR" ]; then
-            REPO_DIR="projects/$SLUG"
-          fi
+  render:
+    needs: plan
+    runs-on: ubuntu-24.04
+    env:
+      PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
+      PROJECT_DIR: ${{ needs.plan.outputs.project_dir }}
+      COMPOSITION_ID: ${{ needs.plan.outputs.composition_id }}
+      DRIVE_PROJECT: ${{ needs.plan.outputs.drive_project }}
+      OUTPUT_FILE: ${{ needs.plan.outputs.output_file }}
+      REMOTION_CONCURRENCY: ${{ needs.plan.outputs.concurrency }}
+      VALIDATION_FRAMES: ${{ needs.plan.outputs.validation_frames }}
+      VALIDATION_ONLY: ${{ needs.plan.outputs.validation_only }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
-          CONFIG="$REPO_DIR/project.config.json"
-
-          if [ -z "$DRIVE_DIR" ] && [ -f "$CONFIG" ]; then
-            DRIVE_DIR="$(node -e 'const c=require(process.argv[1]); console.log(c.driveProjectDir || "")' "$CONFIG")"
-          fi
-
-          if [ -z "$DRIVE_DIR" ]; then
-            DRIVE_DIR="$SLUG"
-          fi
-
-          echo "PROJECT_SLUG=$SLUG" >> "$GITHUB_ENV"
-          echo "PROJECT_DIR=$REPO_DIR" >> "$GITHUB_ENV"
-          echo "DRIVE_PROJECT=$DRIVE_DIR" >> "$GITHUB_ENV"
-
-          echo "Project slug: $SLUG"
-          echo "Repository project: $REPO_DIR"
-          echo "Drive project: $DRIVE_DIR"
-
-      - name: Validate project structure
-        shell: bash
-        run: |
-          test -d "$PROJECT_DIR"
-          test -f "$PROJECT_DIR/package.json"
-          echo "Project structure OK"
-
-      - name: Restore rclone OAuth config
+      - name: Restore rclone config
+        if: env.VALIDATION_ONLY != 'true'
         env:
           RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
-        shell: bash
         run: |
-          if [ -z "$RCLONE_CONFIG_B64" ]; then
-            echo "::error::Missing repository secret RCLONE_CONFIG_B64"
-            exit 1
-          fi
-
+          set -euo pipefail
+          test -n "$RCLONE_CONFIG_B64"
           printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$RUNNER_TEMP/rclone.conf"
           chmod 600 "$RUNNER_TEMP/rclone.conf"
-
-          if ! grep -q '^\[drive\]$' "$RUNNER_TEMP/rclone.conf"; then
-            echo "::error::The rclone config does not contain the drive remote"
-            exit 1
-          fi
+          grep -q '^\[drive\]$' "$RUNNER_TEMP/rclone.conf"
 
       - name: Install pinned rclone
-        shell: bash
+        if: env.VALIDATION_ONLY != 'true'
         run: |
-          RCLONE_VERSION="1.75.1"
+          set -euo pipefail
           ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
           curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
           sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
-          rclone version
           rclone version | head -n 1 | grep -F "rclone v${RCLONE_VERSION}"
 
-      - name: Validate Google Drive access
-        shell: bash
+      - name: Download shared and project assets
+        if: env.VALIDATION_ONLY != 'true'
         run: |
-          rclone \
-            --config "$RUNNER_TEMP/rclone.conf" \
-            lsf "drive:$DRIVE_BASE" \
-            --max-depth 1
-
-      - name: Download shared assets
-        shell: bash
-        run: |
-          mkdir -p "$PROJECT_DIR/public/shared"
-
-          if rclone \
-            --config "$RUNNER_TEMP/rclone.conf" \
-            lsf "drive:$DRIVE_BASE/_shared" >/dev/null 2>&1
-          then
-            rclone \
-              --config "$RUNNER_TEMP/rclone.conf" \
-              copy \
-              "drive:$DRIVE_BASE/_shared" \
-              "$PROJECT_DIR/public/shared" \
-              --create-empty-src-dirs \
-              --transfers 8 \
-              --checkers 16 \
-              --stats 10s
+          set -euo pipefail
+          mkdir -p "$PROJECT_DIR/public/shared" "$PROJECT_DIR/public"
+          if rclone --config "$RUNNER_TEMP/rclone.conf" lsf "drive:$DRIVE_BASE/_shared" >/dev/null 2>&1; then
+            rclone --config "$RUNNER_TEMP/rclone.conf" copy               "drive:$DRIVE_BASE/_shared"               "$PROJECT_DIR/public/shared"               --create-empty-src-dirs --transfers 8 --checkers 16
+          fi
+          if rclone --config "$RUNNER_TEMP/rclone.conf" lsf "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets" >/dev/null 2>&1; then
+            rclone --config "$RUNNER_TEMP/rclone.conf" copy               "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets"               "$PROJECT_DIR/public"               --create-empty-src-dirs --transfers 8 --checkers 16
           else
-            echo "No shared assets yet; continuing."
+            echo "No project assets folder found; continuing for asset-free project."
           fi
-
-      - name: Download project assets from Drive
-        shell: bash
-        run: |
-          mkdir -p "$PROJECT_DIR/public"
-
-          if ! rclone \
-            --config "$RUNNER_TEMP/rclone.conf" \
-            lsf "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets" >/dev/null 2>&1
-          then
-            echo "::error::Drive assets folder not found: $DRIVE_BASE/$DRIVE_PROJECT/assets"
-            exit 1
-          fi
-
-          rclone \
-            --config "$RUNNER_TEMP/rclone.conf" \
-            copy \
-            "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets" \
-            "$PROJECT_DIR/public" \
-            --create-empty-src-dirs \
-            --transfers 8 \
-            --checkers 16 \
-            --stats 10s
-
-          echo "Assets downloaded:"
-          find "$PROJECT_DIR/public" -maxdepth 4 -type f -printf '%P\n' | sort
 
       - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: "20.20.2"
 
-      - name: Pin npm version
-        shell: bash
+      - name: Pin npm
+        run: npm install --global npm@10.8.2
+
+      - name: Install dependencies
+        working-directory: ${{ env.PROJECT_DIR }}
         run: |
-          npm install --global npm@10.8.2
+          set -euo pipefail
+          test -f package-lock.json
+          npm ci --no-audit --no-fund
           node --version | grep -F "v20.20.2"
           npm --version | grep -F "10.8.2"
+          node -e 'const p=require("./package.json"); if(p.dependencies.remotion!=="4.0.530"||p.dependencies["@remotion/cli"]!=="4.0.530") process.exit(1)'
 
-      - name: Install project dependencies
-        working-directory: ${{ env.PROJECT_DIR }}
-        shell: bash
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci --no-audit --no-fund
-          else
-            echo "::warning::package-lock.json missing; using npm install. Commit a lockfile for full dependency reproducibility."
-            npm install --no-audit --no-fund
-          fi
-
-      - name: Verify pinned Remotion environment
-        working-directory: ${{ env.PROJECT_DIR }}
-        shell: bash
-        run: |
-          node -e 'const p=require("./package.json"); if(p.dependencies.remotion!=="4.0.530"||p.dependencies["@remotion/cli"]!=="4.0.530"){process.exit(1)}'
-          npx remotion --version
-
-      - name: Validate Remotion compositions
+      - name: Validate composition
         working-directory: ${{ env.PROJECT_DIR }}
         run: npm run compositions
 
-      - name: Verify Remotion browser bootstrap
+      - name: Render
         working-directory: ${{ env.PROJECT_DIR }}
-        shell: bash
         run: |
-          echo "Remotion composition validation already launched the pinned Headless Shell successfully."
-          echo "Expected Chrome Headless Shell: 149.0.7790.0"
+          set -euo pipefail
+          mkdir -p "$(dirname "$OUTPUT_FILE")"
+          EXTRA=()
+          if [ -n "$VALIDATION_FRAMES" ]; then
+            EXTRA+=(--frames="$VALIDATION_FRAMES")
+          fi
+          npx remotion render             src/index.ts             "$COMPOSITION_ID"             "$OUTPUT_FILE"             --codec=h264             --pixel-format=yuv420p             --crf=18             --concurrency="$REMOTION_CONCURRENCY"             --log=info             "${EXTRA[@]}"
 
-      - name: Record render environment
-        shell: bash
+      - name: Verify final video
         run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg >/dev/null
+          test -s "$PROJECT_DIR/$OUTPUT_FILE"
           mkdir -p "$PROJECT_DIR/out"
+          ffprobe -v error             -show_streams             -show_format             -of json             "$PROJECT_DIR/$OUTPUT_FILE" > "$PROJECT_DIR/out/video-probe.json"
+          python3 scripts/remotion/verify-delivery.py             "$PROJECT_DIR/project.config.json"             "$PROJECT_DIR/out/video-probe.json"             "$PROJECT_DIR/out/delivery-report.json"
+
+      - name: Record environment
+        run: |
           {
             echo "runner=ubuntu-24.04"
+            echo "source_commit=$GITHUB_SHA"
             echo "node=$(node --version)"
             echo "npm=$(npm --version)"
-            echo "rclone=$(rclone version | head -n 1)"
             echo "remotion=$(cd "$PROJECT_DIR" && npx remotion --version | tail -n 1)"
-            echo "chrome_expected=149.0.7790.0"
+            echo "concurrency=$REMOTION_CONCURRENCY"
+            echo "validation_frames=$VALIDATION_FRAMES"
           } > "$PROJECT_DIR/out/render-environment.txt"
 
-      - name: Render with Remotion
-        working-directory: ${{ env.PROJECT_DIR }}
-        run: npm run render
-
-      - name: Validate rendered output
-        shell: bash
+      - name: Upload production delivery to Drive
+        if: env.VALIDATION_ONLY != 'true'
         run: |
-          test -d "$PROJECT_DIR/out"
-          test -n "$(find "$PROJECT_DIR/out" -type f -print -quit)"
-          find "$PROJECT_DIR/out" -type f -printf '%P %s bytes\n'
+          set -euo pipefail
+          rclone --config "$RUNNER_TEMP/rclone.conf" mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"
+          rclone --config "$RUNNER_TEMP/rclone.conf" copy             "$PROJECT_DIR/out"             "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"             --transfers 4 --checkers 8
+          rclone --config "$RUNNER_TEMP/rclone.conf" copyto             "$PROJECT_DIR/$OUTPUT_FILE"             "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders/$(basename "$OUTPUT_FILE")"
 
-      - name: Upload render to Google Drive
-        shell: bash
-        run: |
-          rclone \
-            --config "$RUNNER_TEMP/rclone.conf" \
-            mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"
-
-          rclone \
-            --config "$RUNNER_TEMP/rclone.conf" \
-            copy \
-            "$PROJECT_DIR/out" \
-            "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders" \
-            --transfers 4 \
-            --checkers 8 \
-            --stats 10s
-
-      - name: Upload GitHub artifact backup
+      - name: Upload GitHub artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: remotion-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
-          path: ${{ env.PROJECT_DIR }}/out/
+          name: remotion-delivery-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
+          path: |
+            ${{ env.PROJECT_DIR }}/${{ env.OUTPUT_FILE }}
+            ${{ env.PROJECT_DIR }}/out/video-probe.json
+            ${{ env.PROJECT_DIR }}/out/delivery-report.json
+            ${{ env.PROJECT_DIR }}/out/render-environment.txt
           if-no-files-found: error
           retention-days: 14
 
       - name: Cleanup credential
         if: always()
-        shell: bash
         run: rm -f "$RUNNER_TEMP/rclone.conf"

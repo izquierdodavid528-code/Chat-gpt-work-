@@ -1,0 +1,13 @@
+{
+  "slug": "haaland-goal-cinematic-test",
+  "type": "blender",
+  "driveProjectDir": "04 - Haaland Goal Cinematic Test",
+  "sceneScript": "scene.py",
+  "blendFile": "out/haaland-goal-cinematic.blend",
+  "posterFile": "out/haaland-goal-poster.png",
+  "videoFile": "out/haaland-goal-cinematic.mp4",
+  "renderEngine": "BLENDER_EEVEE_NEXT",
+  "fps": 24,
+  "frames": 144,
+  "resolution": "720x1280"
+}

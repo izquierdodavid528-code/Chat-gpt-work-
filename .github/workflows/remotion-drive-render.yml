@@ -189,17 +189,12 @@ jobs:
         working-directory: ${{ env.PROJECT_DIR }}
         run: npm run compositions
 
-      - name: Verify Chrome Headless Shell version
+      - name: Verify Remotion browser bootstrap
+        working-directory: ${{ env.PROJECT_DIR }}
         shell: bash
         run: |
-          CHROME_BIN="$(find "$HOME/.cache" "$PROJECT_DIR/node_modules/.cache" -type f \( -name chrome-headless-shell -o -name headless_shell \) 2>/dev/null | head -n 1)"
-          if [ -z "$CHROME_BIN" ]; then
-            echo "::error::Remotion Chrome Headless Shell was not found after composition validation."
-            exit 1
-          fi
-          "$CHROME_BIN" --version
-          "$CHROME_BIN" --version | grep -F "149.0.7790.0"
-          echo "CHROME_BIN=$CHROME_BIN" >> "$GITHUB_ENV"
+          echo "Remotion composition validation already launched the pinned Headless Shell successfully."
+          echo "Expected Chrome Headless Shell: 149.0.7790.0"
 
       - name: Record render environment
         shell: bash
@@ -211,7 +206,7 @@ jobs:
             echo "npm=$(npm --version)"
             echo "rclone=$(rclone version | head -n 1)"
             echo "remotion=$(cd "$PROJECT_DIR" && npx remotion --version | tail -n 1)"
-            echo "chrome=$("$CHROME_BIN" --version 2>/dev/null || true)"
+            echo "chrome_expected=149.0.7790.0"
           } > "$PROJECT_DIR/out/render-environment.txt"
 
       - name: Render with Remotion

@@ -26,7 +26,8 @@ Drive root:
 Use **Blender Smart Render**:
 - workflow file: `.github/workflows/blender-smart-render.yml`
 - input: `project_slug`
-- mode: `auto` by default.
+- mode: `auto` by default;
+- `validation_frame_count=0` for full production; a positive value is an economical integration validation and does not publish to Drive.
 
 Do NOT create a new project-specific render workflow unless there is a real requirement the generic workflow cannot represent.
 
@@ -50,14 +51,15 @@ Both sequential and parallel final renders use the same principle:
 5. run the scene script with `BLENDER_BUILD_ONLY=1`;
 6. produce one immutable `.blend` master;
 7. audit dependencies and simulation signals;
-8. pack compatible resources;
+8. pack compatible resources and reject any non-portable external dependency;
 9. fingerprint the master with SHA-256;
-10. render PNG frames from that master;
-11. verify frame completeness;
-12. assemble the MP4 with FFmpeg;
-13. inspect the MP4 with ffprobe;
-14. save audit files;
-15. upload delivery to Drive and GitHub Actions artifacts.
+10. verify the master against `project.config.json` (version, engine, range, FPS and resolution);
+11. render PNG frames from that master using the configured frame padding;
+12. verify exact frame completeness;
+13. assemble the MP4 with FFmpeg;
+14. inspect the MP4 with ffprobe and run the delivery verifier;
+15. save audit files;
+16. for a full production run, upload delivery to Drive and keep a GitHub Actions artifact.
 
 Parallel mode additionally:
 - divides frames into blocks;
@@ -87,7 +89,7 @@ Parallel render is allowed only after scene review.
 
 Use:
 - `simulationPolicy: "none"` for independent/keyframed frames;
-- `simulationPolicy: "baked"` when stateful simulations are baked and a cache directory is declared.
+- `simulationPolicy: "baked"` when stateful simulations are baked and `simulationCacheDir` is declared. Production Smart Render retrieves that cache from the project folder in Drive and preserves its project-relative path for every worker.
 
 Examples requiring special care:
 - smoke / fire / fluids;
@@ -132,7 +134,9 @@ Local planning check:
 - `.github/workflows/blender-workspace-selftest.yml`: regression test for the Blender infrastructure.
 - `scripts/blender/render-plan.py`: config validation and automatic mode selection.
 - `scripts/blender/master-audit.py`: master dependency/simulation audit and manifest.
+- `scripts/blender/verify-master-contract.py`: proves the audited master matches project config.
 - `scripts/blender/verify_fidelity.py`: strict image fidelity gate.
+- `scripts/blender/verify-delivery.py`: proves PNG numbering and final video properties.
 - `scripts/blender/install-pinned.sh`: exact Blender installer.
 - `projects/_template-blender`: contract-compliant starter project.
 
@@ -165,6 +169,15 @@ When asked to continue studio work:
 7. never expose `RCLONE_CONFIG_B64` or other secrets;
 8. do not call a render "final" until its verification/delivery job succeeds.
 
+## Recovery and known boundaries
+
+- Frame block artifacts are checkpoints inside a run and are retained temporarily (currently 14 days).
+- Before rerendering, inspect current/recent Actions artifacts and the master SHA-256.
+- Cross-run automatic resume from arbitrary old frame-block artifacts is **not** implemented yet; do not claim that it is.
+- `render.parallel.safe=true` remains an explicit audit decision. Automation refuses unsafe projects but does not decide artistic/simulation safety on its own.
+- Baking a stateful simulation is still a project preparation step; Smart Render distributes and verifies a declared baked cache, it does not invent the bake.
+- Automated QA verifies technical fidelity and delivery properties; subjective artistic review remains separate.
+
 ## Current cleanup policy
 
-Old project-specific Blender experiment workflows and the legacy Blender Drive Render workflow have been removed from the active workflow directory. Blender Smart Render plus the self-test are now the single production infrastructure.
+Old project-specific Blender experiment workflows and the legacy Blender Drive Render workflow have been removed from the active workflow directory. Blender Smart Render plus the self-test are now the canonical Blender production infrastructure.

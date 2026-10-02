@@ -24,7 +24,7 @@ const MUSIC = staticFile("music-bed-v2.wav");
 const WHOOSH = staticFile("transition-whoosh-v2.wav");
 
 export const V3_FPS = 30;
-export const V3_DURATION_FRAMES = 60 * V3_FPS;
+export const V3_DURATION_FRAMES = 58 * V3_FPS;
 
 type Segment = {
   id: string;
@@ -40,29 +40,29 @@ const SEGMENTS: Segment[] = [
   // Until the master source is upgraded from 640x360, every real shot stays in a
   // native 16:9 documentary window. Fake vertical close-ups exaggerate softness.
   {id: "cold", from: 0, duration: 4.8, sourceStart: 1160.43, mode: "window"},
-  {id: "principle", from: 8.5, duration: 12, sourceStart: 49.883, chapter: "DERECHO INTERNACIONAL", chapterIndex: "01", mode: "window"},
-  {id: "containers", from: 20.5, duration: 13, sourceStart: 208.68, chapter: "PRESIÓN ECONÓMICA", chapterIndex: "02", mode: "window"},
-  {id: "dialogue", from: 33.5, duration: 11, sourceStart: 745.50, chapter: "DIÁLOGO", chapterIndex: "03", mode: "window"},
-  {id: "payoff", from: 44.5, duration: 10.5, sourceStart: 1156.88, mode: "window"},
+  {id: "principle", from: 6.0, duration: 12, sourceStart: 49.883, chapter: "DERECHO INTERNACIONAL", chapterIndex: "01", mode: "window"},
+  {id: "containers", from: 18.0, duration: 13, sourceStart: 208.68, chapter: "PRESIÓN ECONÓMICA", chapterIndex: "02", mode: "window"},
+  {id: "dialogue", from: 31.0, duration: 11, sourceStart: 745.50, chapter: "DIÁLOGO", chapterIndex: "03", mode: "window"},
+  {id: "payoff", from: 42.0, duration: 10.5, sourceStart: 1156.88, mode: "window"},
 ];
 
 type Caption = {start: number; end: number; text: string; accent?: string};
 const CAPTIONS: Caption[] = [
   {start: 0, end: 2.4, text: "La ley de la selva no puede ser", accent: "ley de la selva"},
   {start: 2.4, end: 4.8, text: "el futuro de la humanidad.", accent: "humanidad"},
-  {start: 8.5, end: 10, text: "Sin embargo, es alarmante"},
-  {start: 10, end: 13, text: "el avance del expansionismo,"},
-  {start: 13, end: 15.5, text: "los actos de usurpación y conquista;"},
-  {start: 15.5, end: 20.5, text: "la agresión militar y económica."},
-  {start: 20.5, end: 25.2, text: "Más de 7 000 contenedores han sido detenidos"},
-  {start: 25.2, end: 29, text: "en diversos puertos, muchos de ellos"},
-  {start: 29, end: 33.5, text: "con alimentos, medicamentos y dispositivos médicos."},
-  {start: 33.5, end: 38.9, text: "Siempre hemos estado y seguimos dispuestos al diálogo", accent: "diálogo"},
-  {start: 38.9, end: 41.6, text: "con el gobierno de Estados Unidos"},
-  {start: 41.6, end: 44.5, text: "para intentar encontrar solución a las diferencias bilaterales."},
-  {start: 44.5, end: 49, text: "Creemos que este rumbo es peligroso"},
-  {start: 49, end: 51.5, text: "y es insostenible."},
-  {start: 51.5, end: 55, text: "La ley de la selva no puede ser el futuro de la humanidad.", accent: "futuro de la humanidad"},
+  {start: 6.0, end: 7.5, text: "Sin embargo, es alarmante"},
+  {start: 7.5, end: 10.5, text: "el avance del expansionismo,"},
+  {start: 10.5, end: 13.0, text: "los actos de usurpación y conquista;"},
+  {start: 13.0, end: 18.0, text: "la agresión militar y económica."},
+  {start: 18.0, end: 22.7, text: "Más de 7 000 contenedores han sido detenidos"},
+  {start: 22.7, end: 26.5, text: "en diversos puertos, muchos de ellos"},
+  {start: 26.5, end: 31.0, text: "con alimentos, medicamentos y dispositivos médicos."},
+  {start: 31.0, end: 36.4, text: "Siempre hemos estado y seguimos dispuestos al diálogo", accent: "diálogo"},
+  {start: 36.4, end: 39.1, text: "con el gobierno de Estados Unidos"},
+  {start: 39.1, end: 42.0, text: "para intentar encontrar solución a las diferencias bilaterales."},
+  {start: 42.0, end: 46.5, text: "Creemos que este rumbo es peligroso"},
+  {start: 46.5, end: 49.0, text: "y es insostenible."},
+  {start: 49.0, end: 52.5, text: "La ley de la selva no puede ser el futuro de la humanidad.", accent: "futuro de la humanidad"},
 ];
 
 const FrameTexture: React.FC = () => (
@@ -189,6 +189,7 @@ const Bridge: React.FC = () => {
         <div style={{height: 5, width: 126, background: RED, marginBottom: 18}} />
         <div style={{color: WHITE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 36, fontWeight: 900, letterSpacing: .2}}>BRUNO RODRÍGUEZ PARRILLA</div>
         <div style={{marginTop: 8, color: "rgba(255,255,255,.62)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 19, fontWeight: 750, letterSpacing: 1.4}}>81.ª ASAMBLEA GENERAL · ONU · 26 SEP 2026</div>
+        <div style={{marginTop: 18, color: "rgba(255,255,255,.46)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 16, fontWeight: 700, letterSpacing: 1.1}}>FRAGMENTOS DE UNA INTERVENCIÓN DE ~21 MIN</div>
       </div>
       <FrameTexture />
     </AbsoluteFill>
@@ -254,7 +255,15 @@ const EndCard: React.FC = () => {
 const MusicBed: React.FC = () => {
   const frame = useCurrentFrame();
   const t = frame / V3_FPS;
-  const volume = t < 4.8 ? 0 : interpolate(t, [4.8, 8.5, 42, 48, 55, 60], [0.04, 0.065, 0.06, 0.032, 0.005, 0], {extrapolateLeft: "clamp", extrapolateRight: "clamp"});
+
+  // Continuous editorial underscore: almost absent under the cold open, stronger
+  // across chapter changes, then deliberately collapses under the final quote.
+  const volume = interpolate(
+    t,
+    [0, 0.7, 3.8, 4.8, 6.0, 18.0, 31.0, 42.0, 48.5, 52.5, 58.0],
+    [0, 0.025, 0.045, 0.11, 0.085, 0.105, 0.08, 0.055, 0.022, 0.0, 0.0],
+    {extrapolateLeft: "clamp", extrapolateRight: "clamp"}
+  );
   return <Audio src={MUSIC} volume={volume} />;
 };
 
@@ -269,10 +278,9 @@ export default function BrunoONUReelV3() {
           {segment.id === "containers" ? <DataCard /> : null}
         </Sequence>
       ))}
-      <Sequence from={Math.round(4.8 * V3_FPS)} durationInFrames={Math.round(1.5 * V3_FPS)}><Bridge /><Audio src={WHOOSH} volume={0.13} /></Sequence>
-      <Sequence from={Math.round(6.3 * V3_FPS)} durationInFrames={Math.round(2.2 * V3_FPS)}><ContextCard /></Sequence>
-      <Sequence from={Math.round(55 * V3_FPS)} durationInFrames={5 * V3_FPS}><EndCard /></Sequence>
-      <Sequence from={Math.round(8.5 * V3_FPS)} durationInFrames={Math.round(46.5 * V3_FPS)}><MemorialBug /></Sequence>
+      <Sequence from={Math.round(4.8 * V3_FPS)} durationInFrames={Math.round(1.2 * V3_FPS)}><Bridge /><Audio src={WHOOSH} volume={0.10} /></Sequence>
+      <Sequence from={Math.round(52.5 * V3_FPS)} durationInFrames={Math.round(5.5 * V3_FPS)}><EndCard /></Sequence>
+      <Sequence from={Math.round(6.0 * V3_FPS)} durationInFrames={Math.round(46.5 * V3_FPS)}><MemorialBug /></Sequence>
       <Captions />
     </AbsoluteFill>
   );

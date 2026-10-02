@@ -151,11 +151,25 @@ const DocumentaryVideo: React.FC<{segment: Segment}> = ({segment}) => {
 };
 
 const SegmentWithAudio: React.FC<{segment: Segment}> = ({segment}) => {
+  const frame = useCurrentFrame();
   const startFrom = Math.round(segment.sourceStart * V3_FPS);
+  const durationFrames = Math.max(1, Math.round(segment.duration * V3_FPS));
+  const fadeFrames = 4;
+  const voiceVolume = interpolate(
+    frame,
+    [0, fadeFrames, Math.max(fadeFrames + 1, durationFrames - fadeFrames), durationFrames - 1],
+    [0.82, 1, 1, 0.82],
+    {extrapolateLeft: "clamp", extrapolateRight: "clamp"}
+  );
   return (
     <AbsoluteFill>
       <DocumentaryVideo segment={segment} />
-      <Video src={SOURCE} startFrom={startFrom} style={{position: "absolute", width: 2, height: 2, opacity: 0, pointerEvents: "none"}} />
+      <Video
+        src={SOURCE}
+        startFrom={startFrom}
+        volume={voiceVolume}
+        style={{position: "absolute", width: 2, height: 2, opacity: 0, pointerEvents: "none"}}
+      />
       <SourceBug />
       {segment.chapter && segment.chapterIndex ? <ChapterLabel index={segment.chapterIndex} title={segment.chapter} /> : null}
     </AbsoluteFill>
@@ -231,6 +245,33 @@ const DataCard: React.FC = () => {
   );
 };
 
+const ChapterCut: React.FC = () => {
+  const frame = useCurrentFrame();
+  const phase = interpolate(frame, [0, 3, 7], [0, 1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+  return (
+    <AbsoluteFill style={{pointerEvents: "none", zIndex: 95}}>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          top: "50%",
+          height: 3,
+          width: "100%",
+          background: RED,
+          opacity: phase * 0.72,
+          transform: `scaleX(${phase})`,
+          transformOrigin: "left",
+          boxShadow: "0 0 24px rgba(237,28,36,.45)",
+        }}
+      />
+      <AbsoluteFill style={{background: `rgba(0,0,0,${phase * 0.11})`}} />
+    </AbsoluteFill>
+  );
+};
+
 const MemorialBug: React.FC = () => (
   <div style={{position: "absolute", right: 66, top: 88, width: 76, zIndex: 90, opacity: .70}}>
     <Img src={LOGO} style={{width: "100%", height: "auto"}} />
@@ -279,6 +320,8 @@ export default function BrunoONUReelV3() {
         </Sequence>
       ))}
       <Sequence from={Math.round(4.8 * V3_FPS)} durationInFrames={Math.round(1.2 * V3_FPS)}><Bridge /><Audio src={WHOOSH} volume={0.10} /></Sequence>
+      <Sequence from={Math.round(18.0 * V3_FPS)} durationInFrames={8}><ChapterCut /><Audio src={WHOOSH} volume={0.045} /></Sequence>
+      <Sequence from={Math.round(31.0 * V3_FPS)} durationInFrames={8}><ChapterCut /><Audio src={WHOOSH} volume={0.045} /></Sequence>
       <Sequence from={Math.round(52.5 * V3_FPS)} durationInFrames={Math.round(5.5 * V3_FPS)}><EndCard /></Sequence>
       <Sequence from={Math.round(6.0 * V3_FPS)} durationInFrames={Math.round(46.5 * V3_FPS)}><MemorialBug /></Sequence>
       <Captions />

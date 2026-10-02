@@ -67,7 +67,7 @@ jobs:
           };
           fs.appendFileSync(output, Object.entries(values).map(([k,v]) => k + '=' + v).join('\n') + '\n');
           console.log(JSON.stringify(values, null, 2));
-NODE
+          NODE
 
   remotion:
     needs: resolve

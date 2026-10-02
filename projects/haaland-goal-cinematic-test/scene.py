@@ -7,6 +7,9 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "out")
 os.makedirs(OUT, exist_ok=True)
 
+BUILD_ONLY = os.environ.get("BLENDER_BUILD_ONLY") == "1"
+SKIP_POSTER = os.environ.get("BLENDER_SKIP_POSTER") == "1"
+
 # Reset
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
@@ -281,14 +284,21 @@ comp=nt.nodes.new("CompositorNodeComposite")
 nt.links.new(rl.outputs["Image"],glare.inputs["Image"])
 nt.links.new(glare.outputs["Image"],comp.inputs["Image"])
 
-# poster
-scene.frame_set(100)
-scene.render.image_settings.file_format="PNG"
-scene.render.filepath=os.path.join(OUT,"haaland-goal-poster.png")
-bpy.ops.render.render(write_still=True)
+if not SKIP_POSTER:
+    # poster
+    scene.frame_set(100)
+    scene.render.image_settings.file_format="PNG"
+    scene.render.filepath=os.path.join(OUT,"haaland-goal-poster.png")
+    bpy.ops.render.render(write_still=True)
+else:
+    print("BLENDER_POSTER_SKIPPED")
 
 # save blend
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT,"haaland-goal-cinematic.blend"))
+
+if BUILD_ONLY:
+    print("BLENDER_BUILD_ONLY_READY")
+    raise SystemExit(0)
 
 # movie
 scene.render.image_settings.file_format="FFMPEG"

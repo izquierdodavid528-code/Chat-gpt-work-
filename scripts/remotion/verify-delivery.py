@@ -4,12 +4,13 @@ import math
 import pathlib
 import sys
 
-if len(sys.argv) != 4:
-    raise SystemExit("Usage: verify-delivery.py <project.config.json> <video-probe.json> <report.json>")
+if len(sys.argv) not in {4, 5}:
+    raise SystemExit("Usage: verify-delivery.py <project.config.json> <video-probe.json> <report.json> [--validation]")
 
 config_path = pathlib.Path(sys.argv[1])
 probe_path = pathlib.Path(sys.argv[2])
 report_path = pathlib.Path(sys.argv[3])
+validation_mode = len(sys.argv) == 5 and sys.argv[4] == "--validation"
 
 cfg = json.loads(config_path.read_text(encoding="utf-8"))
 probe = json.loads(probe_path.read_text(encoding="utf-8"))
@@ -61,8 +62,12 @@ try:
 except Exception:
     duration = 0.0
 min_duration = float(render_cfg.get("minDurationSeconds", 0.03))
-if duration < min_duration:
-    errors.append(f"Output duration too short: {duration}s < {min_duration}s")
+if validation_mode:
+    if duration <= 0:
+        errors.append("Validation output duration is invalid or empty.")
+else:
+    if duration < min_duration:
+        errors.append(f"Output duration too short: {duration}s < {min_duration}s")
 
 require_audio = bool(render_cfg.get("requireAudio", False))
 if require_audio and not audio_streams:
@@ -88,6 +93,7 @@ report = {
         "sizeBytes": size_bytes,
     },
     "audioStreams": len(audio_streams),
+    "validationMode": validation_mode,
     "requirements": {
         "expectedCodec": expected_codec,
         "expectedWidth": expected_width,

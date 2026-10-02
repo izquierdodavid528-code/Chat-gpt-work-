@@ -111,8 +111,12 @@ const ChapterLabel: React.FC<{index: string; title: string}> = ({index, title}) 
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const enter = spring({frame, fps, durationInFrames: 16, config: {damping: 170, stiffness: 190}});
+  const exit = interpolate(frame, [Math.round(2.15 * fps), Math.round(2.65 * fps)], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
   return (
-    <div style={{position: "absolute", top: 205, left: 62, zIndex: 75, opacity: enter, transform: `translateX(${interpolate(enter, [0, 1], [-40, 0])}px)`}}>
+    <div style={{position: "absolute", top: 205, left: 62, zIndex: 75, opacity: enter * exit, transform: `translateX(${interpolate(enter, [0, 1], [-40, 0])}px)`}}>
       <div style={{height: 6, width: 110, background: RED, marginBottom: 12}} />
       <div style={{display: "flex", gap: 14, alignItems: "baseline"}}>
         <span style={{color: RED, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 26, fontWeight: 900}}>{index}</span>
@@ -236,8 +240,12 @@ const DataCard: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const enter = spring({frame, fps, durationInFrames: 18, config: {damping: 180, stiffness: 190}});
+  const exit = interpolate(frame, [Math.round(5.3 * fps), Math.round(6.0 * fps)], [1, 0], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
   return (
-    <div style={{position: "absolute", top: 245, right: 58, zIndex: 76, width: 390, padding: "25px 28px", background: "rgba(0,0,0,.86)", border: "1px solid rgba(255,255,255,.12)", borderTop: `6px solid ${RED}`, borderRadius: 18, boxShadow: "0 22px 60px rgba(0,0,0,.46)", opacity: enter, transform: `translateY(${interpolate(enter,[0,1],[-22,0])}px)`}}>
+    <div style={{position: "absolute", top: 245, right: 58, zIndex: 76, width: 390, padding: "25px 28px", background: "rgba(0,0,0,.86)", border: "1px solid rgba(255,255,255,.12)", borderTop: `6px solid ${RED}`, borderRadius: 18, boxShadow: "0 22px 60px rgba(0,0,0,.46)", opacity: enter * exit, transform: `translateY(${interpolate(enter,[0,1],[-22,0])}px)`}}>
       <div style={{color: WHITE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 78, lineHeight: .9, fontWeight: 900}}>7.000+</div>
       <div style={{marginTop: 13, color: "#D5D5D5", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 22, lineHeight: 1.15, fontWeight: 760}}>contenedores</div>
       <div style={{marginTop: 18, color: RED, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 15, lineHeight: 1.2, fontWeight: 900, letterSpacing: 1.2, textTransform: "uppercase"}}>cifra citada en el discurso</div>

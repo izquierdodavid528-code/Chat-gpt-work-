@@ -172,10 +172,10 @@ jobs:
         if: env.VALIDATION_ONLY != 'true'
         run: |
           set -euo pipefail
-          ARCHIVE="rclone-v\${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v\${RCLONE_VERSION}/\${ARCHIVE}"
+          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v\${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Pull project assets
         if: env.VALIDATION_ONLY != 'true'
@@ -491,7 +491,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p out
-          PATTERN="%0\${FRAME_PADDING}d.png"
+          PATTERN="%0${FRAME_PADDING}d.png"
           OUTPUT_NAME="$(basename "$VIDEO_FILE")"
           ffmpeg -y \
             -framerate "$FPS" \
@@ -533,10 +533,10 @@ jobs:
       - name: Install pinned rclone
         if: env.VALIDATION_ONLY != 'true'
         run: |
-          ARCHIVE="rclone-v\${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v\${RCLONE_VERSION}/\${ARCHIVE}"
+          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v\${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Upload final delivery to Drive
         if: env.VALIDATION_ONLY != 'true'
@@ -606,7 +606,7 @@ jobs:
           REPORT="$RUNNER_TEMP/fidelity-report.txt"
           : > "$REPORT"
           for FRAME in $CONTROL_FRAMES; do
-            NAME="$(printf "%0\${FRAME_PADDING}d.png" "$FRAME")"
+            NAME="$(printf "%0${FRAME_PADDING}d.png" "$FRAME")"
             bash scripts/blender/verify-fidelity.sh \
               "$RUNNER_TEMP/master/meta/reference/$NAME" \
               "$RUNNER_TEMP/frames/$NAME" \
@@ -620,7 +620,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p out
-          PATTERN="%0\${FRAME_PADDING}d.png"
+          PATTERN="%0${FRAME_PADDING}d.png"
           OUTPUT_NAME="$(basename "$VIDEO_FILE")"
           ffmpeg -y \
             -framerate "$FPS" \
@@ -662,10 +662,10 @@ jobs:
       - name: Install pinned rclone
         if: env.VALIDATION_ONLY != 'true'
         run: |
-          ARCHIVE="rclone-v\${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v\${RCLONE_VERSION}/\${ARCHIVE}"
+          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
           unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v\${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
       - name: Upload verified delivery to Drive
         if: env.VALIDATION_ONLY != 'true'

@@ -164,6 +164,17 @@ jobs:
           fi
           npx remotion render             src/index.ts             "$COMPOSITION_ID"             "$OUTPUT_FILE"             --codec=h264             --pixel-format=yuv420p             --crf=18             --concurrency="$REMOTION_CONCURRENCY"             --log=info             "${EXTRA[@]}"
 
+      - name: Master final audio
+        if: env.VALIDATION_ONLY != 'true'
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg >/dev/null
+          python3 scripts/media/audio-master.py \
+            "$PROJECT_DIR/project.config.json" \
+            "$PROJECT_DIR/$OUTPUT_FILE" \
+            "$PROJECT_DIR/out/audio-master-report.json"
+
       - name: Verify final video
         run: |
           set -euo pipefail
@@ -222,6 +233,7 @@ jobs:
             ${{ env.PROJECT_DIR }}/out/video-probe.json
             ${{ env.PROJECT_DIR }}/out/delivery-report.json
             ${{ env.PROJECT_DIR }}/out/audio-qa-report.json
+            ${{ env.PROJECT_DIR }}/out/audio-master-report.json
             ${{ env.PROJECT_DIR }}/out/render-environment.txt
           if-no-files-found: warn
           retention-days: 14

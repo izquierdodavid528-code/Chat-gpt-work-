@@ -26,6 +26,9 @@ jobs:
       DRIVE_BASE: "Remotion Projects"
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
       - name: Resolve project paths
         shell: bash
         run: |
@@ -42,6 +45,12 @@ jobs:
             REPO_DIR="projects/$SLUG"
           fi
 
+          CONFIG="$REPO_DIR/project.config.json"
+
+          if [ -z "$DRIVE_DIR" ] && [ -f "$CONFIG" ]; then
+            DRIVE_DIR="$(node -e 'const c=require(process.argv[1]); console.log(c.driveProjectDir || "")' "$CONFIG")"
+          fi
+
           if [ -z "$DRIVE_DIR" ]; then
             DRIVE_DIR="$SLUG"
           fi
@@ -53,9 +62,6 @@ jobs:
           echo "Project slug: $SLUG"
           echo "Repository project: $REPO_DIR"
           echo "Drive project: $DRIVE_DIR"
-
-      - name: Checkout code
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
       - name: Validate project structure
         shell: bash

@@ -173,6 +173,16 @@ jobs:
           mkdir -p "$PROJECT_DIR/out"
           ffprobe -v error             -show_streams             -show_format             -of json             "$PROJECT_DIR/$OUTPUT_FILE" > "$PROJECT_DIR/out/video-probe.json"
           python3 scripts/remotion/verify-delivery.py             "$PROJECT_DIR/project.config.json"             "$PROJECT_DIR/out/video-probe.json"             "$PROJECT_DIR/out/delivery-report.json"
+          AUDIO_ARGS=()
+          if [ "$VALIDATION_ONLY" = "true" ]; then
+            AUDIO_ARGS+=(--validation)
+          fi
+          python3 scripts/media/audio-qa.py \
+            "$PROJECT_DIR/project.config.json" \
+            "$PROJECT_DIR/$OUTPUT_FILE" \
+            "$PROJECT_DIR/out/video-probe.json" \
+            "$PROJECT_DIR/out/audio-qa-report.json" \
+            "${AUDIO_ARGS[@]}"
 
       - name: Record environment
         run: |
@@ -202,6 +212,7 @@ jobs:
             ${{ env.PROJECT_DIR }}/${{ env.OUTPUT_FILE }}
             ${{ env.PROJECT_DIR }}/out/video-probe.json
             ${{ env.PROJECT_DIR }}/out/delivery-report.json
+            ${{ env.PROJECT_DIR }}/out/audio-qa-report.json
             ${{ env.PROJECT_DIR }}/out/render-environment.txt
           if-no-files-found: error
           retention-days: 14

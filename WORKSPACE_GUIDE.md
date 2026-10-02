@@ -205,3 +205,103 @@ Un proyecto no se considera terminado hasta que:
 - el entorno de render queda registrado;
 - el resultado fue revisado visualmente;
 - el render final esta respaldado en Drive y/o GitHub Actions.
+
+
+## Blender: flujo maestro de render verificado
+
+Para trabajos finales de Blender, el objetivo ya no es simplemente "terminar un render". El pipeline debe preservar la escena construida y producir una entrega verificable y reproducible.
+
+### Principios
+
+1. **Una sola escena maestra**
+   - El script del proyecto construye el `.blend` una sola vez.
+   - El modo `BLENDER_BUILD_ONLY=1` guarda la escena y termina sin renderizar la animacion.
+   - Los workers paralelos NO reconstruyen la escena: todos descargan exactamente el mismo archivo maestro.
+
+2. **Version de Blender fijada**
+   - Workspace, Codespaces y GitHub Actions usan la version definida por el proyecto.
+   - Version base actual: `4.5.14`.
+   - `scripts/blender/install-pinned.sh` instala el binario oficial y deja `blender` apuntando a esa version.
+   - No usar una version diferente para preview y final sin una validacion explicita.
+
+3. **Fingerprint del maestro**
+   - `scripts/blender/master-audit.py` audita dependencias, guarda/empaca recursos compatibles y calcula SHA-256 del `.blend`.
+   - Cada worker verifica ese SHA-256 antes de renderizar.
+   - Si el maestro cambia, el worker falla en vez de mezclar frames de escenas distintas.
+
+4. **Dependencias y simulaciones**
+   - Un proyecto solo puede marcar `render.parallel.safe=true` despues de auditarlo.
+   - Escenas sin simulacion secuencial usan `simulationPolicy: "none"`.
+   - Humo, fluidos, cloth, soft body, dynamic paint, particulas dependientes del tiempo o Geometry Nodes con simulation zones deben hornearse primero y usar `simulationPolicy: "baked"`.
+   - Si el auditor detecta una simulacion incompatible con la politica declarada, el render paralelo se rechaza.
+
+5. **Render paralelo por frames**
+   - `scripts/blender/parallel-plan.py` genera automaticamente bloques desde `project.config.json`.
+   - Todos los bloques usan el mismo maestro, la misma version de Blender, el mismo motor, color management, compositor y resolucion.
+   - Los workers producen PNG, no videos parciales. Esto evita cortes de GOP, diferencias de codec y problemas al concatenar segmentos.
+
+6. **Prueba de fidelidad**
+   - Antes de distribuir la escena se renderizan frames de control desde el maestro.
+   - Los mismos frames aparecen despues dentro de los bloques paralelos.
+   - El pipeline compara los pixeles decodificados de ambos resultados.
+   - Si un frame de control no coincide, el workflow falla y NO publica el video como entrega verificada.
+
+7. **Ensamblado**
+   - Solo despues de comprobar que todos los frames existen y pasan la validacion se crea el MP4.
+   - El codec final se define en `project.config.json`.
+   - La compresion del MP4 puede cambiar los bytes respecto a un archivo codificado directamente por Blender, pero las imagenes fuente verificadas corresponden al render del maestro.
+   - Para archivo maestro sin perdida, conservar la secuencia PNG o generar una version lossless cuando el proyecto lo requiera.
+
+8. **Trazabilidad**
+   Cada entrega verificada debe incluir:
+   - `master-manifest.json`;
+   - `master-blend.sha256`;
+   - `render-environment.txt`;
+   - `fidelity-report.txt`;
+   - `block-timings.txt`;
+   - `video-probe.json`;
+   - video final.
+
+### Configuracion de proyecto
+
+Ejemplo:
+
+```json
+{
+  "blenderVersion": "4.5.14",
+  "frameStart": 1,
+  "fps": 24,
+  "frames": 120,
+  "resolution": "720x1280",
+  "render": {
+    "parallel": {
+      "safe": true,
+      "simulationPolicy": "none",
+      "blockSize": 12,
+      "maxParallel": 10,
+      "controlFrames": [1, 60, 120]
+    },
+    "video": {
+      "codec": "libx264",
+      "preset": "medium",
+      "crf": 16,
+      "pixFmt": "yuv420p"
+    }
+  }
+}
+```
+
+Los proyectos nuevos nacen con `parallel.safe=false`. No se habilita automaticamente hasta revisar la escena.
+
+### Modos recomendados
+
+- **Preview rapido**: pocos frames / resolucion reducida.
+- **Render secuencial**: escenas pequenas o cuando paralelizar no compensa.
+- **Render paralelo verificado**: animaciones largas basadas en keyframes y escenas auditadas.
+- **Simulaciones**: bake primero, despues render paralelo.
+- **Cycles GPU**: usar solo cuando un benchmark real del proyecto demuestre ventaja; una GPU asignada no implica automaticamente un render mas rapido.
+
+### Regla de entrega
+
+Un render paralelo NO se considera final si solo "se ve bien". Debe completar la verificacion de maestro, integridad de todos los frames y fidelity check. Si cualquiera falla, no se publica como entrega verificada.
+

@@ -1,11 +1,15 @@
 {
-  "name": "ChatGPT Work - Remotion",
+  "name": "ChatGPT Work - Remotion + Blender",
   "postCreateCommand": "cd remotion-subtitulos-es && npm install",
-  "forwardPorts": [3000],
+  "forwardPorts": [3000, 6080],
   "portsAttributes": {
     "3000": {
       "label": "Remotion Studio",
       "onAutoForward": "openBrowser"
+    },
+    "6080": {
+      "label": "Blender noVNC",
+      "onAutoForward": "notify"
     }
   }
 }

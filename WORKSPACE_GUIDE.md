@@ -115,9 +115,9 @@ Cada render guarda `render-environment.txt`.
 
 ### Blender
 
-Workflow legado: `Blender Drive Render`.
+Workflow canonico: `Blender Smart Render`.
 
-Se conserva para compatibilidad con proyectos antiguos. Para proyectos nuevos y renders finales usar `Blender Smart Render`, que incluye master unico, auditoria, fingerprint, seleccion automatica secuencial/paralela y verificacion final.
+El antiguo `Blender Drive Render` fue retirado para evitar rutas de produccion duplicadas. `Blender Smart Render` incluye master unico, auditoria, fingerprint, seleccion automatica secuencial/paralela y verificacion final.
 
 
 ## Progreso de render de Blender

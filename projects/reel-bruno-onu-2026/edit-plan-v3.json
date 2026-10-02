@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 1,
+  "project": "reel-bruno-onu-2026",
+  "version": "v3",
+  "concept": "EL PULSO DE LA SALA",
+  "targetDurationSeconds": {
+    "min": 58,
+    "max": 68
+  },
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "source": {
+    "currentFile": "source-bruno-onu-2026.mp4",
+    "currentResolution": "640x360",
+    "currentFps": 25,
+    "sourceUpgradePriority": "high",
+    "preferredSource": "UN Web TV Day 5 General Debate, 81st Session",
+    "finalTimingStatus": "pending exact audio verification"
+  },
+  "chapters": [
+    {
+      "id": "cold-open",
+      "timeline": {
+        "start": 0,
+        "end": 2.5
+      },
+      "sourceWindowApprox": {
+        "startSec": 1195,
+        "endSec": 1217
+      },
+      "purpose": "Open with final universal line; exact IN/OUT must be verified.",
+      "visual": "close-up or strongest real shot, no logo intro",
+      "audio": "room tone + original voice, no music first beat"
+    },
+    {
+      "id": "blender-bridge",
+      "timeline": {
+        "start": 2.5,
+        "end": 4.2
+      },
+      "sourceWindowApprox": null,
+      "purpose": "Premium identity bridge",
+      "visual": "Blender motion pack: abstract 81 / geodesic grid / Memorial palette",
+      "audio": "one restrained transition hit"
+    },
+    {
+      "id": "context",
+      "timeline": {
+        "start": 4.2,
+        "end": 7
+      },
+      "sourceWindowApprox": {
+        "startSec": 0,
+        "endSec": 20
+      },
+      "purpose": "Identify speaker/event/date",
+      "visual": "wide UN shot in documentary window",
+      "audio": "music enters under room tone"
+    },
+    {
+      "id": "principle",
+      "timeline": {
+        "start": 7,
+        "end": 20
+      },
+      "sourceWindowApprox": {
+        "startSec": 49.9,
+        "endSec": 112
+      },
+      "purpose": "International law / force / sovereignty",
+      "visual": "real footage + chapter label 01 DERECHO INTERNACIONAL",
+      "notes": "Use a shorter semantic selection than V2; do not reuse full 34 s block."
+    },
+    {
+      "id": "consequence",
+      "timeline": {
+        "start": 20,
+        "end": 34
+      },
+      "sourceWindowApprox": {
+        "startSec": 120,
+        "endSec": 240
+      },
+      "purpose": "Economic pressure section with one attributed concrete figure",
+      "visual": "AttributedDataCard + restrained footage",
+      "notes": "If using 7,000+ containers, label clearly as a figure cited in the speech."
+    },
+    {
+      "id": "dialogue",
+      "timeline": {
+        "start": 34,
+        "end": 47
+      },
+      "sourceWindowApprox": {
+        "startSec": 780,
+        "endSec": 960
+      },
+      "purpose": "Declared willingness to dialogue and commercial relations",
+      "visual": "slower pacing, fewer overlays, chapter 03 DIÁLOGO"
+    },
+    {
+      "id": "payoff",
+      "timeline": {
+        "start": 47,
+        "end": 59
+      },
+      "sourceWindowApprox": {
+        "startSec": 1180,
+        "endSec": 1217
+      },
+      "purpose": "Return to final UN / law-of-the-jungle argument",
+      "visual": "simplify overlays and slow down",
+      "audio": "music nearly disappears for final line"
+    },
+    {
+      "id": "end-card",
+      "timeline": {
+        "start": 59,
+        "end": 64
+      },
+      "sourceWindowApprox": null,
+      "purpose": "Source/context + Memorial identity",
+      "visual": "black / restrained logo / source credit",
+      "audio": "short decay, no CTA"
+    }
+  ],
+  "production": {
+    "blender": {
+      "needed": true,
+      "projectSlugCandidate": "reel-bruno-onu-2026-opener",
+      "renderStrategy": "sequential unless benchmark justifies parallel",
+      "outputs": [
+        "opener-alpha-or-png-sequence",
+        "optional-transition-sting"
+      ]
+    },
+    "remotion": {
+      "master": true,
+      "components": [
+        "ColdOpen",
+        "BlenderBridge",
+        "ContextCard",
+        "SpeechChapter",
+        "DynamicCaptions",
+        "AttributedDataCard",
+        "SourceBug",
+        "EndCard",
+        "AudioMaster"
+      ]
+    },
+    "qa": [
+      "visual-review",
+      "mute-review",
+      "subtitle-review",
+      "safe-zone-review",
+      "audio-quality-gate",
+      "ffprobe-delivery-report"
+    ]
+  }
+}

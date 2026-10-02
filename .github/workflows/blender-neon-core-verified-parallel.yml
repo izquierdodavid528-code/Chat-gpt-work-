@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: blender-neon-core-verified-parallel
+  cancel-in-progress: true
+
 env:
   PROJECT_SLUG: blender-neon-core-demo
   PROJECT_DIR: projects/blender-neon-core-demo

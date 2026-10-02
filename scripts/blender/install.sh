@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "==> Installing Blender + headless software-rendering dependencies"
-sudo apt-get update
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y   blender   libgl1   libegl1   libopengl0   libglx-mesa0   libgl1-mesa-dri   libgles2   mesa-utils   xvfb
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+BLENDER_VERSION="${BLENDER_VERSION:-4.5.14}"
+
+echo "==> Installing pinned Blender $BLENDER_VERSION"
+bash "$ROOT/scripts/blender/install-pinned.sh" "$BLENDER_VERSION"
+
+echo
+echo "==> Installing headless / GUI compatibility dependencies"
+sudo apt-get update -qq
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq \
+  libgl1 libegl1 libopengl0 libglx-mesa0 libgl1-mesa-dri libgles2 \
+  mesa-utils xvfb >/dev/null
 
 echo
 echo "==> Blender version"
-blender --version | head -n 3 || true
-
-echo
-echo "==> Mesa / OpenGL packages installed"
-dpkg -l | grep -E 'libgl1|libegl1|libopengl0|libglx-mesa0|libgl1-mesa-dri|libgles2' || true
+blender --version | head -n 3

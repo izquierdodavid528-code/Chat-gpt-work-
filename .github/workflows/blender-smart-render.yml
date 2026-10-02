@@ -8,14 +8,11 @@ on:
         required: true
         type: string
       mode:
-        description: "auto chooses verified parallel when safe, otherwise sequential"
+        description: "auto = verified parallel when audited safe, otherwise sequential"
         required: true
         default: auto
         type: choice
-        options:
-          - auto
-          - sequential
-          - parallel
+        options: [auto, sequential, parallel]
       drive_project_dir:
         description: "Optional Drive folder override"
         required: false
@@ -47,10 +44,10 @@ jobs:
       frame_start: ${{ steps.plan.outputs.frame_start }}
       frame_end: ${{ steps.plan.outputs.frame_end }}
       frame_count: ${{ steps.plan.outputs.frame_count }}
-      frame_padding: ${{ steps.plan.outputs.frame_padding }}
       fps: ${{ steps.plan.outputs.fps }}
       render_mode: ${{ steps.plan.outputs.render_mode }}
       simulation_policy: ${{ steps.plan.outputs.simulation_policy }}
+      simulation_cache_dir: ${{ steps.plan.outputs.simulation_cache_dir }}
       pack_resources: ${{ steps.plan.outputs.pack_resources }}
       control_frames: ${{ steps.plan.outputs.control_frames }}
       matrix: ${{ steps.plan.outputs.matrix }}
@@ -65,7 +62,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
 
-      - name: Resolve and audit project plan
+      - name: Resolve audited render plan
         id: plan
         shell: bash
         run: |
@@ -82,95 +79,19 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-  sequential:
-    needs: plan
-    if: needs.plan.outputs.render_mode == 'sequential'
-    runs-on: ubuntu-24.04
-    env:
-      PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
-      PROJECT_DIR: ${{ needs.plan.outputs.project_dir }}
-      DRIVE_PROJECT: ${{ needs.plan.outputs.drive_project }}
-      BLENDER_VERSION: ${{ needs.plan.outputs.blender_version }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-
-      - name: Cache exact Blender
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
-        with:
-          path: ~/.cache/chatgpt-work/blender/${{ env.BLENDER_VERSION }}
-          key: blender-${{ env.BLENDER_VERSION }}-linux-x64
-
-      - name: Install exact Blender
-        run: bash scripts/blender/install-pinned.sh "$BLENDER_VERSION"
-
-      - name: Restore rclone config
-        env:
-          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
-        run: |
-          test -n "$RCLONE_CONFIG_B64"
-          printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$RUNNER_TEMP/rclone.conf"
-          chmod 600 "$RUNNER_TEMP/rclone.conf"
-
-      - name: Install pinned rclone
-        run: |
-          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
-          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
-          unzip -q "$ARCHIVE"
-          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
-
-      - name: Pull assets
-        run: |
-          mkdir -p "$PROJECT_DIR/assets"
-          if rclone --config "$RUNNER_TEMP/rclone.conf" lsf "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets" >/dev/null 2>&1; then
-            rclone --config "$RUNNER_TEMP/rclone.conf" copy               "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets"               "$PROJECT_DIR/assets"               --create-empty-src-dirs --transfers 8 --checkers 16
-          fi
-
-      - name: Render sequentially
-        run: |
-          mkdir -p "$PROJECT_DIR/out"
-          bash scripts/workspace/render-blender.sh "$PROJECT_SLUG"
-
-      - name: Record environment
-        run: |
-          {
-            echo "mode=sequential"
-            echo "runner=ubuntu-24.04"
-            blender --version | head -n 3
-            echo "rclone=$(rclone version | head -n 1)"
-            uname -a
-          } > "$PROJECT_DIR/out/render-environment.txt"
-
-      - name: Upload sequential result to Drive
-        run: |
-          rclone --config "$RUNNER_TEMP/rclone.conf" mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"
-          rclone --config "$RUNNER_TEMP/rclone.conf" copy             "$PROJECT_DIR/out"             "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"             --transfers 4 --checkers 8
-
-      - name: Upload artifact backup
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: blender-sequential-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
-          path: ${{ env.PROJECT_DIR }}/out/
-          retention-days: 14
-          if-no-files-found: error
-
-      - name: Cleanup credential
-        if: always()
-        run: rm -f "$RUNNER_TEMP/rclone.conf"
-
   build-master:
     needs: plan
-    if: needs.plan.outputs.render_mode == 'verified_parallel'
     runs-on: ubuntu-24.04
     env:
-      PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
       PROJECT_DIR: ${{ needs.plan.outputs.project_dir }}
       DRIVE_PROJECT: ${{ needs.plan.outputs.drive_project }}
       SCENE_SCRIPT: ${{ needs.plan.outputs.scene_script }}
       BLEND_FILE: ${{ needs.plan.outputs.blend_file }}
       BLENDER_VERSION: ${{ needs.plan.outputs.blender_version }}
+      RENDER_MODE: ${{ needs.plan.outputs.render_mode }}
       CONTROL_FRAMES: ${{ needs.plan.outputs.control_frames }}
       SIMULATION_POLICY: ${{ needs.plan.outputs.simulation_policy }}
+      SIMULATION_CACHE_DIR: ${{ needs.plan.outputs.simulation_cache_dir }}
       PACK_RESOURCES: ${{ needs.plan.outputs.pack_resources }}
     steps:
       - name: Checkout
@@ -200,14 +121,20 @@ jobs:
           unzip -q "$ARCHIVE"
           sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
 
-      - name: Pull assets
+      - name: Pull project assets
         run: |
           mkdir -p "$PROJECT_DIR/assets"
           if rclone --config "$RUNNER_TEMP/rclone.conf" lsf "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets" >/dev/null 2>&1; then
             rclone --config "$RUNNER_TEMP/rclone.conf" copy               "drive:$DRIVE_BASE/$DRIVE_PROJECT/assets"               "$PROJECT_DIR/assets"               --create-empty-src-dirs --transfers 8 --checkers 16
           fi
 
-      - name: Build immutable master
+      - name: Verify baked simulation cache
+        if: env.SIMULATION_POLICY == 'baked'
+        run: |
+          test -n "$SIMULATION_CACHE_DIR"
+          test -e "$PROJECT_DIR/$SIMULATION_CACHE_DIR"
+
+      - name: Build scene without final render
         env:
           BLENDER_BUILD_ONLY: "1"
           BLENDER_SKIP_POSTER: "1"
@@ -217,7 +144,7 @@ jobs:
           blender -b --python "$PROJECT_DIR/$SCENE_SCRIPT"
           test -s "$PROJECT_DIR/$BLEND_FILE"
 
-      - name: Audit and fingerprint master
+      - name: Audit and fingerprint immutable master
         env:
           BLENDER_SIMULATION_POLICY: ${{ env.SIMULATION_POLICY }}
           BLENDER_PACK_RESOURCES: ${{ env.PACK_RESOURCES }}
@@ -226,6 +153,7 @@ jobs:
           sha256sum "$PROJECT_DIR/$BLEND_FILE" | tee "$PROJECT_DIR/out/master-blend.sha256"
 
       - name: Render reference control frames
+        if: env.RENDER_MODE == 'verified_parallel'
         run: |
           mkdir -p "$PROJECT_DIR/out/reference"
           for FRAME in $CONTROL_FRAMES; do
@@ -235,22 +163,23 @@ jobs:
       - name: Record master environment
         run: |
           {
-            echo "mode=verified_parallel"
+            echo "mode=$RENDER_MODE"
             echo "runner=ubuntu-24.04"
             blender --version | head -n 3
             echo "rclone=$(rclone version | head -n 1)"
             uname -a
           } > "$PROJECT_DIR/out/render-environment.txt"
 
-      - name: Stage immutable bundle
+      - name: Stage immutable master bundle
         run: |
-          mkdir -p "$RUNNER_TEMP/master"
+          mkdir -p "$RUNNER_TEMP/master/reference"
           cp "$PROJECT_DIR/$BLEND_FILE" "$RUNNER_TEMP/master/master.blend"
           cp "$PROJECT_DIR/out/master-manifest.json" "$RUNNER_TEMP/master/"
           cp "$PROJECT_DIR/out/master-blend.sha256" "$RUNNER_TEMP/master/"
           cp "$PROJECT_DIR/out/render-environment.txt" "$RUNNER_TEMP/master/"
-          mkdir -p "$RUNNER_TEMP/master/reference"
-          cp "$PROJECT_DIR"/out/reference/*.png "$RUNNER_TEMP/master/reference/"
+          if compgen -G "$PROJECT_DIR/out/reference/*.png" > /dev/null; then
+            cp "$PROJECT_DIR"/out/reference/*.png "$RUNNER_TEMP/master/reference/"
+          fi
 
       - name: Upload immutable master bundle
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -263,6 +192,64 @@ jobs:
       - name: Cleanup credential
         if: always()
         run: rm -f "$RUNNER_TEMP/rclone.conf"
+
+  render-sequential:
+    needs: [plan, build-master]
+    if: needs.plan.outputs.render_mode == 'sequential'
+    runs-on: ubuntu-24.04
+    env:
+      BLENDER_VERSION: ${{ needs.plan.outputs.blender_version }}
+      FRAME_START: ${{ needs.plan.outputs.frame_start }}
+      FRAME_END: ${{ needs.plan.outputs.frame_end }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Cache exact Blender
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: ~/.cache/chatgpt-work/blender/${{ env.BLENDER_VERSION }}
+          key: blender-${{ env.BLENDER_VERSION }}-linux-x64
+
+      - name: Install exact Blender
+        run: bash scripts/blender/install-pinned.sh "$BLENDER_VERSION"
+
+      - name: Download immutable master
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: blender-master-${{ github.run_id }}
+          path: ${{ runner.temp }}/master
+
+      - name: Verify master fingerprint
+        run: |
+          EXPECTED="$(cut -d' ' -f1 "$RUNNER_TEMP/master/master-blend.sha256")"
+          ACTUAL="$(sha256sum "$RUNNER_TEMP/master/master.blend" | cut -d' ' -f1)"
+          test "$EXPECTED" = "$ACTUAL"
+
+      - name: Render all frames sequentially
+        run: |
+          mkdir -p "$RUNNER_TEMP/frames"
+          START_TS="$(date +%s)"
+          blender -b "$RUNNER_TEMP/master/master.blend"             -s "$FRAME_START"             -e "$FRAME_END"             -o "$RUNNER_TEMP/frames/####"             -F PNG             -a
+          END_TS="$(date +%s)"
+          {
+            echo "mode=sequential"
+            echo "start=$FRAME_START"
+            echo "end=$FRAME_END"
+            echo "elapsed_seconds=$((END_TS-START_TS))"
+            echo "runner=${{ runner.name }}"
+            echo "master_sha256=$(cut -d' ' -f1 "$RUNNER_TEMP/master/master-blend.sha256")"
+          } > "$RUNNER_TEMP/frames/block-sequential.txt"
+
+      - name: Upload sequential frames
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blender-frames-sequential-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/frames/*.png
+            ${{ runner.temp }}/frames/block-sequential.txt
+          retention-days: 14
+          if-no-files-found: error
 
   render-blocks:
     needs: [plan, build-master]
@@ -305,11 +292,9 @@ jobs:
           START_TS="$(date +%s)"
           blender -b "$RUNNER_TEMP/master/master.blend"             -s "${{ matrix.start }}"             -e "${{ matrix.end }}"             -o "$RUNNER_TEMP/frames/####"             -F PNG             -a
           END_TS="$(date +%s)"
-
           EXPECTED_COUNT=$(( ${{ matrix.end }} - ${{ matrix.start }} + 1 ))
           ACTUAL_COUNT="$(find "$RUNNER_TEMP/frames" -maxdepth 1 -name '*.png' | wc -l)"
           test "$ACTUAL_COUNT" -eq "$EXPECTED_COUNT"
-
           {
             echo "block=${{ matrix.block }}"
             echo "start=${{ matrix.start }}"
@@ -329,7 +314,93 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-  verify-assemble-deliver:
+  deliver-sequential:
+    needs: [plan, build-master, render-sequential]
+    if: needs.plan.outputs.render_mode == 'sequential'
+    runs-on: ubuntu-24.04
+    env:
+      PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
+      DRIVE_PROJECT: ${{ needs.plan.outputs.drive_project }}
+      FRAME_START: ${{ needs.plan.outputs.frame_start }}
+      FRAME_END: ${{ needs.plan.outputs.frame_end }}
+      FRAME_COUNT: ${{ needs.plan.outputs.frame_count }}
+      FPS: ${{ needs.plan.outputs.fps }}
+      VIDEO_FILE: ${{ needs.plan.outputs.video_file }}
+      VIDEO_CODEC: ${{ needs.plan.outputs.video_codec }}
+      VIDEO_PRESET: ${{ needs.plan.outputs.video_preset }}
+      VIDEO_CRF: ${{ needs.plan.outputs.video_crf }}
+      VIDEO_PIX_FMT: ${{ needs.plan.outputs.video_pix_fmt }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Download immutable master
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: blender-master-${{ github.run_id }}
+          path: ${{ runner.temp }}/master
+
+      - name: Download sequential frames
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: blender-frames-sequential-${{ github.run_id }}
+          path: ${{ runner.temp }}/frames
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg >/dev/null
+
+      - name: Verify, assemble and inspect
+        run: |
+          COUNT="$(find "$RUNNER_TEMP/frames" -maxdepth 1 -name '*.png' | wc -l)"
+          test "$COUNT" -eq "$FRAME_COUNT"
+          for FRAME in $(seq "$FRAME_START" "$FRAME_END"); do
+            NAME="$(printf '%04d.png' "$FRAME")"
+            test -s "$RUNNER_TEMP/frames/$NAME"
+          done
+          mkdir -p out
+          OUTPUT_NAME="$(basename "$VIDEO_FILE")"
+          ffmpeg -y             -framerate "$FPS"             -start_number "$FRAME_START"             -i "$RUNNER_TEMP/frames/%04d.png"             -c:v "$VIDEO_CODEC"             -preset "$VIDEO_PRESET"             -crf "$VIDEO_CRF"             -pix_fmt "$VIDEO_PIX_FMT"             -movflags +faststart             -an             -metadata creation_time=1970-01-01T00:00:00Z             "out/$OUTPUT_NAME"
+          ffprobe -v error             -show_entries stream=codec_name,width,height,r_frame_rate,nb_frames             -show_entries format=duration,size             -of json             "out/$OUTPUT_NAME" > out/video-probe.json
+          cp "$RUNNER_TEMP/master/master-manifest.json" out/
+          cp "$RUNNER_TEMP/master/master-blend.sha256" out/
+          cp "$RUNNER_TEMP/master/render-environment.txt" out/
+          cp "$RUNNER_TEMP/frames/block-sequential.txt" out/block-timings.txt
+
+      - name: Restore rclone config
+        env:
+          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
+        run: |
+          test -n "$RCLONE_CONFIG_B64"
+          printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$RUNNER_TEMP/rclone.conf"
+          chmod 600 "$RUNNER_TEMP/rclone.conf"
+
+      - name: Install pinned rclone
+        run: |
+          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          unzip -q "$ARCHIVE"
+          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+
+      - name: Upload final delivery to Drive
+        run: |
+          rclone --config "$RUNNER_TEMP/rclone.conf" mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"
+          rclone --config "$RUNNER_TEMP/rclone.conf" copy out "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders" --transfers 4 --checkers 8
+
+      - name: Upload final artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blender-sequential-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
+          path: out/
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Cleanup credential
+        if: always()
+        run: rm -f "$RUNNER_TEMP/rclone.conf"
+
+  deliver-parallel:
     needs: [plan, build-master, render-blocks]
     if: needs.plan.outputs.render_mode == 'verified_parallel'
     runs-on: ubuntu-24.04
@@ -339,7 +410,6 @@ jobs:
       FRAME_START: ${{ needs.plan.outputs.frame_start }}
       FRAME_END: ${{ needs.plan.outputs.frame_end }}
       FRAME_COUNT: ${{ needs.plan.outputs.frame_count }}
-      FRAME_PADDING: ${{ needs.plan.outputs.frame_padding }}
       FPS: ${{ needs.plan.outputs.fps }}
       CONTROL_FRAMES: ${{ needs.plan.outputs.control_frames }}
       VIDEO_FILE: ${{ needs.plan.outputs.video_file }}
@@ -359,7 +429,7 @@ jobs:
           name: blender-master-${{ github.run_id }}
           path: ${{ runner.temp }}/master
 
-      - name: Download frame blocks
+      - name: Download all frame blocks
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           pattern: blender-frames-*-${{ github.run_id }}
@@ -371,39 +441,33 @@ jobs:
           sudo apt-get update -qq
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg imagemagick >/dev/null
 
-      - name: Verify frame completeness
+      - name: Verify all frames and fidelity controls
         run: |
           COUNT="$(find "$RUNNER_TEMP/frames" -maxdepth 1 -name '*.png' | wc -l)"
           test "$COUNT" -eq "$FRAME_COUNT"
           for FRAME in $(seq "$FRAME_START" "$FRAME_END"); do
-            NAME="$(printf "%0*d.png" "$FRAME_PADDING" "$FRAME")"
+            NAME="$(printf '%04d.png' "$FRAME")"
             test -s "$RUNNER_TEMP/frames/$NAME"
           done
-
-      - name: Strict fidelity gate
-        run: |
           REPORT="$RUNNER_TEMP/fidelity-report.txt"
           : > "$REPORT"
           for FRAME in $CONTROL_FRAMES; do
-            NAME="$(printf "%0*d.png" "$FRAME_PADDING" "$FRAME")"
+            NAME="$(printf '%04d.png' "$FRAME")"
             bash scripts/blender/verify-fidelity.sh               "$RUNNER_TEMP/master/reference/$NAME"               "$RUNNER_TEMP/frames/$NAME"               "$FRAME"               "$REPORT"
           done
           echo "FIDELITY_CHECK=PASS" | tee -a "$REPORT"
           cat "$REPORT"
 
-      - name: Assemble deterministic MP4
+      - name: Assemble and inspect verified MP4
         run: |
           mkdir -p out
           OUTPUT_NAME="$(basename "$VIDEO_FILE")"
-          ffmpeg -y             -framerate "$FPS"             -start_number "$FRAME_START"             -i "$RUNNER_TEMP/frames/%0${FRAME_PADDING}d.png"             -c:v "$VIDEO_CODEC"             -preset "$VIDEO_PRESET"             -crf "$VIDEO_CRF"             -pix_fmt "$VIDEO_PIX_FMT"             -movflags +faststart             -an             -metadata creation_time=1970-01-01T00:00:00Z             "out/$OUTPUT_NAME"
-
-          test -s "out/$OUTPUT_NAME"
+          ffmpeg -y             -framerate "$FPS"             -start_number "$FRAME_START"             -i "$RUNNER_TEMP/frames/%04d.png"             -c:v "$VIDEO_CODEC"             -preset "$VIDEO_PRESET"             -crf "$VIDEO_CRF"             -pix_fmt "$VIDEO_PIX_FMT"             -movflags +faststart             -an             -metadata creation_time=1970-01-01T00:00:00Z             "out/$OUTPUT_NAME"
           ffprobe -v error             -show_entries stream=codec_name,width,height,r_frame_rate,nb_frames             -show_entries format=duration,size             -of json             "out/$OUTPUT_NAME" > out/video-probe.json
-
-          cp "$RUNNER_TEMP/fidelity-report.txt" out/fidelity-report.txt
-          cp "$RUNNER_TEMP/master/master-manifest.json" out/master-manifest.json
-          cp "$RUNNER_TEMP/master/master-blend.sha256" out/master-blend.sha256
-          cp "$RUNNER_TEMP/master/render-environment.txt" out/render-environment.txt
+          cp "$RUNNER_TEMP/fidelity-report.txt" out/
+          cp "$RUNNER_TEMP/master/master-manifest.json" out/
+          cp "$RUNNER_TEMP/master/master-blend.sha256" out/
+          cp "$RUNNER_TEMP/master/render-environment.txt" out/
           cat "$RUNNER_TEMP"/frames/block-*.txt > out/block-timings.txt
 
       - name: Restore rclone config
@@ -424,7 +488,7 @@ jobs:
       - name: Upload verified delivery to Drive
         run: |
           rclone --config "$RUNNER_TEMP/rclone.conf" mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"
-          rclone --config "$RUNNER_TEMP/rclone.conf" copy             out             "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"             --transfers 4 --checkers 8
+          rclone --config "$RUNNER_TEMP/rclone.conf" copy out "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders" --transfers 4 --checkers 8
 
       - name: Upload verified artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

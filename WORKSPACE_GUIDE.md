@@ -144,7 +144,9 @@ Política de recuperación:
 - antes de rerenderizar, revisar si el run actual o un run reciente conserva artifacts utilizables;
 - usar los artifacts como evidencia y checkpoints cuando una recuperación manual o un rerun de jobs pueda evitar repetir trabajo;
 - no mezclar frames de masters distintos: el SHA-256 del master debe coincidir;
-- no asumir que existe resume automático entre ejecuciones independientes: el workflow genérico todavía no reconstruye por sí solo un run nuevo a partir de bloques de un run antiguo;
+- si un run genérico anterior conserva master + bloques y la entrega falló después del render, usar `recovery_run_id=<run id>` en `Blender Smart Render`; el workflow descarga los artifacts de ese run, verifica que su `projectConfig` y contrato coincidan con el actual, repite fidelity/QA, reensambla y entrega sin rerenderizar frames;
+- una validación parcial no puede usarse como fuente de recovery de producción;
+- el workflow no busca automáticamente el “mejor run recuperable”: hay que identificar el run fuente, y el contrato bloquea mezclas de masters/configuraciones distintas;
 - una entrega de producción completa se publica en Drive solo después de superar QA.
 
 El script `scripts/blender/render-with-progress.py` pertenece al flujo local/legacy de render directo y no es el mecanismo de progreso del Smart Render canónico.
@@ -224,6 +226,7 @@ Inputs:
 - `mode`: `auto`, `sequential` o `parallel`.
 - `drive_project_dir`: override opcional de la carpeta de Drive.
 - `validation_frame_count`: `0` para producción completa; un entero positivo ejecuta una validación económica de los primeros N frames y no publica en Drive.
+- `recovery_run_id`: `0` para un render normal; un run ID genérico compatible para recuperar master + PNG ya calculados y rehacer solo verificación/ensamblado/entrega.
 
 Usar `auto` por defecto.
 
@@ -302,6 +305,7 @@ Para trabajos finales de Blender, el objetivo ya no es simplemente "terminar un 
    - `block-timings.txt`;
    - `video-probe.json`;
    - `delivery-report.json`;
+   - en recovery, `recovery-contract-report.json` y `source-render-plan.json`;
    - video final.
 
 ### Configuracion de proyecto

@@ -1,0 +1,93 @@
+name: WOW Demo Auto Render
+
+on:
+  push:
+    paths:
+      - ".github/workflows/wow-demo-render.yml"
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    env:
+      PROJECT_DIR: "projects/wow-workspace-demo"
+      DRIVE_BASE: "Remotion Projects"
+      DRIVE_PROJECT: "02 - WOW Workspace Demo"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Restore rclone OAuth config
+        env:
+          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
+        shell: bash
+        run: |
+          test -n "$RCLONE_CONFIG_B64"
+          printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$RUNNER_TEMP/rclone.conf"
+          chmod 600 "$RUNNER_TEMP/rclone.conf"
+
+      - name: Install pinned rclone
+        shell: bash
+        run: |
+          RCLONE_VERSION="1.75.1"
+          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          unzip -q "$ARCHIVE"
+          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "20.20.2"
+
+      - name: Pin npm
+        run: npm install --global npm@10.8.2
+
+      - name: Install dependencies
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: npm ci --no-audit --no-fund
+
+      - name: Validate composition
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: npm run compositions
+
+      - name: Verify Chrome
+        shell: bash
+        run: |
+          CHROME_BIN="$(find "$HOME/.cache" "$PROJECT_DIR/node_modules/.cache" -type f \( -name chrome-headless-shell -o -name headless_shell \) 2>/dev/null | head -n 1)"
+          test -n "$CHROME_BIN"
+          "$CHROME_BIN" --version
+          "$CHROME_BIN" --version | grep -F "149.0.7790.0"
+
+      - name: Render
+        working-directory: ${{ env.PROJECT_DIR }}
+        run: npm run render
+
+      - name: Record environment
+        shell: bash
+        run: |
+          {
+            echo "runner=ubuntu-24.04"
+            echo "node=$(node --version)"
+            echo "npm=$(npm --version)"
+            echo "rclone=$(rclone version | head -n 1)"
+            echo "remotion=$(cd "$PROJECT_DIR" && npx remotion --version | tail -n 1)"
+          } > "$PROJECT_DIR/out/render-environment.txt"
+
+      - name: Upload to Drive
+        shell: bash
+        run: |
+          rclone --config "$RUNNER_TEMP/rclone.conf" copy             "$PROJECT_DIR/out"             "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"             --transfers 4 --checkers 8 --stats 10s
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: wow-workspace-demo-${{ github.run_id }}
+          path: ${{ env.PROJECT_DIR }}/out/
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Cleanup
+        if: always()
+        run: rm -f "$RUNNER_TEMP/rclone.conf"

@@ -351,3 +351,60 @@ Los proyectos nuevos nacen con `parallel.safe=false`. No se habilita automaticam
 
 Un render paralelo NO se considera final si solo "se ve bien". Debe completar la verificacion de maestro, integridad de todos los frames y fidelity check. Si cualquiera falla, no se publica como entrega verificada.
 
+
+
+## Audio Quality Gate profesional
+
+El flujo audiovisual final usa un gate de audio compartido:
+
+`scripts/media/audio-qa.py`
+
+Se ejecuta sobre el MP4 final de Remotion después de `ffprobe` y antes de publicar una entrega de producción.
+
+El contrato se define en `project.config.json` bajo `render.audioQa`.
+
+Controles disponibles:
+- presencia de stream de audio cuando `requireAudio=true`;
+- codec esperado (por defecto AAC);
+- sample rate esperado (por defecto 48 kHz);
+- rango de canales permitido;
+- sincronía de duración audio/vídeo;
+- loudness integrado mediante EBU R128;
+- true peak;
+- loudness range opcional;
+- silencios iniciales, finales y continuos mediante `silencedetect`.
+
+Perfil base recomendado para social/web:
+- AAC;
+- 48 kHz;
+- 1-2 canales;
+- objetivo -14 LUFS;
+- tolerancia ±2 LU;
+- true peak <= -1 dBFS;
+- delta máximo audio/vídeo 0.12 s.
+
+Los límites son configurables por proyecto. No se aplica normalización destructiva automática a una mezcla terminada: voz, música y efectos deben mezclarse correctamente durante la edición. El gate mide el master final y bloquea la entrega si incumple un requisito marcado como obligatorio.
+
+Los silencios anómalos se reportan por defecto como advertencias; pueden convertirse en fallo usando `silence.enforce=true`.
+
+Los renders de validación parcial omiten loudness/silence globales porque una muestra de pocos frames no representa el programa completo, pero siguen verificando presencia/codec/sample rate/canales y contrato básico.
+
+Cada entrega Remotion verificada incluye:
+- `video-probe.json`;
+- `delivery-report.json`;
+- `audio-qa-report.json`;
+- `render-environment.txt`;
+- MP4 final.
+
+Validación real de infraestructura y audio:
+- GitHub Actions run `37069243373`: SUCCESS;
+- el self-test generó un MP4 sintético con audio AAC 48 kHz normalizado, ejecutó el gate completo y obtuvo PASS;
+- después ejecutó el mismo Remotion Smart Render sobre el template y produjo artifact con `audio-qa-report.json`.
+
+### Política Blender + audio
+
+Blender se considera generador visual/3D. Su Smart Render produce frames/video verificados, pero la mezcla de voz, música, efectos y el master de audio final pertenecen normalmente a Remotion/FFmpeg. En un proyecto híbrido:
+
+Blender -> asset visual -> Remotion -> mezcla audiovisual -> Audio Quality Gate -> entrega.
+
+Esto evita duplicar lógica de audio dentro de Blender y mantiene una única fuente de verdad para sincronía y mezcla final.

@@ -67,6 +67,35 @@ if validation_frames and not re.fullmatch(r"[0-9,-]+", validation_frames):
     raise SystemExit("validation-frames contains unsupported characters")
 
 require_audio = bool(render.get("requireAudio", False))
+audio_qa = render.get("audioQa", {})
+if not isinstance(audio_qa, dict):
+    raise SystemExit("render.audioQa must be an object")
+if audio_qa.get("enabled", False):
+    sample_rate = int(audio_qa.get("expectedSampleRateHz", 48000))
+    min_channels = int(audio_qa.get("minChannels", 1))
+    max_channels = int(audio_qa.get("maxChannels", 2))
+    target_lufs = float(audio_qa.get("targetIntegratedLufs", -14.0))
+    tolerance_lu = float(audio_qa.get("integratedLufsTolerance", 2.0))
+    max_true_peak = float(audio_qa.get("maxTruePeakDbfs", -1.0))
+    max_sync_delta = float(audio_qa.get("maxDurationDeltaSeconds", 0.12))
+    expected_audio_codec = str(audio_qa.get("expectedCodec", "aac"))
+    if sample_rate < 8000 or sample_rate > 384000:
+        raise SystemExit("render.audioQa.expectedSampleRateHz is outside a sensible range")
+    if min_channels < 1 or max_channels < min_channels or max_channels > 32:
+        raise SystemExit("render.audioQa channel range is invalid")
+    if tolerance_lu < 0 or tolerance_lu > 20:
+        raise SystemExit("render.audioQa.integratedLufsTolerance is invalid")
+    if max_sync_delta < 0 or max_sync_delta > 10:
+        raise SystemExit("render.audioQa.maxDurationDeltaSeconds is invalid")
+    if not re.fullmatch(r"[A-Za-z0-9_.+-]+", expected_audio_codec):
+        raise SystemExit("render.audioQa.expectedCodec contains unsupported characters")
+    silence = audio_qa.get("silence", {})
+    if silence and not isinstance(silence, dict):
+        raise SystemExit("render.audioQa.silence must be an object")
+    for key in ("maxLeadingSeconds", "maxTrailingSeconds", "maxContinuousSeconds"):
+        if silence.get(key) is not None and float(silence[key]) < 0:
+            raise SystemExit(f"render.audioQa.silence.{key} must be >= 0")
+
 expected_codec = str(render.get("expectedCodec", "h264"))
 if not re.fullmatch(r"[A-Za-z0-9_.+-]+", expected_codec):
     raise SystemExit("render.expectedCodec contains unsupported characters")

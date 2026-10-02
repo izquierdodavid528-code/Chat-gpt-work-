@@ -43,7 +43,8 @@ jobs:
         shell: bash
         run: |
           ACTIONLINT_VERSION="1.7.12"
-          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v$ACTIONLINT_VERSION/actionlint_"$ACTIONLINT_VERSION"_linux_amd64.tar.gz" \
+          printf -v ACTIONLINT_ARCHIVE 'actionlint_%s_linux_amd64.tar.gz' "$ACTIONLINT_VERSION"
+          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v$ACTIONLINT_VERSION/$ACTIONLINT_ARCHIVE" \
             -o "$RUNNER_TEMP/actionlint.tar.gz"
           tar -xzf "$RUNNER_TEMP/actionlint.tar.gz" -C "$RUNNER_TEMP" actionlint
           "$RUNNER_TEMP/actionlint" \

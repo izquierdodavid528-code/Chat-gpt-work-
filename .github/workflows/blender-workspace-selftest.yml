@@ -1,0 +1,86 @@
+name: Blender Workspace Self-Test
+
+on:
+  push:
+    paths:
+      - ".github/workflows/blender-smart-render.yml"
+      - ".github/workflows/blender-workspace-selftest.yml"
+      - "scripts/blender/render-plan.py"
+      - "scripts/blender/master-audit.py"
+      - "scripts/blender/verify_fidelity.py"
+      - "scripts/blender/verify-fidelity.sh"
+      - "scripts/blender/install-pinned.sh"
+      - "projects/_template-blender/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Validate Python and shell syntax
+        shell: bash
+        run: |
+          python3 -m py_compile             scripts/blender/render-plan.py             scripts/blender/verify_fidelity.py
+          bash -n scripts/blender/verify-fidelity.sh
+          bash -n scripts/blender/install-pinned.sh
+          python3 -m json.tool projects/_template-blender/project.config.json >/dev/null
+
+      - name: Validate template render plan
+        shell: bash
+        run: |
+          : > "$RUNNER_TEMP/github-output.txt"
+          python3 scripts/blender/render-plan.py             projects/_template-blender             "$RUNNER_TEMP/github-output.txt"             "$RUNNER_TEMP/render-plan.json"             auto             ""
+          grep -q '"render_mode": "sequential"' "$RUNNER_TEMP/render-plan.json"
+          grep -q '"blender_version": "4.5.14"' "$RUNNER_TEMP/render-plan.json"
+
+      - name: Cache exact Blender
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: ~/.cache/chatgpt-work/blender/4.5.14
+          key: blender-4.5.14-linux-x64
+
+      - name: Install exact Blender
+        run: bash scripts/blender/install-pinned.sh 4.5.14
+
+      - name: Build template master
+        env:
+          BLENDER_BUILD_ONLY: "1"
+          BLENDER_SKIP_POSTER: "1"
+        run: |
+          rm -rf projects/_template-blender/out
+          mkdir -p projects/_template-blender/out
+          blender -b --python projects/_template-blender/scene.py
+          test -s projects/_template-blender/out/scene.blend
+
+      - name: Audit template master
+        env:
+          BLENDER_SIMULATION_POLICY: "unknown"
+          BLENDER_PACK_RESOURCES: "true"
+        run: |
+          blender -b projects/_template-blender/out/scene.blend             --python scripts/blender/master-audit.py             -- projects/_template-blender/out/master-manifest.json
+          test -s projects/_template-blender/out/master-manifest.json
+
+      - name: Render one PNG and validate dimensions
+        run: |
+          blender -b projects/_template-blender/out/scene.blend             -o "$RUNNER_TEMP/frame-####"             -F PNG             -f 1
+          test -s "$RUNNER_TEMP/frame-0001.png"
+          python3 - <<'PY'
+import struct
+from pathlib import Path
+p=Path("/home/runner/work/_temp/frame-0001.png")
+with p.open("rb") as f:
+    sig=f.read(24)
+w,h=struct.unpack(">II", sig[16:24])
+assert (w,h)==(1080,1080), (w,h)
+print("template-frame", w, h)
+PY
+
+      - name: Self-test summary
+        run: |
+          echo "Blender workspace self-test PASS"

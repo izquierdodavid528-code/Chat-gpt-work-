@@ -49,7 +49,7 @@ permissions:
 
 concurrency:
   group: blender-smart-${{ inputs.project_slug }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ inputs.validation_frame_count != '0' }}
 
 env:
   DRIVE_BASE: Remotion Projects

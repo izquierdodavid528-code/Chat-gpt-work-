@@ -22,13 +22,20 @@
         1,
         72,
         144
-      ]
+      ],
+      "minFrames": 24,
+      "packResources": true
     },
     "video": {
       "codec": "libx264",
       "preset": "medium",
       "crf": 16,
       "pixFmt": "yuv420p"
+    },
+    "fidelity": {
+      "rmseMax": 0.00002,
+      "changedFractionMax": 0.0001
     }
-  }
+  },
+  "framePadding": 4
 }

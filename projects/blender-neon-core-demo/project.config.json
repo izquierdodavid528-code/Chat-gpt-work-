@@ -1,0 +1,13 @@
+{
+  "slug": "blender-neon-core-demo",
+  "type": "blender",
+  "driveProjectDir": "03 - Blender Neon Core Demo",
+  "sceneScript": "scene.py",
+  "blendFile": "out/neon-core-demo.blend",
+  "previewFile": "out/neon-core-poster.png",
+  "videoFile": "out/neon-core-demo.mp4",
+  "renderEngine": "BLENDER_EEVEE_NEXT",
+  "fps": 24,
+  "frames": 120,
+  "resolution": "720x1280"
+}

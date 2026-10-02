@@ -27,7 +27,7 @@ jobs:
 
       - name: Validate Python and JSON
         run: |
-          python3 -m py_compile scripts/remotion/render-plan.py scripts/remotion/verify-delivery.py
+          python3 -m py_compile scripts/remotion/render-plan.py scripts/remotion/verify-delivery.py scripts/media/audio-qa.py
           python3 -m json.tool projects/_template-remotion/project.config.json >/dev/null
 
       - name: Validate workflows
@@ -39,6 +39,52 @@ jobs:
           "$RUNNER_TEMP/actionlint"             .github/workflows/remotion-drive-render.yml             .github/workflows/remotion-workspace-selftest.yml \
             .github/workflows/studio-render-request.yml \
             .github/workflows/new-project.yml
+
+      - name: Validate audio QA gate with synthetic compliant media
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg >/dev/null
+          cat > "$RUNNER_TEMP/audio-config.json" <<'JSON'
+          {
+            "render": {
+              "requireAudio": true,
+              "audioQa": {
+                "enabled": true,
+                "requireAudio": true,
+                "expectedCodec": "aac",
+                "expectedSampleRateHz": 48000,
+                "minChannels": 1,
+                "maxChannels": 2,
+                "targetIntegratedLufs": -14.0,
+                "integratedLufsTolerance": 2.0,
+                "maxTruePeakDbfs": -1.0,
+                "maxDurationDeltaSeconds": 0.12,
+                "silence": {
+                  "enabled": true,
+                  "enforce": false,
+                  "noiseDb": -50.0,
+                  "minDurationSeconds": 0.5
+                }
+              }
+            }
+          }
+JSON
+          ffmpeg -y \
+            -f lavfi -i "color=c=black:s=320x240:r=30:d=3" \
+            -f lavfi -i "sine=frequency=1000:sample_rate=48000:duration=3" \
+            -filter:a "loudnorm=I=-14:TP=-1:LRA=7" \
+            -c:v libx264 -pix_fmt yuv420p \
+            -c:a aac -b:a 192k \
+            -shortest "$RUNNER_TEMP/audio-test.mp4" >/dev/null 2>&1
+          ffprobe -v error -show_streams -show_format -of json \
+            "$RUNNER_TEMP/audio-test.mp4" > "$RUNNER_TEMP/audio-probe.json"
+          python3 scripts/media/audio-qa.py \
+            "$RUNNER_TEMP/audio-config.json" \
+            "$RUNNER_TEMP/audio-test.mp4" \
+            "$RUNNER_TEMP/audio-probe.json" \
+            "$RUNNER_TEMP/audio-qa-report.json"
+          grep -q '"result": "PASS"' "$RUNNER_TEMP/audio-qa-report.json"
 
       - name: Validate planner
         run: |

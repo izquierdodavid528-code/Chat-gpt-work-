@@ -1,0 +1,8 @@
+{
+  "slug": "template-remotion",
+  "type": "remotion",
+  "compositionId": "TemplateVideo",
+  "driveProjectDir": "template-remotion",
+  "studioPort": 3000,
+  "outputFile": "out/render.mp4"
+}

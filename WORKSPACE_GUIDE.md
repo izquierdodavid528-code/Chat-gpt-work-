@@ -244,7 +244,10 @@ Para trabajos finales de Blender, el objetivo ya no es simplemente "terminar un 
    - Antes de distribuir la escena se renderizan frames de control desde el maestro.
    - Los mismos frames aparecen despues dentro de los bloques paralelos.
    - El pipeline compara los pixeles decodificados de ambos resultados.
-   - Si un frame de control no coincide, el workflow falla y NO publica el video como entrega verificada.
+   - Primero se exige coincidencia exacta.
+   - Si EEVEE produce una diferencia numerica minima entre runners, se aplica una tolerancia estricta: RMSE normalizado <= 2e-5 y pixeles distintos <= 0.01% del frame.
+   - Esta tolerancia se definio a partir de una prueba forense real del mismo maestro: 40 pixeles distintos de 921600 en frames 1 y 60, PSNR ~96.5 dB y SSIM 1.000000; el frame 120 fue exactamente identico.
+   - Si un frame supera cualquiera de esos limites, el workflow falla y NO publica el video como entrega verificada.
 
 7. **Ensamblado**
    - Solo despues de comprobar que todos los frames existen y pasan la validacion se crea el MP4.

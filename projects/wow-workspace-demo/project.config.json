@@ -1,0 +1,8 @@
+{
+  "slug": "wow-workspace-demo",
+  "type": "remotion",
+  "compositionId": "WowWorkspaceDemo",
+  "driveProjectDir": "02 - WOW Workspace Demo",
+  "studioPort": 3000,
+  "outputFile": "out/wow-workspace-demo.mp4"
+}

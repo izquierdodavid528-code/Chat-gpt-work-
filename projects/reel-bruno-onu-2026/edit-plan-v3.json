@@ -4,8 +4,8 @@
   "version": "v3",
   "concept": "EL PULSO DE LA SALA",
   "targetDurationSeconds": {
-    "min": 58,
-    "max": 58
+    "min": 55.5,
+    "max": 55.5
   },
   "output": {
     "width": 1080,
@@ -152,7 +152,7 @@
       "id": "end-card",
       "timeline": {
         "start": 52.5,
-        "end": 58
+        "end": 55.5
       },
       "sourceWindowApprox": null,
       "purpose": "Source/context + Memorial identity",
@@ -185,9 +185,9 @@
       ],
       "audio": {
         "bed": "music-bed-v3.wav",
-        "durationSeconds": 58,
+        "durationSeconds": 55.5,
         "sampleRateHz": 48000,
-        "policy": "continuous editorial underscore with ducking under voice and near-silence under final quote"
+        "policy": "continuous editorial underscore; ducks to near-silence under final quote, returns subtly under a 3s end card, then fades to zero"
       },
       "chapterTransitions": {
         "style": "4-8 frame restrained red-line editorial transition",

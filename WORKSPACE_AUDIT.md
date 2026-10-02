@@ -226,3 +226,53 @@ For most jobs, the user-facing interaction can be reduced to:
 The user should not need to manually move media into GitHub, create Drive project folders, choose render workers, assemble Blender frame blocks, or upload final renders.
 
 The preferred operating rule is: use generic infrastructure and configuration; do not introduce project-specific workflows unless a project proves the generic contract is insufficient.
+
+
+## Audio system closure
+
+The audiovisual pipeline now includes a shared professional Audio Quality Gate:
+
+`scripts/media/audio-qa.py`
+
+Integrated into Remotion Smart Render after ffprobe and before production publication.
+
+The gate can enforce:
+- required audio presence;
+- AAC or another configured codec;
+- expected sample rate (48 kHz baseline);
+- channel-count range;
+- audio/video duration synchronization;
+- EBU R128 integrated loudness;
+- true peak;
+- optional loudness-range limit;
+- anomalous leading/trailing/continuous silence.
+
+Default social/web profile in the Remotion template:
+- AAC;
+- 48 kHz;
+- 1-2 channels;
+- target -14 LUFS;
+- +/- 2 LU tolerance;
+- true peak <= -1 dBFS;
+- max audio/video duration delta 0.12 s.
+
+Silence analysis is enabled but advisory by default and becomes blocking only when a project explicitly sets `silence.enforce=true`.
+
+Intentional silent videos remain supported: the project decides whether audio is mandatory.
+
+The system deliberately does not apply hidden automatic loudness normalization to every final mix. Mixing decisions stay in Remotion; the gate measures the delivered master and fails the workflow when the configured technical contract is violated.
+
+Successful validation:
+
+`37069243373` — SUCCESS
+
+Evidence in that run:
+- workflow/action lint PASS;
+- Python/config validation PASS;
+- synthetic media fixture with required AAC audio at 48 kHz PASS;
+- EBU R128 loudness/true-peak analysis PASS;
+- Remotion planner PASS;
+- real reusable Remotion Smart Render PASS;
+- delivery artifact contains `audio-qa-report.json`.
+
+With this gate, the deterministic technical path covers visual render integrity and final-master audio integrity. Remaining human review is artistic/editorial rather than a missing infrastructure component.

@@ -37,11 +37,13 @@ type Segment = {
 };
 
 const SEGMENTS: Segment[] = [
-  {id: "cold", from: 0, duration: 4.8, sourceStart: 1160.88, mode: "close"},
-  {id: "principle", from: 8.5, duration: 12, sourceStart: 49.883, chapter: "DERECHO INTERNACIONAL", chapterIndex: "01", mode: "medium"},
+  // Until the master source is upgraded from 640x360, every real shot stays in a
+  // native 16:9 documentary window. Fake vertical close-ups exaggerate softness.
+  {id: "cold", from: 0, duration: 4.8, sourceStart: 1160.88, mode: "window"},
+  {id: "principle", from: 8.5, duration: 12, sourceStart: 49.883, chapter: "DERECHO INTERNACIONAL", chapterIndex: "01", mode: "window"},
   {id: "containers", from: 20.5, duration: 13, sourceStart: 208.68, chapter: "PRESIÓN ECONÓMICA", chapterIndex: "02", mode: "window"},
-  {id: "dialogue", from: 33.5, duration: 11, sourceStart: 747.88, chapter: "DIÁLOGO", chapterIndex: "03", mode: "close"},
-  {id: "payoff", from: 44.5, duration: 10.5, sourceStart: 1156.88, mode: "medium"},
+  {id: "dialogue", from: 33.5, duration: 11, sourceStart: 747.88, chapter: "DIÁLOGO", chapterIndex: "03", mode: "window"},
+  {id: "payoff", from: 44.5, duration: 10.5, sourceStart: 1156.88, mode: "window"},
 ];
 
 type Caption = {start: number; end: number; text: string; accent?: string};
@@ -91,7 +93,7 @@ const Captions: React.FC = () => {
   const y = interpolate(local, [0, 0.14], [12, 0], {extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.quad)});
   return (
     <div style={{position: "absolute", left: 78, right: 116, bottom: 300, zIndex: 80, display: "flex", justifyContent: "center", opacity, transform: `translateY(${y}px)`}}>
-      <div style={{maxWidth: 850, color: WHITE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 48, fontWeight: 850, lineHeight: 1.08, letterSpacing: -0.7, textAlign: "center", padding: "15px 22px 17px", borderRadius: 16, background: "rgba(0,0,0,.78)", boxShadow: "0 10px 34px rgba(0,0,0,.34)", textShadow: "0 3px 12px rgba(0,0,0,.94)", borderBottom: `4px solid ${RED}`}}>
+      <div style={{maxWidth: 850, color: WHITE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 42, fontWeight: 850, lineHeight: 1.1, letterSpacing: -0.4, textAlign: "center", padding: "13px 20px 15px", borderRadius: 12, background: "rgba(0,0,0,.72)", boxShadow: "0 10px 30px rgba(0,0,0,.28)", textShadow: "0 3px 10px rgba(0,0,0,.90)", borderBottom: `3px solid ${RED}`}}>
         <Highlight text={cue.text} accent={cue.accent} />
       </div>
     </div>
@@ -99,7 +101,7 @@ const Captions: React.FC = () => {
 };
 
 const SourceBug: React.FC = () => (
-  <div style={{position: "absolute", top: 92, left: 66, zIndex: 72, display: "flex", alignItems: "center", gap: 10, padding: "9px 13px", borderRadius: 10, background: "rgba(0,0,0,.58)", color: "rgba(255,255,255,.86)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 19, fontWeight: 800, letterSpacing: 1.3, textTransform: "uppercase"}}>
+  <div style={{position: "absolute", top: 92, left: 66, zIndex: 72, display: "flex", alignItems: "center", gap: 9, padding: 0, color: "rgba(255,255,255,.70)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 16, fontWeight: 800, letterSpacing: 1.45, textTransform: "uppercase", textShadow: "0 2px 8px rgba(0,0,0,.85)"}}>
     <span style={{width: 8, height: 8, borderRadius: 99, background: RED}} /> ONU · 26 SEP 2026
   </div>
 );
@@ -127,10 +129,11 @@ const DocumentaryVideo: React.FC<{segment: Segment}> = ({segment}) => {
   if (segment.mode === "window") {
     return (
       <AbsoluteFill style={{background: BLACK, overflow: "hidden"}}>
-        <Video src={SOURCE} startFrom={startFrom} muted style={{width: "100%", height: "100%", objectFit: "cover", objectPosition, transform: "scale(1.18)", filter: "blur(25px) brightness(.38) saturate(.68)"}} />
-        <AbsoluteFill style={{background: "linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.70))"}} />
-        <div style={{position: "absolute", left: 60, right: 60, top: 360, height: 820, borderRadius: 28, overflow: "hidden", border: "1.5px solid rgba(255,255,255,.18)", boxShadow: "0 36px 100px rgba(0,0,0,.60)", transform: `scale(${1 + progress * 0.016})`}}>
-          <Video src={SOURCE} startFrom={startFrom} muted style={{width: "100%", height: "100%", objectFit: "cover", objectPosition}} />
+        <Video src={SOURCE} startFrom={startFrom} muted style={{width: "100%", height: "100%", objectFit: "cover", objectPosition, transform: "scale(1.34)", filter: "blur(34px) brightness(.24) saturate(.62)"}} />
+        <AbsoluteFill style={{background: "linear-gradient(180deg, rgba(0,0,0,.36), rgba(0,0,0,.82))"}} />
+        <div style={{position: "absolute", left: 60, right: 60, top: 410, height: 540, borderRadius: 20, overflow: "hidden", background: BLACK, border: "1px solid rgba(255,255,255,.20)", boxShadow: "0 30px 90px rgba(0,0,0,.68)", transform: `scale(${1 + progress * 0.008})`}}>
+          <Video src={SOURCE} startFrom={startFrom} muted style={{width: "100%", height: "100%", objectFit: "contain", objectPosition: "center center"}} />
+          <div style={{position: "absolute", inset: 0, boxShadow: "inset 0 0 0 1px rgba(255,255,255,.035)"}} />
         </div>
         <FrameTexture />
       </AbsoluteFill>
@@ -176,13 +179,16 @@ const Bridge: React.FC = () => {
   const orbit = interpolate(frame, [0, 45], [-24, 28], {extrapolateRight: "clamp"});
   return (
     <AbsoluteFill style={{background: BLACK, justifyContent: "center", alignItems: "center", overflow: "hidden"}}>
-      <div style={{position: "absolute", width: 720, height: 720, borderRadius: "50%", border: "2px solid rgba(255,255,255,.12)", boxShadow: "inset 0 0 90px rgba(255,255,255,.04)", transform: `rotate(${orbit}deg) scale(${0.88 + enter * 0.12})`}}>
-        <div style={{position: "absolute", left: 40, right: 40, top: 358, height: 2, background: "rgba(237,28,36,.72)"}} />
-        <div style={{position: "absolute", top: 40, bottom: 40, left: 358, width: 2, background: "rgba(237,28,36,.46)"}} />
+      <div style={{position: "absolute", width: 760, height: 760, top: 310, borderRadius: "50%", border: "1px solid rgba(255,255,255,.10)", boxShadow: "inset 0 0 110px rgba(255,255,255,.025)", transform: `rotate(${orbit}deg) scale(${0.88 + enter * 0.12})`}}>
+        <div style={{position: "absolute", left: 22, right: 22, top: 379, height: 2, background: "rgba(237,28,36,.74)"}} />
+        <div style={{position: "absolute", top: 22, bottom: 22, left: 379, width: 2, background: "rgba(237,28,36,.42)"}} />
       </div>
-      <div style={{color: WHITE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 250, fontWeight: 900, letterSpacing: -15, transform: `scale(${0.82 + enter * 0.18})`, opacity: enter, textShadow: "0 0 60px rgba(255,255,255,.12)"}}>81</div>
-      <div style={{position: "absolute", bottom: 430, color: RED, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 24, fontWeight: 900, letterSpacing: 3}}>ASAMBLEA GENERAL</div>
-      <div style={{position: "absolute", bottom: 382, color: "rgba(255,255,255,.72)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 20, fontWeight: 700, letterSpacing: 2}}>26 · SEP · 2026</div>
+      <div style={{position: "absolute", top: 515, color: WHITE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 278, fontWeight: 900, letterSpacing: -17, transform: `scale(${0.82 + enter * 0.18})`, opacity: enter, textShadow: "0 0 60px rgba(255,255,255,.10)"}}>81</div>
+      <div style={{position: "absolute", left: 68, right: 68, bottom: 315, opacity: enter}}>
+        <div style={{height: 5, width: 126, background: RED, marginBottom: 18}} />
+        <div style={{color: WHITE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 36, fontWeight: 900, letterSpacing: .2}}>BRUNO RODRÍGUEZ PARRILLA</div>
+        <div style={{marginTop: 8, color: "rgba(255,255,255,.62)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 19, fontWeight: 750, letterSpacing: 1.4}}>81.ª ASAMBLEA GENERAL · ONU · 26 SEP 2026</div>
+      </div>
       <FrameTexture />
     </AbsoluteFill>
   );
@@ -194,13 +200,16 @@ const ContextCard: React.FC = () => {
   const enter = spring({frame, fps, durationInFrames: 16, config: {damping: 170, stiffness: 190}});
   return (
     <AbsoluteFill style={{background: BLACK, overflow: "hidden"}}>
-      <Video src={SOURCE} startFrom={0} muted style={{width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 42%", filter: "brightness(.48) saturate(.72)"}} />
-      <AbsoluteFill style={{background: "linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.84))"}} />
-      <div style={{position: "absolute", left: 62, right: 62, bottom: 310, opacity: enter, transform: `translateY(${interpolate(enter,[0,1],[40,0])}px)`}}>
-        <div style={{width: 160, height: 7, background: RED, marginBottom: 20}} />
-        <div style={{fontFamily: "Arial, Helvetica, sans-serif", color: WHITE, fontSize: 64, lineHeight: .95, fontWeight: 900, letterSpacing: -1.5}}>BRUNO RODRÍGUEZ<br />PARRILLA</div>
-        <div style={{marginTop: 20, color: "#D7D7D7", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 28, lineHeight: 1.25, fontWeight: 650}}>Ministro de Relaciones Exteriores de Cuba</div>
-        <div style={{marginTop: 10, color: RED, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 22, fontWeight: 900, letterSpacing: 1.5}}>81.ª ASAMBLEA GENERAL · NACIONES UNIDAS</div>
+      <Video src={SOURCE} startFrom={0} muted style={{width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 44%", transform: "scale(1.32)", filter: "blur(32px) brightness(.22) saturate(.60)"}} />
+      <AbsoluteFill style={{background: "linear-gradient(180deg, rgba(0,0,0,.38), rgba(0,0,0,.86))"}} />
+      <div style={{position: "absolute", left: 60, right: 60, top: 355, height: 540, borderRadius: 20, overflow: "hidden", border: "1px solid rgba(255,255,255,.18)", boxShadow: "0 30px 90px rgba(0,0,0,.70)"}}>
+        <Video src={SOURCE} startFrom={0} muted style={{width: "100%", height: "100%", objectFit: "contain", objectPosition: "center center", background: BLACK}} />
+      </div>
+      <div style={{position: "absolute", left: 62, right: 62, top: 970, opacity: enter, transform: `translateY(${interpolate(enter,[0,1],[24,0])}px)`}}>
+        <div style={{width: 126, height: 5, background: RED, marginBottom: 16}} />
+        <div style={{fontFamily: "Arial, Helvetica, sans-serif", color: WHITE, fontSize: 50, lineHeight: .98, fontWeight: 900, letterSpacing: -1}}>BRUNO RODRÍGUEZ PARRILLA</div>
+        <div style={{marginTop: 13, color: "#D0D0D0", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 23, lineHeight: 1.2, fontWeight: 650}}>Ministro de Relaciones Exteriores de Cuba</div>
+        <div style={{marginTop: 8, color: "rgba(255,255,255,.58)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 17, fontWeight: 800, letterSpacing: 1.4}}>NACIONES UNIDAS · 26 SEP 2026</div>
       </div>
       <FrameTexture />
     </AbsoluteFill>
@@ -221,7 +230,7 @@ const DataCard: React.FC = () => {
 };
 
 const MemorialBug: React.FC = () => (
-  <div style={{position: "absolute", right: 68, top: 90, width: 108, zIndex: 90, opacity: .86}}>
+  <div style={{position: "absolute", right: 66, top: 88, width: 76, zIndex: 90, opacity: .70}}>
     <Img src={LOGO} style={{width: "100%", height: "auto"}} />
   </div>
 );

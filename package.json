@@ -11,7 +11,7 @@
     "project:new": "bash scripts/workspace/new-remotion-project.sh",
     "studio": "bash scripts/workspace/open-remotion.sh",
     "drive:pull": "bash scripts/workspace/sync-drive.sh",
-    "drive:push-render": "bash scripts/workspace/sync-drive.sh",
+    "drive:push-render": "bash scripts/workspace/push-render.sh",
     "blender:install": "bash scripts/blender/install.sh && bash scripts/blender/install-gui.sh",
     "blender:start": "bash scripts/blender/start-gui.sh",
     "blender:stop": "bash scripts/blender/stop-gui.sh",

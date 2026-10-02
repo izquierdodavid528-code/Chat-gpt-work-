@@ -1,0 +1,27 @@
+{
+  "name": "wow-workspace-demo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "remotion studio src/index.ts",
+    "compositions": "remotion compositions src/index.ts",
+    "render": "remotion render src/index.ts WowWorkspaceDemo out/wow-workspace-demo.mp4 --codec=h264 --pixel-format=yuv420p --crf=18 --log=info"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.530",
+    "@remotion/transitions": "4.0.530",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.530"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "typescript": "5.6.3"
+  },
+  "engines": {
+    "node": "20.20.2",
+    "npm": "10.8.2"
+  },
+  "packageManager": "npm@10.8.2"
+}

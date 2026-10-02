@@ -59,19 +59,17 @@ El hook debe funcionar también sin audio.
 ### 0:00–0:04.8 — Cold open
 Frase final del discurso. Rostro + voz original + subtítulo. Sin música durante las primeras palabras.
 
-### 0:04.8–0:06.3 — Motion bridge Blender
-Opener 3D breve. No superar 1.7 s. Objetivo: identidad premium y pattern interrupt, no espectáculo.
+### 0:04.8–0:06.0 — Motion bridge / contexto
+Opener breve. Objetivo: identidad premium y pattern interrupt, no espectáculo.
 
-### 0:06.3–0:08.5 — Contexto
-Plano abierto real de la Asamblea.
-Texto:
+El propio bridge debe resolver todo el contexto, sin una tarjeta posterior:
 BRUNO RODRÍGUEZ PARRILLA
-MINISTRO DE RELACIONES EXTERIORES DE CUBA
-NACIONES UNIDAS · 26 SEP 2026
+81.ª ASAMBLEA GENERAL · ONU · 26 SEP 2026
+FRAGMENTOS DE UNA INTERVENCIÓN DE ~21 MIN
 
-Secundario opcional: INTERVENCIÓN: ~21 MIN
+A continuación entrar directamente al capítulo 1.
 
-### 0:08.5–0:20.5 — CAPÍTULO 1 · PRINCIPIO
+### 0:06.0–0:18.0 — CAPÍTULO 1 · PRINCIPIO
 Usar el pasaje inicial sobre expansionismo, uso de la fuerza, derecho internacional y soberanía.
 
 No usar los 34 s continuos del V2. Extraer únicamente las frases necesarias para construir una idea completa.
@@ -85,7 +83,7 @@ Visual:
 
 Capítulo: 01 · DERECHO INTERNACIONAL
 
-### 0:20.5–0:33.5 — CAPÍTULO 2 · CONSECUENCIA
+### 0:18.0–0:31.0 — CAPÍTULO 2 · CONSECUENCIA
 Seleccionar una frase concreta de la sección sobre presión económica.
 
 Candidato principal:
@@ -99,7 +97,7 @@ Tratamiento obligatorio:
 
 Capítulo: 02 · PRESIÓN ECONÓMICA
 
-### 0:33.5–0:44.5 — CAPÍTULO 3 · DIÁLOGO
+### 0:31.0–0:42.0 — CAPÍTULO 3 · DIÁLOGO
 Usar la parte en la que declara disposición a dialogar con Estados Unidos sobre diferencias bilaterales y a mantener relaciones comerciales.
 
 Este bloque es esencial porque evita un montaje unidimensional.
@@ -112,7 +110,7 @@ Visual:
 
 Capítulo: 03 · DIÁLOGO
 
-### 0:44.5–0:55 — PAYOFF
+### 0:42.0–0:52.5 — PAYOFF
 Volver al cierre del discurso. Usar una versión más completa de la secuencia que culmina en:
 “La ley de la selva no puede ser el futuro de la humanidad.”
 
@@ -122,7 +120,7 @@ En los últimos 1.5–2 s:
 - pasar de close-up a plano abierto o viceversa;
 - no añadir CTA.
 
-### 0:55–0:59/1:01 — End card
+### 0:52.5–0:58 — End card
 Negro.
 Logo Memorial con respiración.
 Texto:
@@ -243,8 +241,11 @@ Música:
 - textura documental;
 - no épica militar;
 - no trailer propagandístico;
-- bajar durante citas fuertes;
-- casi desaparecer en la frase final.
+- cama continua durante los 58 s para unir fragmentos no contiguos;
+- ducking constante bajo la voz;
+- leve aumento de energía en cambios de capítulo;
+- casi desaparecer durante la frase final;
+- master asset: music-bed-v3.wav, 58 s, 48 kHz estéreo.
 
 SFX:
 - whoosh solo con movimiento real;

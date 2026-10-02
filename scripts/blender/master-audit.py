@@ -26,6 +26,20 @@ simulation_cache_dir = os.environ.get("BLENDER_SIMULATION_CACHE_DIR", "").strip(
 def dep_record(kind, name, raw_path, packed=False):
     if not raw_path:
         return None
+
+    # Blender's built-in font is a virtual resource, not an external file.
+    # Treat it as internal/portable so text objects do not fail master audit.
+    if kind == "font" and raw_path == "<builtin>":
+        return {
+            "kind": kind,
+            "name": name,
+            "path": raw_path,
+            "resolved": raw_path,
+            "packed": True,
+            "exists": True,
+            "internal": True,
+        }
+
     resolved = pathlib.Path(bpy.path.abspath(raw_path))
     return {
         "kind": kind,
@@ -34,6 +48,7 @@ def dep_record(kind, name, raw_path, packed=False):
         "resolved": str(resolved),
         "packed": bool(packed),
         "exists": bool(packed or resolved.exists()),
+        "internal": False,
     }
 
 def collect_dependencies():

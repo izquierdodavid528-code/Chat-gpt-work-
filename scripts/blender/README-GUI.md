@@ -1,6 +1,10 @@
 # Blender GUI en Codespaces
 
-Una vez validado Blender headless, puedes intentar la interfaz completa en el navegador usando noVNC.
+## Estado
+
+**Flujo validado desde Android el 2 de octubre de 2026.**
+
+Blender 4.0 abre correctamente dentro del navegador mediante noVNC.
 
 ## 1. Instalar la capa gráfica
 
@@ -15,9 +19,15 @@ bash scripts/blender/install-gui.sh
 bash scripts/blender/start-gui.sh
 ```
 
-Codespaces debe detectar el puerto **6080**. Ábrelo desde la pestaña **Ports/Puertos** o desde la notificación que aparezca.
+Codespaces detecta el puerto **6080**.
 
-La página noVNC suele abrir en:
+En la pestaña **Ports / Puertos**:
+
+- abrir el puerto 6080;
+- mantener visibilidad **Private**;
+- si aparece un listado de directorios, entrar en `vnc.html`.
+
+Ruta:
 
 ```
 /vnc.html
@@ -29,10 +39,28 @@ La página noVNC suele abrir en:
 bash scripts/blender/stop-gui.sh
 ```
 
-## Notas importantes
+## Componentes
 
-- El renderizado usa **Mesa llvmpipe**, es decir, CPU/software rendering.
-- El viewport puede sentirse lento, especialmente desde móvil.
-- Para modelado ligero, revisar escenas y lanzar renders es viable.
-- Para trabajo 3D pesado, simulaciones o Cycles complejos, esta no es una sustitución real de una GPU.
+- Xvfb: display virtual.
+- Openbox: gestor de ventanas ligero.
+- x11vnc: expone el display como VNC.
+- noVNC/websockify: convierte VNC a una interfaz usable desde el navegador.
+- Mesa llvmpipe: renderizado gráfico por software.
+
+## Notas
+
+- El viewport funciona, pero usa CPU/software rendering.
+- Es adecuado para modelado ligero, revisión de escenas, cámaras, materiales y lanzamiento de renders.
+- No sustituye una estación con GPU para escenas complejas.
 - Los logs quedan en `.blender-gui/logs/`.
+- El puerto 6080 ya está declarado en `.devcontainer/devcontainer.json`.
+
+## Comandos rápidos
+
+```bash
+# iniciar
+bash scripts/blender/start-gui.sh
+
+# detener
+bash scripts/blender/stop-gui.sh
+```

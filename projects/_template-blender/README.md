@@ -1,21 +1,45 @@
-# Blender Project Template
+# Blender project template
 
-Create a new project with:
+This folder defines the contract used by `Blender Smart Render`.
 
-```bash
-npm run blender:new -- my-project
-```
+## Required behavior
 
-Headless build/render:
+`scene.py` must:
+- build the complete scene deterministically;
+- save the file declared by `blendFile`;
+- honor `BLENDER_BUILD_ONLY=1` by saving and exiting before final rendering;
+- use repository code + Drive assets, not runtime network downloads.
 
-```bash
-npm run blender:render -- my-project
-```
+`project.config.json` controls:
+- Blender version;
+- frame range / FPS / resolution;
+- Drive project folder;
+- sequential vs verified-parallel eligibility;
+- block size / worker count;
+- simulation policy;
+- FFmpeg output settings;
+- fidelity thresholds.
 
-Open the Blender GUI in Codespaces:
+## Parallel safety
 
-```bash
-npm run blender:open -- my-project
-```
+New projects start with:
 
-Large textures, footage and render outputs should live in Drive rather than GitHub.
+`render.parallel.safe=false`
+
+Only change it to `true` after the scene has been reviewed for frame independence.
+
+For stateful simulations, bake first and declare:
+
+`simulationPolicy: "baked"`
+
+plus `simulationCacheDir`.
+
+## Final render
+
+Use the generic GitHub Actions workflow:
+
+`Blender Smart Render`
+
+with `mode=auto`.
+
+Do not create a project-specific workflow unless the generic pipeline cannot represent a real requirement.

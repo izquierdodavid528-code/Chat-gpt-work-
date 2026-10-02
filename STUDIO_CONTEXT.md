@@ -119,7 +119,7 @@ New Blender projects should start from:
 - `projects/_template-blender`
 - `npm run blender:new -- <slug> ["Drive folder"]`
 
-New projects default to `render.parallel.safe=false` until audited.
+New projects default to `render.parallel.safe=false` until audited.\n\nLocal planning check:\n- `npm run blender:plan -- <slug> [auto|sequential|parallel]`
 
 ## Important files
 
@@ -155,12 +155,13 @@ The experiment showed that parallel EEVEE rendering reduced wall-clock frame com
 When asked to continue studio work:
 1. read this file;
 2. read the target project's `project.config.json`;
-3. read `WORKSPACE_GUIDE.md` only when broader architecture is needed;
-4. use the generic workflows instead of inventing duplicate automation;
-5. keep Drive for heavy assets/renders and GitHub for source/config;
-6. never expose `RCLONE_CONFIG_B64` or other secrets;
-7. do not call a render "final" until its verification/delivery job succeeds.
+3. read `WORKSPACE_AUDIT.md` for the validated production contract;
+4. read `WORKSPACE_GUIDE.md` only when broader architecture is needed;
+5. use the generic workflows instead of inventing duplicate automation;
+6. keep Drive for heavy assets/renders and GitHub for source/config;
+7. never expose `RCLONE_CONFIG_B64` or other secrets;
+8. do not call a render "final" until its verification/delivery job succeeds.
 
 ## Current cleanup policy
 
-Old project-specific workflows created during the Neon Core experiments are historical scaffolding and should not be used as the production path. The generic Blender Smart Render plus self-test are the canonical infrastructure.
+Old project-specific Blender experiment workflows and the legacy Blender Drive Render workflow have been removed from the active workflow directory. Blender Smart Render plus the self-test are now the single production infrastructure.

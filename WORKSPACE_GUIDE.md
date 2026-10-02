@@ -119,6 +119,36 @@ Workflow: `Blender Drive Render`
 
 Toma el proyecto, descarga sus assets desde Drive, ejecuta Blender en headless, sube `out/` a Drive y conserva artifact de GitHub Actions.
 
+
+## Progreso de render de Blender
+
+Todos los renders nuevos de Blender pasan por `scripts/blender/render-with-progress.py`.
+
+Durante una animacion se genera:
+
+```text
+<proyecto>/out/render-progress.json
+```
+
+El archivo informa:
+- estado: starting, rendering, completed, cancelled o failed;
+- frame actual;
+- frames totales;
+- porcentaje completado;
+- tiempo transcurrido;
+- ETA estimada;
+- fecha/hora de la ultima actualizacion.
+
+En GitHub Actions, el workflow publica ese JSON en Drive aproximadamente cada 30 segundos:
+
+```text
+Remotion Projects/<carpeta-del-proyecto>/renders/render-progress.json
+```
+
+Esto permite consultar el avance desde ChatGPT sin esperar a que termine el job. La estimacion restante es orientativa porque distintos frames pueden tardar tiempos diferentes.
+
+Nota: los jobs que ya estaban ejecutandose antes de incorporar este sistema no pueden mostrar porcentaje retroactivamente. Solo aplica a renders iniciados con la version nueva del workspace.
+
 ## Crear proyectos desde GitHub sin terminal
 
 Workflow: `Create Workspace Project`

@@ -23,6 +23,11 @@ on:
         required: false
         default: "0"
         type: string
+      recovery_run_id:
+        description: "0 = normal render; otherwise recover a compatible generic Smart Render run"
+        required: false
+        default: "0"
+        type: string
   workflow_call:
     inputs:
       project_slug:
@@ -40,11 +45,16 @@ on:
         required: false
         default: "0"
         type: string
+      recovery_run_id:
+        required: false
+        default: "0"
+        type: string
     secrets:
       RCLONE_CONFIG_B64:
         required: false
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
@@ -125,6 +135,7 @@ jobs:
 
   build-master:
     needs: plan
+    if: inputs.recovery_run_id == '0'
     runs-on: ubuntu-24.04
     env:
       PROJECT_DIR: ${{ needs.plan.outputs.project_dir }}
@@ -308,7 +319,7 @@ jobs:
 
   render-sequential:
     needs: [plan, build-master]
-    if: needs.plan.outputs.render_mode == 'sequential'
+    if: inputs.recovery_run_id == '0' && needs.plan.outputs.render_mode == 'sequential'
     runs-on: ubuntu-24.04
     env:
       BLENDER_VERSION: ${{ needs.plan.outputs.blender_version }}
@@ -376,7 +387,7 @@ jobs:
 
   render-blocks:
     needs: [plan, build-master]
-    if: needs.plan.outputs.render_mode == 'verified_parallel'
+    if: inputs.recovery_run_id == '0' && needs.plan.outputs.render_mode == 'verified_parallel'
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -449,7 +460,7 @@ jobs:
 
   deliver-sequential:
     needs: [plan, build-master, render-sequential]
-    if: needs.plan.outputs.render_mode == 'sequential'
+    if: inputs.recovery_run_id == '0' && needs.plan.outputs.render_mode == 'sequential'
     runs-on: ubuntu-24.04
     env:
       PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
@@ -558,7 +569,7 @@ jobs:
 
   deliver-parallel:
     needs: [plan, build-master, render-blocks]
-    if: needs.plan.outputs.render_mode == 'verified_parallel'
+    if: inputs.recovery_run_id == '0' && needs.plan.outputs.render_mode == 'verified_parallel'
     runs-on: ubuntu-24.04
     env:
       PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
@@ -677,6 +688,180 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: blender-delivery-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
+          path: out/
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Cleanup credential
+        if: always()
+        run: rm -f "$RUNNER_TEMP/rclone.conf"
+
+  recover-delivery:
+    needs: plan
+    if: inputs.recovery_run_id != '0'
+    runs-on: ubuntu-24.04
+    env:
+      SOURCE_RUN_ID: ${{ inputs.recovery_run_id }}
+      PROJECT_SLUG: ${{ needs.plan.outputs.project_slug }}
+      DRIVE_PROJECT: ${{ needs.plan.outputs.drive_project }}
+      BLEND_FILE: ${{ needs.plan.outputs.blend_file }}
+      VIDEO_FILE: ${{ needs.plan.outputs.video_file }}
+      FRAME_START: ${{ needs.plan.outputs.frame_start }}
+      FRAME_END: ${{ needs.plan.outputs.frame_end }}
+      FRAME_PADDING: ${{ needs.plan.outputs.frame_padding }}
+      FPS: ${{ needs.plan.outputs.fps }}
+      WIDTH: ${{ needs.plan.outputs.width }}
+      HEIGHT: ${{ needs.plan.outputs.height }}
+      RENDER_MODE: ${{ needs.plan.outputs.render_mode }}
+      CONTROL_FRAMES: ${{ needs.plan.outputs.control_frames }}
+      VIDEO_CODEC: ${{ needs.plan.outputs.video_codec }}
+      VIDEO_PRESET: ${{ needs.plan.outputs.video_preset }}
+      VIDEO_CRF: ${{ needs.plan.outputs.video_crf }}
+      VIDEO_PIX_FMT: ${{ needs.plan.outputs.video_pix_fmt }}
+      FIDELITY_RMSE_MAX: ${{ needs.plan.outputs.fidelity_rmse_max }}
+      FIDELITY_CHANGED_FRACTION_MAX: ${{ needs.plan.outputs.fidelity_changed_fraction_max }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Download current render plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: blender-render-plan-${{ github.run_id }}
+          path: ${{ runner.temp }}/current-plan
+
+      - name: Download source render plan
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: blender-render-plan-${{ inputs.recovery_run_id }}
+          path: ${{ runner.temp }}/source-plan
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.recovery_run_id }}
+
+      - name: Verify recovery contract
+        run: |
+          set -euo pipefail
+          python3 scripts/blender/verify-recovery-plan.py \
+            "$RUNNER_TEMP/source-plan/render-plan.json" \
+            "$RUNNER_TEMP/current-plan/render-plan.json" \
+            "$RUNNER_TEMP/recovery-contract-report.json"
+
+      - name: Download source immutable master
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: blender-master-${{ inputs.recovery_run_id }}
+          path: ${{ runner.temp }}/master
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.recovery_run_id }}
+
+      - name: Download source frame blocks
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: blender-frames-*-${{ inputs.recovery_run_id }}
+          path: ${{ runner.temp }}/frames
+          merge-multiple: true
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.recovery_run_id }}
+
+      - name: Verify recovered master fingerprint
+        run: |
+          set -euo pipefail
+          EXPECTED="$(cut -d' ' -f1 "$RUNNER_TEMP/master/meta/master-blend.sha256")"
+          ACTUAL="$(sha256sum "$RUNNER_TEMP/master/project/$BLEND_FILE" | cut -d' ' -f1)"
+          echo "expected=$EXPECTED"
+          echo "actual=$ACTUAL"
+          test "$EXPECTED" = "$ACTUAL"
+
+      - name: Install verification tools
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg imagemagick >/dev/null
+
+      - name: Verify recovered fidelity controls
+        if: env.RENDER_MODE == 'verified_parallel'
+        run: |
+          set -euo pipefail
+          REPORT="$RUNNER_TEMP/fidelity-report.txt"
+          : > "$REPORT"
+          for FRAME in $CONTROL_FRAMES; do
+            NAME="$(printf "%0${FRAME_PADDING}d.png" "$FRAME")"
+            bash scripts/blender/verify-fidelity.sh \
+              "$RUNNER_TEMP/master/meta/reference/$NAME" \
+              "$RUNNER_TEMP/frames/$NAME" \
+              "$FRAME" \
+              "$REPORT"
+          done
+          echo "FIDELITY_CHECK=PASS" | tee -a "$REPORT"
+
+      - name: Assemble and verify recovered delivery
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          PATTERN="%0${FRAME_PADDING}d.png"
+          OUTPUT_NAME="$(basename "$VIDEO_FILE")"
+          ffmpeg -y \
+            -framerate "$FPS" \
+            -start_number "$FRAME_START" \
+            -i "$RUNNER_TEMP/frames/$PATTERN" \
+            -c:v "$VIDEO_CODEC" \
+            -preset "$VIDEO_PRESET" \
+            -crf "$VIDEO_CRF" \
+            -pix_fmt "$VIDEO_PIX_FMT" \
+            -movflags +faststart \
+            -an \
+            -metadata creation_time=1970-01-01T00:00:00Z \
+            "out/$OUTPUT_NAME"
+          test -s "out/$OUTPUT_NAME"
+          ffprobe -v error \
+            -show_entries stream=codec_type,codec_name,width,height,r_frame_rate,nb_frames \
+            -show_entries format=duration,size \
+            -of json \
+            "out/$OUTPUT_NAME" > out/video-probe.json
+          python3 scripts/blender/verify-delivery.py \
+            "$RUNNER_TEMP/frames" "$FRAME_START" "$FRAME_END" "$FRAME_PADDING" \
+            out/video-probe.json "$WIDTH" "$HEIGHT" "$FPS" out/delivery-report.json
+          if [ "$RENDER_MODE" = "verified_parallel" ]; then
+            cp "$RUNNER_TEMP/fidelity-report.txt" out/fidelity-report.txt
+          else
+            printf 'mode=sequential\nresult=NOT_APPLICABLE\n' > out/fidelity-report.txt
+          fi
+          cp "$RUNNER_TEMP/recovery-contract-report.json" out/
+          cp "$RUNNER_TEMP/source-plan/render-plan.json" out/source-render-plan.json
+          cp "$RUNNER_TEMP/master/meta/master-manifest.json" out/
+          cp "$RUNNER_TEMP/master/meta/master-blend.sha256" out/
+          cp "$RUNNER_TEMP/master/meta/master-contract-report.json" out/
+          cp "$RUNNER_TEMP/master/meta/render-environment.txt" out/
+          cat "$RUNNER_TEMP"/frames/block-*.txt > out/block-timings.txt
+
+      - name: Restore rclone config
+        env:
+          RCLONE_CONFIG_B64: ${{ secrets.RCLONE_CONFIG_B64 }}
+        run: |
+          set -euo pipefail
+          test -n "$RCLONE_CONFIG_B64"
+          printf '%s' "$RCLONE_CONFIG_B64" | base64 --decode > "$RUNNER_TEMP/rclone.conf"
+          chmod 600 "$RUNNER_TEMP/rclone.conf"
+
+      - name: Install pinned rclone
+        run: |
+          set -euo pipefail
+          ARCHIVE="rclone-v${RCLONE_VERSION}-linux-amd64.zip"
+          curl -fsSLO "https://downloads.rclone.org/v${RCLONE_VERSION}/${ARCHIVE}"
+          unzip -q "$ARCHIVE"
+          sudo install -m 0755 "rclone-v${RCLONE_VERSION}-linux-amd64/rclone" /usr/local/bin/rclone
+
+      - name: Upload recovered delivery to Drive
+        run: |
+          rclone --config "$RUNNER_TEMP/rclone.conf" mkdir "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders"
+          rclone --config "$RUNNER_TEMP/rclone.conf" copy out "drive:$DRIVE_BASE/$DRIVE_PROJECT/renders" --transfers 4 --checkers 8
+
+      - name: Upload recovered delivery artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: blender-recovery-${{ env.PROJECT_SLUG }}-${{ github.run_id }}
           path: out/
           retention-days: 14
           if-no-files-found: error

@@ -60,7 +60,7 @@ const CAPTIONS: Caption[] = [
   {start: 31.0, end: 36.4, text: "Siempre hemos estado y seguimos dispuestos al diálogo", accent: "diálogo"},
   {start: 36.4, end: 39.1, text: "con el gobierno de Estados Unidos"},
   {start: 39.1, end: 42.0, text: "para intentar encontrar solución a las diferencias bilaterales."},
-  {start: 42.0, end: 46.5, text: "Creemos que este rumbo es peligroso"},
+  {start: 42.0, end: 46.5, text: "Este rumbo es peligroso"},
   {start: 46.5, end: 49.0, text: "y es insostenible."},
   {start: 49.0, end: 52.5, text: "La ley de la selva no puede ser el futuro de la humanidad.", accent: "futuro de la humanidad"},
 ];

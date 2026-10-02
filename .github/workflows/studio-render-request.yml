@@ -1,0 +1,91 @@
+name: Studio Render Request
+
+on:
+  push:
+    paths:
+      - "projects/*/render.request.json"
+  workflow_dispatch:
+    inputs:
+      project_slug:
+        description: "Project slug under projects/"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  resolve:
+    runs-on: ubuntu-24.04
+    outputs:
+      engine: ${{ steps.resolve.outputs.engine }}
+      project_slug: ${{ steps.resolve.outputs.project_slug }}
+      validation_frames: ${{ steps.resolve.outputs.validation_frames }}
+      blender_mode: ${{ steps.resolve.outputs.blender_mode }}
+      blender_validation_frame_count: ${{ steps.resolve.outputs.blender_validation_frame_count }}
+      recovery_run_id: ${{ steps.resolve.outputs.recovery_run_id }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 2
+
+      - name: Resolve request
+        id: resolve
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_SLUG: ${{ inputs.project_slug }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            REQUEST="projects/$DISPATCH_SLUG/render.request.json"
+          else
+            mapfile -t REQUESTS < <(git diff-tree --no-commit-id --name-only -r HEAD | grep -E '^projects/[^/]+/render\.request\.json$' || true)
+            test "${#REQUESTS[@]}" -eq 1
+            REQUEST="${REQUESTS[0]}"
+          fi
+
+          test -f "$REQUEST"
+          PROJECT_SLUG="$(basename "$(dirname "$REQUEST")")"
+
+          node - "$REQUEST" "$PROJECT_SLUG" "$GITHUB_OUTPUT" <<'NODE'
+          const fs = require('fs');
+          const [file, slug, output] = process.argv.slice(2);
+          const req = JSON.parse(fs.readFileSync(file, 'utf8'));
+          const allowed = new Set(['remotion', 'blender']);
+          if (!allowed.has(req.engine)) throw new Error('engine must be remotion or blender');
+          if (req.projectSlug && req.projectSlug !== slug) throw new Error('projectSlug does not match request path');
+          const clean = (v) => String(v ?? '').replace(/[\r\n]/g, '');
+          const values = {
+            engine: req.engine,
+            project_slug: slug,
+            validation_frames: clean(req.validationFrames ?? ''),
+            blender_mode: clean(req.blenderMode ?? 'auto'),
+            blender_validation_frame_count: clean(req.validationFrameCount ?? '0'),
+            recovery_run_id: clean(req.recoveryRunId ?? '0'),
+          };
+          fs.appendFileSync(output, Object.entries(values).map(([k,v]) => k + '=' + v).join('\n') + '\n');
+          console.log(JSON.stringify(values, null, 2));
+NODE
+
+  remotion:
+    needs: resolve
+    if: needs.resolve.outputs.engine == 'remotion'
+    uses: ./.github/workflows/remotion-drive-render.yml
+    with:
+      project_slug: ${{ needs.resolve.outputs.project_slug }}
+      validation_frames: ${{ needs.resolve.outputs.validation_frames }}
+    secrets: inherit
+
+  blender:
+    needs: resolve
+    if: needs.resolve.outputs.engine == 'blender'
+    uses: ./.github/workflows/blender-smart-render.yml
+    with:
+      project_slug: ${{ needs.resolve.outputs.project_slug }}
+      mode: ${{ needs.resolve.outputs.blender_mode }}
+      drive_project_dir: ""
+      validation_frame_count: ${{ needs.resolve.outputs.blender_validation_frame_count }}
+      recovery_run_id: ${{ needs.resolve.outputs.recovery_run_id }}
+    secrets: inherit

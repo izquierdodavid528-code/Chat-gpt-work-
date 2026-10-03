@@ -33,6 +33,10 @@ NARRATION_V3 remains the unchanged, source-checked 120-word draft. Edge TTS 7.2.
 
 The first full render reached technical PASS at 60.032 s, H.264 1080×1920 / 30 fps, with 48 kHz stereo AAC. Extracted voice measured -18.4 LUFS integrated, -5.2 dBFS true peak and 2.4 LU LRA, with no clipping. The workflow's dedicated audio-QA report is NOT_ENABLED, so these are direct media measurements rather than a configured QA pass. A contact sheet revealed that the bank clip was cut before its transformation; the branch now starts that source at 3.0 s and keeps it at 1x for its 2.9 s phrase window, then requests another full render. The visual placeholders are still marked as blockouts. Creative approval, pronunciation listen-through, final voice, factual final-pass, SFX/music and final QA are not yet passed. The earlier 9.3-second pilot remains unapproved.
 
+## Motion pass in progress
+
+The next isolated render replaces the eight instructional placeholder cards with first-pass animated Remotion diagrams for the map route, conditional gate, February change, agency roles, OFAC register, U-turn path, meeting authorization and education exceptions. Exact labels remain in Remotion. Existing Flow plates remain selective. Render and review are pending.
+
 ## Next
 
 1. Replace the eight blockouts with the sourced Remotion map, route, gate/calendar, delegation, register and travel-category motion; add exact bank/date labels.

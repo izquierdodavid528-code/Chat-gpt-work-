@@ -21,12 +21,16 @@ Drive source: 02 - Reel Rubio Habana 2026/assets/flow. Three stills and six Flow
 - ofac-ledger-to-bank-v1.mp4 — readable page-to-bank morph, blank facade; recommended for OFAC transition.
 Mute all clip audio by default. Check upscaling and 24-to-30 cadence.
 
-## Current blockers and gates
-NARRATION_V3 is source-checked and revised to 120 words; 130 wpm estimates 55.4 sec but is not a measured take. Runway voice endpoint returned 401 (token revoked); no suitable natural Spanish TTS is installed locally. Therefore no voice-led animatic is rendered or claimed. SOUND_DESIGN_V1 is a plan, not a mix. Technical, creative, factual, audio and final passes remain separate.
+## Voice and animatic status
+
+NARRATION_V3 remains the unchanged, source-checked 120-word draft. Edge TTS 7.2.8 was installed and the live voice list checked. Three identical neural voice samples were generated; es-US-AlonsoNeural is the provisional scratch choice because its 12.624-second sample left the most room for breaths among the three tested. Full narration is measured at 56.640 seconds (master WAV); the Remotion MP3 is 56.664 seconds. No acceleration or script edits. Word timings now drive 12 animatic cuts and phrase captions. The original MP3, conservative WAV/MP3 masters, SRT and samples are in Drive under project assets/audio.
+
+Voice scratch is integrated in the separate 60-second composition. The visual placeholders are still clearly marked as blockouts. Technical render, creative approval, pronunciation listen-through, final voice, factual final-pass, SFX/music and final QA are not yet passed. The earlier 9.3-second pilot remains unapproved.
 
 ## Next
-1. Restore voice access or supply scratch audio; save under assets/audio.
-2. Measure actual duration and phrase breaks; retime the six-act matrix.
-3. Render/review complete 60-sec voice animatic using selected Flow clips and explicit placeholders.
-4. Inspect full moving video at phone size; then issue only prompts for assets proven missing by review.
-5. After approval, complete visual assets, Remotion compositing, voice, SFX, music, captions and final independent QA.
+
+1. Run the full 60-second render on this isolated branch with Drive assets enabled; check build, audio QA and artifact.
+2. Inspect motion, phone framing, visual holds, Flow timing, captions and speech onsets; update the matrix from findings.
+3. Request Flow generation only for gaps where a physical action or acting shot is better in Flow than Remotion; exact text, map geography and labels stay in Remotion.
+4. After animatic review, lock voice performance and timing, then add action-linked SFX, restrained music and finalized captions.
+5. Continue factual, visual and audio QA separately; the 9.3-second pilot is not approved.

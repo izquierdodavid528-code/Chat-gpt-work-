@@ -1,25 +1,25 @@
-# NARRATION V3 — source-checked scratch draft
+# NARRATION V3 — source-checked scratch script with measured neural voice
 
-Checked against the primary sources below on 2026-10-03. Draft only: no scratch take exists yet and it has not been timed acoustically. It contains 120 words; at 130 wpm the estimate is 55.4 seconds, leaving about 4.6 seconds for pauses. Re-time after recording; do not speed up a natural read to fit.
+Checked against the primary sources below on 2026-10-03. The script remains 120 words and unchanged. Edge TTS 7.2.8 neural scratch measured 56.640 s at the original MP3 and WAV master; the Remotion MP3 is 56.664 s. No rate acceleration was used. Twelve shot boundaries and phrase captions now follow Edge word timings.
 
 ## Scratch script
 
-### 00:00–00:04 — Hook
+### 00:00–00:03.4 — Hook
 Washington amplió la presión sobre La Habana.
 
-### 00:04–00:20 — January and February
+### 00:03.4–00:17.7 — January and February
 El 29 de enero se abrió la vía para posibles aranceles a países que suministraran petróleo a Cuba. El 20 de febrero se retiraron esos aranceles; la emergencia y otras medidas siguieron vigentes.
 
-### 00:20–00:33 — May and Rubio's role
+### 00:17.7–00:30.2 — May and Rubio's role
 En mayo, la orden habilitó sanciones por vínculos con ciertos sectores o conductas y encargó su aplicación a Estado y Tesoro. Rubio, secretario de Estado, no la firmó.
 
-### 00:33–00:41 — OFAC designations
+### 00:30.2–00:37.0 — OFAC designations
 En septiembre, OFAC añadió varias entidades a su lista, incluido el Banco Exterior de Cuba.
 
-### 00:41–00:53 — Finance and travel
+### 00:37.0–00:50.3 — Finance and travel
 Ese mes cambió la licencia general para ciertas transferencias U-turn. También se eliminó la autorización de reuniones profesionales y se acotaron viajes educativos, con excepciones transitorias.
 
-### 00:53–01:00 — Attributed close
+### 00:50.3–01:00 — Attributed close
 Washington invoca seguridad nacional; el MINREX denuncia un recrudecimiento del bloqueo.
 
 ## Source-check decisions
@@ -43,6 +43,28 @@ Washington invoca seguridad nacional; el MINREX denuncia un recrudecimiento del 
 - FAQ 1275: https://ofac.treasury.gov/faqs/1275
 - MINREX statement carried by Granma (2026-05-07): https://www.granma.cu/cuba/2026-05-07/la-orden-ejecutiva-del-primero-de-mayo-y-las-medidas-de-bloqueo-anunciadas-hoy-incrementan-el-dano-a-la-poblacion-cubana-y-refuerzan-la-amenaza-de-agresion-07-05-2026-16-05-55
 
-## Voice
+## Voice tests and measured timing
 
-Use a natural neutral Spanish documentary read, 125–135 wpm, with pauses at dates and attribution. Do not imitate a public figure. The connected Runway voice endpoint returned 401 (token revoked); no suitable local Spanish TTS is installed. No narration audio or real duration is claimed yet.
+Installed Edge TTS 7.2.8 in an isolated work environment. Queried edge-tts --list-voices live; the three sample voices below were present. The identical 30-word excerpt was used for all samples.
+
+| Voice | Measured sample | Notes |
+|---|---:|---|
+| es-US-AlonsoNeural | 12.624 s | Selected scratch voice; longest measured reading, leaving the most room for breaths and editorial holds. |
+| es-MX-JorgeNeural | 11.976 s | Comparison sample. |
+| es-ES-AlvaroNeural | 10.944 s | Comparison sample. |
+
+The selected take is a neutral Spanish neural voice at its default rate. It is not a celebrity imitation, trailer read, or political impersonation. Selection is provisional for animatic timing; listen to the linked samples before treating the voice as creatively approved.
+
+Full scratch timing: original Edge MP3 56.640 s; measured master WAV 56.640 s; Remotion MP3 56.664 s. The last spoken word ends at 55.737 s. No text edits or speed changes were made.
+
+The source MP3 is preserved unchanged. The WAV master is mono PCM 24-bit/48 kHz; conservative processing used a 45 Hz high-pass, 1.5:1 light compression, and -18 LUFS / -2 dBTP normalization. No reverb, radio effect, clipping, or aggressive de-essing. The Remotion MP3 is 48 kHz mono at 192 kb/s. Word boundaries were captured from Edge TTS and used for the phrase SRT and the 12 cut points in SHOT_MATRIX.md.
+
+Pronunciation audit notes: La Habana, Rubio, OFAC, Banco Exterior de Cuba, U-turn, and MINREX are in the spoken draft. IEEPA is intentionally not spoken in this short script; the acronym belongs in exact on-screen explanatory labels/captions. Verify the audible rendering of OFAC, U-turn, and MINREX during the voice listen-through before final voice approval.
+
+## Primary audio assets
+
+- Original: assets/audio/narration-scratch-v1-original.mp3
+- Master WAV: assets/audio/narration-scratch-v1-master.wav
+- Remotion master MP3: assets/audio/narration-scratch-v1-master.mp3
+- Phrase captions: assets/audio/narration-scratch-v1-captions.srt
+- Identical voice samples: assets/audio/voice-tests/

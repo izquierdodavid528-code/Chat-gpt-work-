@@ -11,31 +11,31 @@ import {
 } from "remotion";
 
 export const RUBIO_ANIMATIC_FRAMES = 60 * 30;
-const VOICE_SCRATCH_READY = false;
-const VOICE_SCRATCH_FILE = "audio/narration-scratch-v1.mp3";
+const VOICE_SCRATCH_READY = true;
+const VOICE_SCRATCH_FILE = "audio/narration-scratch-v1-master.mp3";
 
 type Shot = {
   id: string; from: number; duration: number; act: string;
   heading: string; caption: string; visual: string;
-  kind: "placeholder" | "video" | "image"; asset?: string;
+  kind: "placeholder" | "video" | "image"; asset?: string; playbackRate?: number;
 };
 const shots: Shot[] = [
-  {id:"S01",from:0,duration:120,act:"ACT 1 · HOOK",heading:"HARBOR PLATE → ROUTE SEED",caption:"Washington amplió la presión sobre La Habana.",visual:"Use only as harbor environment; not a verified oil tanker.",kind:"video",asset:"flow/video/habana-harbor-ships-v1.mp4"},
-  {id:"S02",from:120,duration:150,act:"ACT 2 · 29 JAN",heading:"PLACEHOLDER · MAP + CONDITIONAL ROUTE",caption:"El 29 de enero se abrió la vía para posibles aranceles…",visual:"Build sourced Caribbean geography and a conditional supplier route in Remotion.",kind:"placeholder"},
-  {id:"S03",from:270,duration:120,act:"ACT 2 · OIL MECHANISM",heading:"PLACEHOLDER · CONDITIONAL CUSTOMS GATE",caption:"…a países que suministraran petróleo a Cuba.",visual:"Show a mechanism dependent on findings and a further decision; no universal tariff.",kind:"placeholder"},
-  {id:"S04",from:390,duration:210,act:"ACT 2 · 20 FEB",heading:"PLACEHOLDER · REMOVE ONE TARIFF MECHANISM",caption:"El 20 de febrero se retiraron esos aranceles; la emergencia y otras medidas siguieron vigentes.",visual:"Flip a calendar, lift only this gate, retain the wider emergency marker.",kind:"placeholder"},
-  {id:"S05",from:600,duration:180,act:"ACT 3 · 1 MAY",heading:"EXISTING FLOW PLATE · REACTION ONLY",caption:"En mayo, la orden habilitó sanciones por vínculos con ciertos sectores o conductas…",visual:"Trim before the awkward page lift. Do not imply Rubio signed the order.",kind:"video",asset:"flow/video/rubio-may-document-acting-v1.mp4"},
-  {id:"S06",from:780,duration:210,act:"ACT 3 · IMPLEMENTATION",heading:"PLACEHOLDER · STATE + TREASURY",caption:"…y encargó su aplicación a Estado y Tesoro. Rubio, secretario de Estado, no la firmó.",visual:"Two implementation branches from the presidential order; exact labels in Remotion.",kind:"placeholder"},
-  {id:"S07",from:990,duration:60,act:"ACT 4 · OFAC",heading:"PLACEHOLDER · REGISTER SETUP",caption:"En septiembre, OFAC añadió varias entidades a su lista…",visual:"Brief blank register and one restrained stamp. No generated names or logos.",kind:"placeholder"},
-  {id:"S08",from:1050,duration:180,act:"ACT 4 · BANCO EXTERIOR",heading:"EXISTING FLOW PLATE · BANK TRANSFORMATION",caption:"…incluido el Banco Exterior de Cuba.",visual:"Add the sourced exact label/date over the blank facade in Remotion.",kind:"video",asset:"flow/video/ofac-ledger-to-bank-v1.mp4"},
-  {id:"S09",from:1230,duration:150,act:"ACT 5 · FINANCE",heading:"PLACEHOLDER · DEFINED U-TURN ROUTE",caption:"Ese mes cambió la licencia general para ciertas transferencias U-turn.",visual:"Show only the transaction scope in OFAC FAQ 1272, not all Cuba-related payments.",kind:"placeholder"},
-  {id:"S10",from:1380,duration:90,act:"ACT 5 · PROFESSIONAL MEETINGS",heading:"PLACEHOLDER · REMOVE AUTHORIZATION TAB",caption:"También se eliminó la autorización de reuniones profesionales…",visual:"Add exact wind-down scope/date in a small sourced caption.",kind:"placeholder"},
-  {id:"S11",from:1470,duration:120,act:"ACT 5 · EDUCATION",heading:"PLACEHOLDER · NARROWED EDUCATION LANES",caption:"…y se acotaron viajes educativos, con excepciones transitorias.",visual:"Keep an exception branch visible; details follow OFAC FAQ 1274.",kind:"placeholder"},
-  {id:"S12",from:1590,duration:210,act:"ACT 6 · ATTRIBUTED CLOSE",heading:"EXISTING MAP STILL · TIMELINE PULLBACK",caption:"Washington invoca seguridad nacional; el MINREX denuncia un recrudecimiento del bloqueo.",visual:"Keep the two institutional views separately attributed.",kind:"image",asset:"flow/images/rubio-policy-map-reference-v1.jpg"},
+  {id:"S01",from:0,duration:102,act:"ACT 1 · HOOK",heading:"HARBOR PLATE → ROUTE SEED",caption:"Washington amplió la presión\nsobre La Habana.",visual:"Use only as harbor environment; not a verified oil tanker.",kind:"video",asset:"flow/video/habana-harbor-ships-v1.mp4"},
+  {id:"S02",from:102,duration:63,act:"ACT 2 · 29 JAN",heading:"PLACEHOLDER · MAP + CONDITIONAL ROUTE",caption:"El 29 de enero se abrió\nla vía",visual:"Build sourced Caribbean geography and a conditional supplier route in Remotion.",kind:"placeholder"},
+  {id:"S03",from:165,duration:151,act:"ACT 2 · OIL MECHANISM",heading:"PLACEHOLDER · CONDITIONAL CUSTOMS GATE",caption:"para posibles aranceles a países\nque suministraran petróleo a Cuba.",visual:"Show a mechanism dependent on findings and a further decision; no universal tariff.",kind:"placeholder"},
+  {id:"S04",from:316,duration:214,act:"ACT 2 · 20 FEB",heading:"PLACEHOLDER · REMOVE ONE TARIFF MECHANISM",caption:"El 20 de febrero se retiraron esos aranceles;\nla emergencia y otras medidas siguieron vigentes.",visual:"Flip a calendar, lift only this gate, retain the wider emergency marker.",kind:"placeholder"},
+  {id:"S05",from:530,duration:154,act:"ACT 3 · 1 MAY",heading:"EXISTING FLOW PLATE · REACTION ONLY",caption:"En mayo, la orden habilitó sanciones\npor vínculos con ciertos sectores o conductas",visual:"Trim before the awkward page lift. Do not imply Rubio signed the order.",kind:"video",asset:"flow/video/rubio-may-document-acting-v1.mp4"},
+  {id:"S06",from:684,duration:221,act:"ACT 3 · IMPLEMENTATION",heading:"PLACEHOLDER · STATE + TREASURY",caption:"y encargó su aplicación a Estado y Tesoro.\nRubio, secretario de Estado, no la firmó.",visual:"Two implementation branches from the presidential order; exact labels in Remotion.",kind:"placeholder"},
+  {id:"S07",from:905,duration:118,act:"ACT 4 · OFAC",heading:"PLACEHOLDER · REGISTER SETUP",caption:"En septiembre, OFAC añadió varias\nentidades a su lista,",visual:"Brief blank register and one restrained stamp. No generated names or logos.",kind:"placeholder"},
+  {id:"S08",from:1023,duration:87,act:"ACT 4 · BANCO EXTERIOR",heading:"EXISTING FLOW PLATE · BANK TRANSFORMATION",caption:"incluido el Banco Exterior de Cuba.",visual:"Add the sourced exact label/date over the blank facade in Remotion.",kind:"video",asset:"flow/video/ofac-ledger-to-bank-v1.mp4",playbackRate:2},
+  {id:"S09",from:1110,duration:150,act:"ACT 5 · FINANCE",heading:"PLACEHOLDER · DEFINED U-TURN ROUTE",caption:"Ese mes cambió la licencia general\npara ciertas transferencias U-turn.",visual:"Show only the transaction scope in OFAC FAQ 1272, not all Cuba-related payments.",kind:"placeholder"},
+  {id:"S10",from:1260,duration:101,act:"ACT 5 · PROFESSIONAL MEETINGS",heading:"PLACEHOLDER · REMOVE AUTHORIZATION TAB",caption:"También se eliminó la autorización\nde reuniones profesionales,",visual:"Add exact wind-down scope/date in a small sourced caption.",kind:"placeholder"},
+  {id:"S11",from:1361,duration:148,act:"ACT 5 · EDUCATION",heading:"PLACEHOLDER · NARROWED EDUCATION LANES",caption:"y se acotaron viajes educativos,\ncon excepciones transitorias.",visual:"Keep an exception branch visible; details follow OFAC FAQ 1274.",kind:"placeholder"},
+  {id:"S12",from:1509,duration:291,act:"ACT 6 · ATTRIBUTED CLOSE",heading:"EXISTING MAP STILL · TIMELINE PULLBACK",caption:"Washington invoca seguridad nacional;\nel MINREX denuncia un recrudecimiento del bloqueo.",visual:"Keep the two institutional views separately attributed.",kind:"image",asset:"flow/images/rubio-policy-map-reference-v1.jpg"},
 ];
 const ink="#25282a", ivory="#f2e8d4", coral="#ce6259";
 const Paper: React.FC=()=> <AbsoluteFill style={{backgroundColor:ivory,backgroundImage:"radial-gradient(circle at 12% 20%, rgba(37,40,42,.07) 0 1px, transparent 1.4px), radial-gradient(circle at 75% 65%, rgba(37,40,42,.045) 0 1px, transparent 1.4px)",backgroundSize:"19px 19px, 27px 27px"}}/>;
-const Caption: React.FC<{children:string}>=({children})=><div style={{position:"absolute",left:84,right:84,bottom:150,minHeight:120,padding:"28px 32px",boxSizing:"border-box",background:"rgba(25,31,38,.91)",color:"#fff9ed",borderLeft:"9px solid "+coral,borderRadius:10,fontFamily:"Arial, sans-serif",fontSize:43,lineHeight:1.18,fontWeight:700,letterSpacing:"-0.6px"}}>{children}</div>;
+const Caption: React.FC<{children:string}>=({children})=><div style={{position:"absolute",left:84,right:84,bottom:150,minHeight:120,padding:"28px 32px",boxSizing:"border-box",background:"rgba(25,31,38,.91)",color:"#fff9ed",borderLeft:"9px solid "+coral,borderRadius:10,fontFamily:"Arial, sans-serif",fontSize:children.length>70?31:children.length>55?34:38,lineHeight:1.18,fontWeight:700,letterSpacing:"-0.6px",whiteSpace:"pre-line"}}>{children}</div>;
 const Placeholder: React.FC<{shot:Shot}>=({shot})=>{
  const f=useCurrentFrame();
  const p=interpolate(f,[0,shot.duration],[0,1],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
@@ -61,7 +61,7 @@ const ShotLayer: React.FC<{shot:Shot}>=({shot})=>{
  const zoom=interpolate(frame,[0,shot.duration],[1.01,1.045],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  return <AbsoluteFill>
   {shot.kind==="placeholder"&&<Placeholder shot={shot}/>}
-  {shot.kind==="video"&&shot.asset&&<OffthreadVideo src={staticFile(shot.asset)} muted startFrom={0} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
+  {shot.kind==="video"&&shot.asset&&<OffthreadVideo src={staticFile(shot.asset)} muted startFrom={0} playbackRate={shot.playbackRate??1} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
   {shot.kind==="image"&&shot.asset&&<Img src={staticFile(shot.asset)} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
   <div style={{position:"absolute",left:64,right:64,top:72,display:"flex",justifyContent:"space-between",alignItems:"center",color:"#fff9ef",fontFamily:"Arial, sans-serif",textShadow:"0 2px 8px rgba(0,0,0,.55)"}}>
    <div style={{padding:"14px 18px",background:"rgba(31,39,44,.84)",borderRadius:8,fontSize:25,fontWeight:800,letterSpacing:2}}>{shot.act}</div>

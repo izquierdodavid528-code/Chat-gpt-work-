@@ -1,6 +1,6 @@
 {
-  "requestId": "rubio-habana-60s-remotion-preview-v1",
+  "requestId": "rubio-habana-close-validation-v2",
   "engine": "remotion",
   "projectSlug": "reel-rubio-habana-2026",
-  "validationFrames": "0-1799"
+  "validationFrames": "1500-1799"
 }

@@ -4,7 +4,7 @@
   "compositionId": "AdvancedOpeningPilot",
   "driveProjectDir": "03 - Reel Rubio Habana Animated 2026",
   "studioPort": 3000,
-  "outputFile": "out/rubio-habana-advanced-opening-pilot-v3.mp4",
+  "outputFile": "out/rubio-habana-advanced-opening-pilot-v4.mp4",
   "render": {
     "concurrency": "100%",
     "expectedCodec": "h264",
@@ -12,6 +12,6 @@
     "expectedHeight": 1920,
     "expectedFps": 30,
     "requireAudio": false,
-    "minDurationSeconds": 10.9
+    "minDurationSeconds": 17.9
   }
 }

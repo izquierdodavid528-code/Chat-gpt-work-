@@ -8,7 +8,7 @@ Rule: factual claims are descriptive; disputed rationales remain attributed.
 
 ## 00:00-00:05 - Hook
 
-> En 2026, Washington amplio por etapas su presion sobre La Habana.
+> En 2026, Washington amplió por etapas su presión sobre La Habana.
 
 Visual:
 - clean Blender Florida-Cuba plate;
@@ -18,7 +18,7 @@ Visual:
 
 ## 00:05-00:14 - Oil / tariff route
 
-> El 29 de enero, Trump abrio una via arancelaria ligada a paises que suministraran petroleo a Cuba. El 20 de febrero, esos aranceles bajo IEEPA terminaron, aunque la emergencia siguio vigente.
+> El 29 de enero, Trump abrió una vía arancelaria vinculada al suministro de petróleo a Cuba. El 20 de febrero, esos aranceles IEEPA terminaron, aunque la emergencia siguió vigente.
 
 Primary sources:
 - White House / EO 14380.
@@ -29,7 +29,7 @@ Editorial guardrail:
 
 ## 00:14-00:24 - EO 14404
 
-> El 1 de mayo, otra orden amplio autoridades de sancion y encargo funciones de implementacion a los departamentos de Estado y del Tesoro.
+> El 1 de mayo, otra orden amplió autoridades de sanción y delegó implementación a Estado y Tesoro.
 
 Primary source:
 - White House / EO 14404, especially Sec. 5 (Delegation).
@@ -40,7 +40,7 @@ Editorial guardrail:
 
 ## 00:24-00:37 - Rubio role + designations
 
-> Como secretario de Estado, Marco Rubio anuncio medidas y encabezo uno de los departamentos a los que la orden delego funciones. En junio y septiembre, OFAC sumo personas y entidades a su lista, incluido el Banco Exterior de Cuba.
+> Como secretario de Estado, Marco Rubio anunció medidas dentro de ese marco. Entre junio y septiembre, OFAC añadió personas, entidades y al Banco Exterior de Cuba.
 
 Primary sources:
 - White House / EO 14404.
@@ -53,7 +53,7 @@ Editorial guardrail:
 
 ## 00:37-00:50 - Indirect transactions / U-turn
 
-> A finales de septiembre, las reglas se extendieron a determinadas transacciones financieras indirectas con entidades de la Cuba Restricted List y se retiro la autorizacion U-turn.
+> A finales de septiembre, las reglas alcanzaron determinadas transacciones financieras indirectas con entidades de la Cuba Restricted List y se retiró la autorización U-turn.
 
 Primary sources:
 - OFAC FAQs updated 2026-09-29.
@@ -64,7 +64,7 @@ Editorial guardrail:
 
 ## 00:50-01:00 - Close
 
-> La Casa Blanca vincula estas medidas a seguridad nacional y politica exterior. El MINREX las describe como un recrudecimiento del bloqueo economico, financiero y comercial. Lo documentado es que, durante 2026, la arquitectura de restricciones cambio y se amplio.
+> La Casa Blanca lo vincula a seguridad nacional y política exterior. El MINREX lo describe como un recrudecimiento del bloqueo económico, financiero y comercial. Lo documentado: en 2026, la arquitectura de restricciones cambió y se amplió.
 
 Treatment:
 - visually separate the two attributed official interpretations;
@@ -75,5 +75,5 @@ Treatment:
 
 - Generate or record the final narration only after the 60-second visual animatic passes creative QA.
 - Captions must be derived from final narration timing, not this estimated timecode.
-- Target spoken pace: approximately 145-155 wpm with natural pauses.
+- Target spoken pace: approximately 145-155 wpm with natural pauses. Current narration: 143 words.
 - Do not compress pauses just to force the script into 60 seconds; trim wording instead if the final voice exceeds the slot.

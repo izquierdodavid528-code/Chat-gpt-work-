@@ -181,3 +181,13 @@ Current gate:
 - El trabuco es un gag visual no letal, llevado hacia abajo; no se apunta ni dispara.
 - GitHub Actions run `37123096661` completó con PASS: H.264, 1080×1920, 30 fps, 60 s. Revisión visual de muestras a lo largo del clip y del cierre a tamaño completo; se corrigieron ritmo de escenas, fundidos, composición final y rótulos.
 - Esta entrega es una prueba visual sin voz, música ni efectos. El render es de validación y no se publicó como entrega de producción en Drive. Falta sincronizar con narración/sonido cuando se cree el máster.
+
+
+## V6 — capas de ambiente y personajes expresivos
+
+- Rama: `memorias-cartoon-v6`; rama de validación separada del corte V5.
+- Se añadieron nubes con deriva a distintas velocidades, skyline habanero, palmera, aves, capas ambientales y textura de papel.
+- Se reforzó el movimiento de cámara y se ampliaron los personajes en los planos donde quedaban pequeños.
+- Trump y Rubio tienen ojos, cejas, mejillas, mechones, detalles de traje y boca animada por reacción.
+- Render completo de validación: GitHub Actions run `37129519131`, éxito. H.264, 1080×1920, 30 fps, 60 s.
+- Artefacto: `rubio-habana-cartoon-explainer-v6.mp4`. Sigue siendo una prueba sin voz, música ni efectos; no es el máster sincronizado.

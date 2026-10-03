@@ -35,15 +35,15 @@ const MapHook:React.FC=()=>{
     />
     <div style={{position:"absolute",inset:0,background:"linear-gradient(180deg,rgba(2,7,12,.08) 0%,rgba(4,8,13,.18) 42%,rgba(4,8,13,.76) 72%,rgba(4,8,13,.96) 100%)"}}/>
     <div style={{position:"absolute",inset:0,boxShadow:"inset 0 0 180px rgba(0,0,0,.45)"}}/>
-    <div style={{position:"absolute",left:74,right:74,bottom:250,opacity:titleIn,transform:`translateY(${interpolate(titleIn,[0,1],[34,0])}px)`}}>
-      <div style={{color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3,marginBottom:16}}>2026</div>
-      <div style={{color:INK,fontFamily:"Arial",fontSize:72,fontWeight:900,lineHeight:.98,letterSpacing:-2,textShadow:"0 8px 28px rgba(0,0,0,.48)"}}>LA PRESIÓN<br/>SE AMPLÍA</div>
-      <div style={{color:INK,fontFamily:"Arial",fontSize:27,fontWeight:700,marginTop:20,textShadow:"0 4px 18px rgba(0,0,0,.55)"}}>No fue una sola medida.</div>
+    <div style={{position:"absolute",left:74,right:74,top:118,opacity:titleIn,transform:`translateY(${interpolate(titleIn,[0,1],[28,0])}px)`}}>
+      <div style={{color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3,marginBottom:14}}>2026</div>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:70,fontWeight:900,lineHeight:.98,letterSpacing:-2,textShadow:"0 8px 28px rgba(0,0,0,.58)"}}>LA PRESIÓN<br/>SE AMPLÍA</div>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:27,fontWeight:700,marginTop:18,textShadow:"0 4px 18px rgba(0,0,0,.65)"}}>No fue una sola medida.</div>
     </div>
-    <LayerLabel text="PETRÓLEO" y={790} delay={74}/>
-    <LayerLabel text="SANCIONES" y={860} delay={88}/>
-    <LayerLabel text="FINANZAS" y={930} delay={102}/>
-    <LayerLabel text="MOVILIDAD" y={1000} delay={116}/>
+    <LayerLabel text="PETRÓLEO" y={1260} delay={74}/>
+    <LayerLabel text="SANCIONES" y={1330} delay={88}/>
+    <LayerLabel text="FINANZAS" y={1400} delay={102}/>
+    <LayerLabel text="MOVILIDAD" y={1470} delay={116}/>
     <div style={{position:"absolute",right:90,top:120,width:12,height:12,borderRadius:99,background:RED,boxShadow:"0 0 18px rgba(217,54,54,.55)",transform:`scale(${pulse})`}}/>
   </AbsoluteFill>;
 };

@@ -12,7 +12,7 @@
     "expectedHeight": 1920,
     "expectedFps": 30,
     "requireAudio": true,
-    "minDurationSeconds": 15,
+    "minDurationSeconds": 59,
     "audioMastering": {
       "enabled": true,
       "targetIntegratedLufs": -15,

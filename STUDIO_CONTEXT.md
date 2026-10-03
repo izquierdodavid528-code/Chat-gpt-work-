@@ -22,6 +22,18 @@ Repository:
 Drive root:
 - `Remotion Projects`
 
+## Human-operated Google Flow handoff
+
+There is no Google Flow API, credential or GitHub Actions generation step in this repository. Flow is a manual art-department handoff: Codex prepares shot briefs and copy-ready prompts; the user generates and exports approved images or short clips; the files are uploaded to the configured Drive project folder. Treat an asset as available only after it has been received and checked. Never describe this as an automated Flow integration.
+
+Start with one style frame and one character reference. Reuse the approved reference for poses and optional short motion clips. Keep generated text, labels, maps and factual geography out of Flow outputs; build those deterministically in Remotion.
+
+## Current Rubio / Havana project state
+
+The main branch preserves the earlier 60-second rough-cut baseline. The latest cartoon render remains isolated on `memorias-cartoon-v6`; it is a technical validation, has no audio and was not delivered to Drive. The user has not approved its current visual style as the final direction. Preserve the baseline and work only on an 8–12-second opening pilot until the user approves its look and motion.
+
+For that project, read `projects/reel-rubio-habana-animated-2026/PRODUCTION_STATUS.md` and `projects/reel-rubio-habana-animated-2026/FLOW_ASSET_BRIEFS.md` before editing.
+
 ## Canonical hybrid animation workflow
 
 Read `HYBRID_ANIMATION_PIPELINE.md` before designing an animated project.
@@ -144,6 +156,8 @@ Local planning check:
 
 - `WORKSPACE_GUIDE.md`: complete workspace guide.
 - `STUDIO_CONTEXT.md`: this cross-chat operational summary.
+- `projects/reel-rubio-habana-animated-2026/FLOW_ASSET_BRIEFS.md`: user-operated Flow prompts and the opening-pilot handoff.
+- `projects/reel-rubio-habana-animated-2026/PRODUCTION_STATUS.md`: dated production record and current Rubio/Havana status.
 - `.github/workflows/blender-smart-render.yml`: canonical Blender final render.
 - `.github/workflows/blender-workspace-selftest.yml`: regression test for the Blender infrastructure.
 - `scripts/blender/render-plan.py`: config validation and automatic mode selection.

@@ -1,5 +1,11 @@
 
 
+## Latest reviewed render — 37159002008
+
+Full render has embedded narration, restrained pad and action-linked cues. Delivery and dedicated media-audio QA both PASS: H.264 vertical 1080×1920/30, 60.053 s container; stereo AAC 48 kHz; -17.9 LUFS / -4.6 dBFS TP / 2.5 LU LRA; A/V duration delta 0.053 s. S04 card now reads “ARANCELES” and “RETIRADOS” with no wrap; S06 delegation graphic enters earlier and visibly. S08 shows the completed bank façade on the final beat. Remaining: motivated transitions, additional visual depth/continuity, and human listening/factual/creative reviews. Current render is only an animatic. No additional Flow asset is currently justified for the unresolved information graphics.
+
+
+
 ## Review after score/SFX render — run 37158143501
 
 Inspected the actual full render contact sheet. Audio-bearing render, captions and all 12 timed shots are present. Fix before the next visual review: the 20 FEB card text feels cramped; reduce/reflow its type. The S06 delegation card's long opacity ramp makes the graphic nearly invisible at the shot opening; shorten that reveal to land with “encargó su aplicación”. The S08 paper fold is still dominant at midpoint; inspect the final beat to ensure the bank reads before the cut. Music and action cues are technically included and passed configured media QA, but the balance still needs an attentive human listen. These are Remotion/timing refinements; no new Flow asset is requested yet.

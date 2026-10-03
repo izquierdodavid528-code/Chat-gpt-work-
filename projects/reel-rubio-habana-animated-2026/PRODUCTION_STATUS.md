@@ -1,3 +1,13 @@
+## Latest audio animatic delivery — run 37159002008
+
+Latest reviewed commit: 2d7211dad801460a36e56afd0aa3469c363b8422. Render run: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37159002008. Delivery artifact includes MP4 plus video/audio reports. The MP4 has been copied to the working folder for review.
+
+TECHNICAL PASS: H.264, 1080×1920, 30 fps, 60.053 s container, stereo AAC 48 kHz; one audio track. Dedicated configured audio QA PASS: -17.9 LUFS, -4.6 dBFS true peak, 2.5 LU LRA, 0.053 s audio/video duration difference; masterer and delivery report pass. The 60-second composition and phrase captions are intact. The scratch voice remains the 56.640-second Edge es-US-AlonsoNeural take; script unchanged. These checks do not equal a human listening/creative approval.
+
+After inspection, S04 now reads “ARANCELES / RETIRADOS” on separate adjacent date cards, and S06's delegation diagram appears earlier in its spoken window. The S08 bank façade is fully visible at the last beat before cut; its midpoint intentionally shows the paper-to-bank reveal in progress. Remaining visual work is still substantial: most transitions are cuts, scene-to-scene shape bridges need design, and the paper/diagram sections require additional animated depth and continuity. The art is a story animatic with editorial motion graphics, not yet a professionally finished animation. No new Flow prompt is justified for the remaining data/scope graphics. If a later scene specifically needs more character acting or an organic bridge not present in current clips, then request Flow footage for that action only.
+
+Pass state: TECHNICAL PASS; AUDIO FILE/LOUDNESS/SYNC QA PASS; AUDIO CREATIVE PASS pending phone-speaker listening; CREATIVE PASS pending; FACTUAL PASS pending full frame-level review; FINAL PASS pending. This is not a final master.
+
 ## Audio-bearing animatic render — run 37158143501
 
 Commit a7c756e0b330e3caba3527fbcd1ce7ee7d7a6d32 adds the scratch score/cues and enables configured mastering/audio QA. GitHub Actions: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37158143501; artifact delivery: https://drive.google.com/file/d/116A8XWaV4XwyDMiQzwcZQbu1Eovgqvn8/view?usp=drivesdk.

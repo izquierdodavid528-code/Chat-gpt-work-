@@ -1,3 +1,7 @@
+## Latest mastered animatic — run 37159002008
+
+Mastering and configured audio QA passed: stereo AAC 48 kHz; integrated -17.9 LUFS, true peak -4.6 dBFS, LRA 2.5 LU, sync delta 0.053 s, and no technical errors. Music, SFX and voice are all present. These measurements cannot assess the subjective balance; Edge Alonso remains scratch. Listen on phone speakers, adjust if music/cues mask consonants, then record an AUDIO CREATIVE PASS separately.
+
 ## Current render check — run 37158143501
 
 Scratch music and action cues are now integrated in Remotion. The audio masterizer reports MASTERED; configured audio QA passes at -17.9 LUFS integrated, -4.6 dBFS true peak, 2.5 LU LRA, AAC 48 kHz stereo and 0.053 s A/V sync delta. Overall delivery report passes. This validates codec, loudness and sync only. It does not approve the scratch TTS voice or creative balance. Contact sheet confirms four intentional breath spaces remain quiet. Continue with phone-speaker listening and revise S04/S06/S08 visuals noted in PRODUCTION_STATUS and SHOT_MATRIX; keep music/cues conservative.

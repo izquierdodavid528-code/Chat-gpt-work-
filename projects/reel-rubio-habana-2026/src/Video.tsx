@@ -1,9 +1,10 @@
 import React from "react";
-import {AbsoluteFill, Audio, Sequence, Video, interpolate, spring, staticFile, useCurrentFrame} from "remotion";
+import {AbsoluteFill, Audio, Img, Sequence, Video, interpolate, spring, staticFile, useCurrentFrame} from "remotion";
 
 export const ANIMATIC_FRAMES = 60 * 30;
 const BED = staticFile("rubio-habana-animatic-bed.wav");
 const HOOK_PLATE = staticFile("rubio-habana-map.mp4");
+const RUBIO_PORTRAIT = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Official_portrait_of_Secretary_Marco_Rubio_%283x4_cropped%29.jpg/960px-Official_portrait_of_Secretary_Marco_Rubio_%283x4_cropped%29.jpg";
 
 const BG="#081018";
 const INK="#F2F0EA";
@@ -135,9 +136,13 @@ const Framework:React.FC=()=>{
       <div style={{position:"absolute",left:60,right:60,bottom:48,color:STEEL,fontFamily:"Arial",fontSize:22,fontWeight:700,lineHeight:1.28,opacity:delegation}}>Ambos departamentos reciben autoridad para implementar la orden dentro de sus competencias.</div>
     </div>
 
-    <div style={{position:"absolute",left:70,right:70,bottom:260,padding:"26px 30px",borderLeft:"4px solid "+RED,background:"rgba(217,54,54,.055)"}}>
+    <div style={{position:"absolute",left:70,right:70,bottom:235,minHeight:205,padding:"26px 220px 26px 30px",borderLeft:"4px solid "+RED,background:"rgba(217,54,54,.055)",overflow:"hidden"}}>
       <div style={{color:INK,fontFamily:"Arial",fontSize:30,fontWeight:900,lineHeight:1.16}}>Marco Rubio · Secretario de Estado</div>
       <div style={{color:STEEL,fontFamily:"Arial",fontSize:21,fontWeight:700,marginTop:8,lineHeight:1.25}}>Papel documentado: voz pública e implementación desde State; no firmante de la orden presidencial.</div>
+      <div style={{position:"absolute",right:24,top:18,width:164,height:164,borderRadius:18,overflow:"hidden",border:"1px solid rgba(242,240,234,.18)",boxShadow:"0 16px 36px rgba(0,0,0,.28)"}}>
+        <Img src={RUBIO_PORTRAIT} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"50% 22%"}}/>
+      </div>
+      <div style={{position:"absolute",right:25,bottom:9,color:STEEL,fontFamily:"Arial",fontSize:10,fontWeight:800,letterSpacing:.8}}>RETRATO OFICIAL · STATE DEPT.</div>
     </div>
     <div style={{position:"absolute",right:70,bottom:120,color:STEEL,fontFamily:"Arial",fontSize:16,fontWeight:800,letterSpacing:1.2}}>FUENTE · CASA BLANCA · EXECUTIVE ORDER 14404</div>
   </AbsoluteFill>;

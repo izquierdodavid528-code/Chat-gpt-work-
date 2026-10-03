@@ -52,7 +52,7 @@
     {
       "remote": "renders/rubio-habana-map.mp4",
       "local": "rubio-habana-map.mp4",
-      "required": true
+      "required": false
     }
   ],
   "remoteAssetImports": [

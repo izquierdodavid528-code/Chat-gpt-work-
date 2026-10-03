@@ -141,6 +141,13 @@ jobs:
             "drive:$DRIVE_BASE/$DRIVE_PROJECT" \
             "$RUNNER_TEMP/rclone.conf"
 
+      - name: Import configured public remote assets
+        run: |
+          set -euo pipefail
+          python3 scripts/remotion/pull-remote-assets.py \
+            "$PROJECT_DIR/project.config.json" \
+            "$PROJECT_DIR/public"
+
       - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:

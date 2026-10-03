@@ -83,7 +83,7 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
     </div>
     <div style={{position:"absolute",left:"48%",top:"36%",width:100,height:8,background:coral,transform:"rotate(-22deg) scaleX("+p+")",transformOrigin:"left"}}/>
     <div style={{position:"absolute",left:"64%",top:"24%",width:"25%",height:"46%",background:"#f6ead4",border:"3px solid "+navy,borderRadius:16,boxShadow:"12px 14px 0 rgba(52,69,86,.13)",transform:"rotate(3deg)"}}>
-     <div style={{...tiny,margin:"22px 18px"}}>20 FEB</div><div style={{font:"800 29px Arial",color:navy,margin:"8px 18px"}}>SE RETIRAN</div>
+     <div style={{...tiny,margin:"22px 18px"}}>20 FEB</div><div style={{font:"800 29px Arial",color:navy,margin:"8px 18px"}}>RETIRADOS</div>
     </div>
     <div style={{position:"absolute",left:"21%",right:"21%",bottom:"11%",padding:22,borderRadius:18,background:"rgba(78,154,160,.16)",border:"2px solid "+teal,display:"flex",justifyContent:"space-around",alignItems:"center"}}>
      <span style={tiny}>EMERGENCIA</span><span style={{font:"800 26px Arial",color:teal}}>SIGUE VIGENTE</span>

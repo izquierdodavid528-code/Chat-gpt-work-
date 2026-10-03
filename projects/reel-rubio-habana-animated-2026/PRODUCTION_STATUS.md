@@ -158,3 +158,15 @@ Sound:
 Current gate:
 - illustrated animation language is approved for rough-cut continuation;
 - next production phase is narration + SFX + captions + final mix.
+
+## Advanced opening pilot v3 — isolated experiment
+
+- Branch: `advanced-opening-pilot-v1`; `main` remains the approved 60-second rough cut.
+- Composition: `AdvancedOpeningPilot`, 330 frames / 11 seconds, 1080×1920 at 30 fps.
+- Last GitHub render validation: run `37092909668`, successful for frames `0-329`.
+- Visual notes: `VISUAL_QA_ADVANCED_PILOT_V3.md`.
+- The run was a validation render; it proves composition/build/delivery checks, not final creative approval or a full-production Drive delivery.
+- Local commands: `npm run render:pilot:validation` for the 330-frame check and `npm run render:pilot` for the full 11-second composition. `npm run render` remains an alias for the 60-second rough cut.
+- Pilot delivery validation now uses a 10.9-second minimum so the complete 11-second composition can pass the existing output checks.
+- This remains an opening prototype. It contains no narration, captions, sound design, or the newly requested satirical “versión económica con trabuco” character; that character's identity and visual brief need to be specified before it is drawn into the story.
+

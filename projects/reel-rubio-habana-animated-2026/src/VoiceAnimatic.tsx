@@ -49,7 +49,7 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
  const move=interpolate(p,[0,1],[70,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  return <AbsoluteFill style={{overflow:"hidden",background:"linear-gradient(145deg,#e8ddc6,#f7f0e3 54%,#d8d1c3)"}}>
   <Paper/>
-  <div style={{position:"absolute",left:"8%",right:"8%",top:"12%",height:"74%",transform:"translateY("+move+"px)",opacity:interpolate(p,[0,.07],[0,1],{extrapolateRight:"clamp"})}}>
+  <div style={{position:"absolute",left:"8%",right:"8%",top:"12%",height:"74%",transform:"translateY("+move+"px)",opacity:interpolate(p,[0,.025],[0,1],{extrapolateRight:"clamp"})}}>
    {shot.id==="S02"&&<div style={{...card,background:"#b9d9d8"}}>
     <div style={{position:"absolute",left:40,top:34,...label}}>CARIBE · ESQUEMA NO A ESCALA</div>
     <svg viewBox="0 0 900 600" style={{position:"absolute",inset:"70px 15px 15px",width:"calc(100% - 30px)",height:"calc(100% - 85px)"}}>
@@ -109,7 +109,7 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
     <div style={{position:"absolute",left:42,top:34,...label}}>TRANSFERENCIA U-TURN · ESQUEMA</div>
     <svg viewBox="0 0 900 550" style={{position:"absolute",inset:"70px 25px 20px",width:"calc(100% - 50px)",height:"calc(100% - 90px)"}}>
      <path d="M145 250 H370 Q430 250 430 310 V390 Q430 445 490 445 H755" fill="none" stroke="#bbc9c2" strokeWidth="27" strokeLinecap="round" strokeLinejoin="round"/>
-     <path d="M145 250 H370 Q430 250 430 310 V390 Q430 445 490 445 H755" fill="none" stroke={coral} strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="900" strokeDashoffset={900*(1-p)}/>
+     <path d="M145 250 H370 Q430 250 430 310 V390 Q430 445 490 445 H755" fill="none" stroke={coral} strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="900" strokeDashoffset={900*(1-p)}/>
      <circle cx="145" cy="250" r="54" fill={cream} stroke={navy} strokeWidth="8"/><circle cx="430" cy="390" r="54" fill={cream} stroke={navy} strokeWidth="8"/><circle cx="755" cy="445" r="54" fill={cream} stroke={navy} strokeWidth="8"/>
      <text x="70" y="175" fontSize="22" fontWeight="700" fill={navy}>ORIGEN FUERA</text><text x="356" y="300" fontSize="22" fontWeight="700" fill={navy}>BANCO EE.UU.</text><text x="670" y="540" fontSize="22" fontWeight="700" fill={navy}>DESTINO FUERA</text>
     </svg>
@@ -157,9 +157,7 @@ const bridges:Bridge[]=[
  {cut:102,exit:"wake",enter:"route"},
  {cut:165,exit:"route",enter:"gate"},
  {cut:316,exit:"gate",enter:"underline"},
- {cut:530,exit:"calendar",enter:"paper"},
- {cut:684,exit:"paper",enter:"branch"},
- {cut:905,exit:"branch",enter:"ledger"},
+  {cut:905,exit:"branch",enter:"ledger"},
  {cut:1023,exit:"stamp",enter:"arch"},
  {cut:1110,exit:"arch",enter:"uturn"},
  {cut:1260,exit:"uturn",enter:"tab"},
@@ -175,7 +173,7 @@ const BridgeTransition:React.FC<{bridge:Bridge}>=({bridge})=>{
  const inDraw=interpolate(p,[.54,1],[1800,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  return <AbsoluteFill style={{pointerEvents:"none"}}>
   <svg viewBox="0 0 1080 1920" style={{position:"absolute",inset:0,width:"100%",height:"100%",overflow:"visible"}}>
-   <path d={bridgePaths[bridge.exit]} fill="none" stroke="#fffaf0" strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" opacity={out}/>
+   <path d={bridgePaths[bridge.exit]} fill="none" stroke="#fffaf0" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" opacity={out}/>
    <path d={bridgePaths[bridge.exit]} fill="none" stroke="#ce6259" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1800" strokeDashoffset={outDraw} opacity={out}/>
    <path d={bridgePaths[bridge.enter]} fill="none" stroke="#fffaf0" strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" opacity={inn}/>
    <path d={bridgePaths[bridge.enter]} fill="none" stroke="#ce6259" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1800" strokeDashoffset={inDraw} opacity={inn}/>

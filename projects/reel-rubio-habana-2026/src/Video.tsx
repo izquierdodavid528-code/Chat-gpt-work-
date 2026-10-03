@@ -251,8 +251,8 @@ const Close:React.FC=()=>{
     <div style={{position:"absolute",left:90,right:90,top:1080,height:3,background:"rgba(126,151,168,.18)"}}>
       <div style={{width:`${line*100}%`,height:"100%",background:RED}}/>
     </div>
-    <div style={{position:"absolute",left:70,right:70,bottom:310,color:STEEL,fontFamily:"Arial",fontSize:22,fontWeight:900,letterSpacing:2}}>LO DOCUMENTADO</div>
-    <div style={{position:"absolute",left:70,right:70,bottom:180,color:INK,fontFamily:"Arial",fontSize:50,fontWeight:900,lineHeight:1.02}}>LA ARQUITECTURA DE RESTRICCIONES<br/>CAMBIÓ Y SE AMPLIÓ.</div>
+    <div style={{position:"absolute",left:70,right:70,bottom:430,color:STEEL,fontFamily:"Arial",fontSize:22,fontWeight:900,letterSpacing:2}}>LO DOCUMENTADO</div>
+    <div style={{position:"absolute",left:70,right:70,bottom:165,color:INK,fontFamily:"Arial",fontSize:50,fontWeight:900,lineHeight:1.02}}>LA ARQUITECTURA DE RESTRICCIONES<br/>CAMBIÓ Y SE AMPLIÓ.</div>
   </AbsoluteFill>;
 };
 

@@ -1,0 +1,47 @@
+{
+  "slug": "reel-rubio-habana-2026",
+  "type": "remotion",
+  "compositionId": "RubioHabana2026",
+  "driveProjectDir": "02 - Reel Rubio Habana 2026",
+  "studioPort": 3000,
+  "outputFile": "out/reel-rubio-habana-2026.mp4",
+  "render": {
+    "concurrency": "100%",
+    "expectedCodec": "h264",
+    "expectedWidth": 1080,
+    "expectedHeight": 1920,
+    "expectedFps": 30,
+    "requireAudio": true,
+    "minDurationSeconds": 55,
+    "audioMastering": {
+      "enabled": true,
+      "targetIntegratedLufs": -15,
+      "targetTruePeakDbfs": -1.5,
+      "targetLraLu": 7,
+      "sampleRateHz": 48000,
+      "codec": "aac",
+      "bitrateKbps": 320
+    },
+    "audioQa": {
+      "enabled": true,
+      "requireAudio": true,
+      "expectedCodec": "aac",
+      "expectedSampleRateHz": 48000,
+      "minChannels": 1,
+      "maxChannels": 2,
+      "targetIntegratedLufs": -14,
+      "integratedLufsTolerance": 2,
+      "maxTruePeakDbfs": -1,
+      "maxDurationDeltaSeconds": 0.12,
+      "silence": {
+        "enabled": true,
+        "enforce": false,
+        "noiseDb": -50,
+        "minDurationSeconds": 0.5,
+        "maxLeadingSeconds": 1.2,
+        "maxTrailingSeconds": 1.5,
+        "maxContinuousSeconds": 3
+      }
+    }
+  }
+}

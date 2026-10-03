@@ -57,9 +57,9 @@
         "start": 37,
         "end": 50
       },
-      "message": "Cambios de septiembre endurecen transacciones indirectas y eliminan la U-turn.",
-      "visual": "Grafo financiero A-B-C + rutas que se detienen.",
-      "sourceType": "OFAC Sep 29/30"
+      "message": "Cambios de finales de septiembre amplían restricciones sobre transacciones financieras indirectas con entidades de la Cuba Restricted List, eliminan la autorización U-turn y restringen categorías específicas de movilidad, incluidas reuniones profesionales y determinados viajes educativos.",
+      "visual": "Grafo financiero A-B-C + ruta bloqueada + tarjetas U-turn / reuniones profesionales / educación; evitar cualquier representación de cierre general de viajes.",
+      "sourceType": "OFAC Sep 29/30 + FAQs 1274/1275"
     },
     {
       "id": "close",

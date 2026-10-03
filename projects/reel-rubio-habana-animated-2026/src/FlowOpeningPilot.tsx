@@ -7,7 +7,7 @@ import {
   useCurrentFrame,
 } from "remotion";
 import {TransitionSeries, linearTiming} from "@remotion/transitions";
-import {fade} from "@remotion/transitions/fade";
+import {wipe} from "@remotion/transitions/wipe";
 
 export const FLOW_OPENING_PILOT_FRAMES = 279;
 
@@ -81,7 +81,7 @@ export const FlowOpeningPilot: React.FC = () => (
         />
       </TransitionSeries.Sequence>
       <TransitionSeries.Transition
-        presentation={fade()}
+        presentation={wipe({direction: "from-right"})}
         timing={linearTiming({durationInFrames: 9})}
       />
       <TransitionSeries.Sequence durationInFrames={84}>
@@ -94,7 +94,7 @@ export const FlowOpeningPilot: React.FC = () => (
         />
       </TransitionSeries.Sequence>
       <TransitionSeries.Transition
-        presentation={fade()}
+        presentation={wipe({direction: "from-bottom"})}
         timing={linearTiming({durationInFrames: 9})}
       />
       <TransitionSeries.Sequence durationInFrames={78}>
@@ -107,7 +107,7 @@ export const FlowOpeningPilot: React.FC = () => (
         />
       </TransitionSeries.Sequence>
       <TransitionSeries.Transition
-        presentation={fade()}
+        presentation={wipe({direction: "from-right"})}
         timing={linearTiming({durationInFrames: 9})}
       />
       <TransitionSeries.Sequence durationInFrames={102}>

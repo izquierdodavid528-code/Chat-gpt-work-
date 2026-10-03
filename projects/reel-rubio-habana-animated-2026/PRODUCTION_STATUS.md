@@ -1,3 +1,7 @@
+## Next production gate: closing acting plate
+
+The ongoing branch is animatic/rubio-60s-source-checked. Latest verified full audio-bearing base is run 37159002008; newer transition/entrance iteration is being validated independently. The next clear creative gap is the final 7.2 seconds: S12 currently holds one static map still under two attributed clauses. Keep that still for the first clause (00:50.30–00:52.80), then use a new 8-second Flow character plate from 00:52.80 to 01:00.00. Documented exact prompt and acceptance criteria are in FLOW_PROMPTS_V1.md. The asset must be manually generated in Flow and uploaded; exact institutional labels and captions remain Remotion layers. No suitable existing Flow clip replaces it: the remaining Rubio alternates are document-action variants with awkward endings, while this closing beat needs a calm single explanatory gesture beside blank panels.
+
 ## Latest audio animatic delivery — run 37159002008
 
 Latest reviewed commit: 2d7211dad801460a36e56afd0aa3469c363b8422. Render run: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37159002008. Delivery artifact includes MP4 plus video/audio reports. The MP4 has been copied to the working folder for review.

@@ -1,17 +1,17 @@
 {
-  "slug":"reel-rubio-habana-animated-2026",
-  "type":"remotion",
-  "compositionId":"RubioHabanaAnimated",
-  "driveProjectDir":"03 - Reel Rubio Habana Animated 2026",
-  "studioPort":3000,
-  "outputFile":"out/rubio-habana-animated.mp4",
-  "render":{
-    "concurrency":"100%",
-    "expectedCodec":"h264",
-    "expectedWidth":1080,
-    "expectedHeight":1920,
-    "expectedFps":30,
-    "requireAudio":false,
-    "minDurationSeconds":59
+  "slug": "reel-rubio-habana-animated-2026",
+  "type": "remotion",
+  "compositionId": "RubioFlowOpeningPilot",
+  "driveProjectDir": "02 - Reel Rubio Habana 2026",
+  "studioPort": 3000,
+  "outputFile": "out/rubio-flow-opening-pilot.mp4",
+  "render": {
+    "concurrency": "100%",
+    "expectedCodec": "h264",
+    "expectedWidth": 1080,
+    "expectedHeight": 1920,
+    "expectedFps": 30,
+    "requireAudio": false,
+    "minDurationSeconds": 9
   }
 }

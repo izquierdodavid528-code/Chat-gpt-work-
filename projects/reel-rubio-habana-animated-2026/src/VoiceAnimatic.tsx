@@ -17,7 +17,7 @@ const VOICE_SCRATCH_FILE = "audio/narration-scratch-v1-master.mp3";
 type Shot = {
   id: string; from: number; duration: number; act: string;
   heading: string; caption: string; visual: string;
-  kind: "placeholder" | "video" | "image"; asset?: string; playbackRate?: number;
+  kind: "placeholder" | "video" | "image"; asset?: string; startFrom?: number;
 };
 const shots: Shot[] = [
   {id:"S01",from:0,duration:102,act:"ACT 1 · HOOK",heading:"HARBOR PLATE → ROUTE SEED",caption:"Washington amplió la presión\nsobre La Habana.",visual:"Use only as harbor environment; not a verified oil tanker.",kind:"video",asset:"flow/video/habana-harbor-ships-v1.mp4"},
@@ -27,7 +27,7 @@ const shots: Shot[] = [
   {id:"S05",from:530,duration:154,act:"ACT 3 · 1 MAY",heading:"EXISTING FLOW PLATE · REACTION ONLY",caption:"En mayo, la orden habilitó sanciones\npor vínculos con ciertos sectores o conductas",visual:"Trim before the awkward page lift. Do not imply Rubio signed the order.",kind:"video",asset:"flow/video/rubio-may-document-acting-v1.mp4"},
   {id:"S06",from:684,duration:221,act:"ACT 3 · IMPLEMENTATION",heading:"PLACEHOLDER · STATE + TREASURY",caption:"y encargó su aplicación a Estado y Tesoro.\nRubio, secretario de Estado, no la firmó.",visual:"Two implementation branches from the presidential order; exact labels in Remotion.",kind:"placeholder"},
   {id:"S07",from:905,duration:118,act:"ACT 4 · OFAC",heading:"PLACEHOLDER · REGISTER SETUP",caption:"En septiembre, OFAC añadió varias\nentidades a su lista,",visual:"Brief blank register and one restrained stamp. No generated names or logos.",kind:"placeholder"},
-  {id:"S08",from:1023,duration:87,act:"ACT 4 · BANCO EXTERIOR",heading:"EXISTING FLOW PLATE · BANK TRANSFORMATION",caption:"incluido el Banco Exterior de Cuba.",visual:"Add the sourced exact label/date over the blank facade in Remotion.",kind:"video",asset:"flow/video/ofac-ledger-to-bank-v1.mp4",playbackRate:2},
+  {id:"S08",from:1023,duration:87,act:"ACT 4 · BANCO EXTERIOR",heading:"EXISTING FLOW PLATE · BANK TRANSFORMATION",caption:"incluido el Banco Exterior de Cuba.",visual:"Add the sourced exact label/date over the blank facade in Remotion.",kind:"video",asset:"flow/video/ofac-ledger-to-bank-v1.mp4",startFrom:72},
   {id:"S09",from:1110,duration:150,act:"ACT 5 · FINANCE",heading:"PLACEHOLDER · DEFINED U-TURN ROUTE",caption:"Ese mes cambió la licencia general\npara ciertas transferencias U-turn.",visual:"Show only the transaction scope in OFAC FAQ 1272, not all Cuba-related payments.",kind:"placeholder"},
   {id:"S10",from:1260,duration:101,act:"ACT 5 · PROFESSIONAL MEETINGS",heading:"PLACEHOLDER · REMOVE AUTHORIZATION TAB",caption:"También se eliminó la autorización\nde reuniones profesionales,",visual:"Add exact wind-down scope/date in a small sourced caption.",kind:"placeholder"},
   {id:"S11",from:1361,duration:148,act:"ACT 5 · EDUCATION",heading:"PLACEHOLDER · NARROWED EDUCATION LANES",caption:"y se acotaron viajes educativos,\ncon excepciones transitorias.",visual:"Keep an exception branch visible; details follow OFAC FAQ 1274.",kind:"placeholder"},
@@ -61,7 +61,7 @@ const ShotLayer: React.FC<{shot:Shot}>=({shot})=>{
  const zoom=interpolate(frame,[0,shot.duration],[1.01,1.045],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  return <AbsoluteFill>
   {shot.kind==="placeholder"&&<Placeholder shot={shot}/>}
-  {shot.kind==="video"&&shot.asset&&<OffthreadVideo src={staticFile(shot.asset)} muted startFrom={0} playbackRate={shot.playbackRate??1} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
+  {shot.kind==="video"&&shot.asset&&<OffthreadVideo src={staticFile(shot.asset)} muted startFrom={shot.startFrom??0} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
   {shot.kind==="image"&&shot.asset&&<Img src={staticFile(shot.asset)} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
   <div style={{position:"absolute",left:64,right:64,top:72,display:"flex",justifyContent:"space-between",alignItems:"center",color:"#fff9ef",fontFamily:"Arial, sans-serif",textShadow:"0 2px 8px rgba(0,0,0,.55)"}}>
    <div style={{padding:"14px 18px",background:"rgba(31,39,44,.84)",borderRadius:8,fontSize:25,fontWeight:800,letterSpacing:2}}>{shot.act}</div>

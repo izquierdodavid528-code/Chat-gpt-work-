@@ -46,20 +46,35 @@ Good:
 
 ## Production architecture
 
+This project now follows the repository-wide hybrid animation policy in `HYBRID_ANIMATION_PIPELINE.md`.
+
 Remotion:
-- camera and scene timing;
-- SVG/vector characters and props;
+- master timeline and scene timing;
+- 2D/2.5D camera, parallax and compositing;
 - procedural maps/routes;
-- compositing and transitions;
-- subtitles later.
+- masks, transitions and subtitles;
+- final assembly and audio.
+
+Flow / generative visual tools:
+- character pose/expression packs;
+- illustrated backgrounds and props;
+- foreground/midground/background plates;
+- selective short motion assets only when organic acting/movement would be expensive to recreate.
 
 Blender:
-- optional only for shots where spatial depth materially improves the story;
-- never a dependency for the entire reel.
+- selective short shots or reusable motion elements where real depth, perspective, rigging or camera movement materially improves the story;
+- default to EEVEE Next;
+- preview cheaply before final rendering;
+- use the existing Smart Render contract for final Blender assets;
+- never become a dependency for the entire reel unless the creative direction is explicitly changed to 3D-first.
 
-External assets:
-- only when authenticity matters;
+External/authentic assets:
+- use when authenticity matters;
 - licensing/provenance documented.
+
+### Shot-routing rule
+
+For future upgrades, classify every shot as `R`, `F`, `FV`, `B` or `S` before implementation. If the current Remotion-native version feels visually basic, first diagnose whether the limitation is the asset, pose, timing, layering, camera or transition. Escalate to Flow or Blender only for the specific weakness instead of rebuilding the entire reel.
 
 ## Factual posture
 

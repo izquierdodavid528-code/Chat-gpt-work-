@@ -43,23 +43,25 @@ const MapIllustration: React.FC<{frame:number}> = ({frame}) => {
         ))}
       </g>
 
-      <path d="M 650 250 C 740 270 822 345 835 430 C 842 485 814 520 827 574 C 844 640 900 686 914 762 C 923 810 896 845 858 820 C 811 789 792 728 767 685 C 728 617 665 571 645 505 C 625 441 665 402 653 350 C 646 317 625 277 650 250 Z"
+      <polygon
+        points="165.7,224.1 234.3,256.8 297.1,281.4 360,310 405.7,387.7 434.3,473.6 462.9,567.7 494.3,641.4 534.3,698.6 582.9,706.8 594.3,657.7 585.7,584.1 565.7,510.5 537.1,436.8 491.4,367.3 431.4,301.8 348.6,248.6 262.9,228.2"
         fill={C.green} stroke={C.ink} strokeWidth={12} strokeLinejoin="round"/>
-      <path d="M 658 255 C 720 278 785 330 805 390" fill="none" stroke={C.cream} strokeWidth={8} strokeLinecap="round" opacity={.45}/>
+      <path d="M 212 249 C 310 274 393 322 438 399 C 470 454 486 535 523 617" fill="none" stroke={C.cream} strokeWidth={8} strokeLinecap="round" opacity={.45}/>
 
-      <path d="M 190 1110 C 270 1072 360 1058 460 1060 C 566 1062 650 1044 742 1018 C 806 1000 875 1004 930 1028 C 882 1052 834 1077 778 1090 C 685 1110 596 1118 504 1132 C 402 1148 300 1157 210 1142 C 180 1137 166 1124 190 1110 Z"
+      <polygon
+        points="314.3,964.5 345.7,940 391.4,919.5 442.9,895 500,870.5 557.1,858.2 622.9,870.5 688.6,911.4 757.1,960.5 817.1,1030 877.1,1091.4 928.6,1115.9 877.1,1058.6 820,1038.2 745.7,1001.4 668.6,980.9 594.3,964.5 520,952.3 445.7,960.5 382.9,980.9"
         fill={C.green} stroke={C.ink} strokeWidth={12} strokeLinejoin="round"/>
-      <path d="M 250 1120 C 375 1100 520 1098 650 1078" fill="none" stroke={C.cream} strokeWidth={8} strokeLinecap="round" opacity={.45}/>
+      <path d="M 365 958 C 486 905 604 900 720 948 C 777 971 826 1013 870 1062" fill="none" stroke={C.cream} strokeWidth={8} strokeLinecap="round" opacity={.45}/>
 
       <g fill={C.green} stroke={C.ink} strokeWidth={7}>
-        <ellipse cx="840" cy="690" rx="24" ry="50" transform="rotate(-18 840 690)"/>
-        <ellipse cx="885" cy="760" rx="18" ry="38" transform="rotate(-18 885 760)"/>
-        <ellipse cx="920" cy="830" rx="14" ry="29" transform="rotate(-18 920 830)"/>
+        <ellipse cx="610" cy="705" rx="18" ry="38" transform="rotate(-18 610 705)"/>
+        <ellipse cx="655" cy="765" rx="15" ry="31" transform="rotate(-18 655 765)"/>
+        <ellipse cx="696" cy="825" rx="12" ry="25" transform="rotate(-18 696 825)"/>
       </g>
 
       <g fontFamily="Arial, sans-serif" fill={C.ink} fontWeight={900}>
-        <text x="704" y="470" fontSize="34" transform="rotate(8 704 470)">FLORIDA</text>
-        <text x="470" y="1210" fontSize="40" letterSpacing="4">CUBA</text>
+        <text x="395" y="455" fontSize="32" transform="rotate(17 395 455)">FLORIDA</text>
+        <text x="565" y="1048" fontSize="40" letterSpacing="4">CUBA</text>
       </g>
     </svg>
   );

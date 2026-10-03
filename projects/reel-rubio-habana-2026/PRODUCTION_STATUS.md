@@ -136,3 +136,35 @@ Key rules:
 8. Generate captions from the final narration waveform/timing.
 9. Run complete creative + factual + audio QA.
 10. Render the 60-second production master.
+
+
+## 60-second Remotion preview milestone
+
+Run `37089348442` completed successfully.
+
+Result:
+- full 1800-frame / 60-second Remotion preview rendered;
+- H.264 1080x1920 30 fps;
+- AAC 48 kHz stereo;
+- delivery QA: PASS;
+- audio validation QA: PASS;
+- validation peak: -21.5 dBFS;
+- official Rubio portrait and licensed music imported successfully;
+- provisional Remotion-native map hook used so the full reel could advance without waiting for Blender.
+
+Visual review sampled at 2s / 9s / 19s / 30s / 43s / 47s / 55s / 59s.
+
+Findings:
+- hook: acceptable as temporary preview only;
+- oil: PASS;
+- EO 14404 / Rubio: PASS;
+- designations: PASS;
+- finance + mobility: PASS;
+- close: one hierarchy collision found between `LO DOCUMENTADO` and the final headline.
+
+Close collision fix:
+- commit `61e8e56c62936adb57273e934b207a3c284be42b`;
+- label moved upward and final headline slightly lowered;
+- short close-only validation requested as run `37089628002`.
+
+Do not rerender the full 60 seconds again until the final Blender hook is ready. The next full render should combine the corrected close with the accepted v5 Blender plate.

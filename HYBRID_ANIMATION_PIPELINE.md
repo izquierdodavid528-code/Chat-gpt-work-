@@ -15,13 +15,13 @@ The workspace uses a **hybrid shot-by-shot pipeline**:
 - **GitHub**: code, manifests, prompts, configuration, version history and Actions.
 - **Google Drive**: heavy images, video, textures, 3D assets, intermediate renders and final deliveries.
 
-Remotion is the orchestration layer. Flow and Blender are suppliers of reusable visual material, not mandatory render engines for the entire video.
+Remotion is the orchestration layer. Flow images, Flow video, and Blender are all production routes evaluated shot by shot. Flow video is a first-class option and can replace a Blender shot when it delivers the needed performance and continuity with less production time.
 
 ### Flow handoff boundary
 
 Google Flow is currently operated manually by the user. This repository has no Flow API credentials or GitHub Actions generation step. The assistant prepares shot-specific prompts, filenames, framing and acceptance checks; the user generates and exports the chosen files, then uploads them to the project’s Google Drive folder. Verify the files before integrating them. Do not claim the Flow stage is automated or generate assets that have not been supplied.
 
-Start with a small approved style pack. Keep factual geography, dates, official names, map labels and captions in Remotion or sourced media. Use Flow for original illustrations, consistent characters, poses, backgrounds and selected short motion plates.
+Start with a small approved style pack. Keep factual geography, dates, official names, map labels and captions in Remotion or sourced media. Use Flow for original illustrations, consistent characters, poses, backgrounds and video clips. Flow can handle both still-image creation and video generation; video is not a secondary or last-resort use.
 
 ---
 
@@ -61,7 +61,7 @@ Prefer transparent or easily separable assets when possible. Keep the prompt and
 
 ### Tier FV — Flow short motion asset
 
-Use generated video only when organic motion or acting would be disproportionately expensive to reproduce in code or Blender.
+Actively consider Flow video for every shot whose core value is character performance, organic motion, atmosphere, a visual transformation, or a cinematic insert. Prefer it when the result meets the quality and continuity needs faster than building the shot in Blender. Available Flow credits are a production resource: optimize them with focused prompts, references and controlled iterations, but do not avoid video generation solely to conserve credits.
 
 Examples:
 - cloth/hair-like secondary motion;
@@ -70,11 +70,11 @@ Examples:
 - complex natural motion;
 - very short cinematic inserts.
 
-Treat these clips as **shots or plates**, not as the whole editing pipeline. Remotion still owns timing, crop, transitions, overlays, captions and audio.
+Treat these clips as **shots or plates**, not as the whole editing pipeline. Remotion still owns timing, crop, transitions, overlays, captions and audio. Keep critical on-screen text, verified maps and precise factual graphics in Remotion.
 
-### Tier B — Blender selective shot
+### Tier B — Blender complementary shot
 
-Use Blender when the shot needs one or more of:
+Use Blender when Flow cannot provide the required control or consistency, and the shot needs one or more of:
 - real spatial depth;
 - a controlled 3D camera move;
 - reusable rigged motion;
@@ -98,7 +98,7 @@ Cycles is an exception. Use it only when a benchmark on the actual shot shows th
 
 Prefer Blender for short segments, usually a few seconds, rather than a continuous 30–90 second master scene.
 
-A Blender segment should have a clear reason to exist. If the same result can be achieved with layered Flow art + Remotion camera/parallax, do that instead.
+A Blender segment should have a clear reason to exist. If Flow video or layered Flow art + Remotion camera/parallax achieves the approved result with fewer production steps, use that route. Choose Blender when deterministic 3D geometry, exact camera paths, reusable rigging or editable simulation materially matter.
 
 ### Preview before final
 
@@ -304,3 +304,16 @@ If Blender becomes responsible for most frames, re-evaluate whether the project 
 Do not ask one tool to be the whole studio.
 
 **Flow creates visual richness. Blender creates spatial or rigged motion where it matters. Remotion turns those pieces into a coherent, editable, synchronized film.**
+
+
+## Flow credit and iteration policy
+
+The user has Flow credits available. Do not treat credit conservation as a reason to exclude Flow video from the shot plan. Improve efficiency by:
+
+- defining the shot action, framing, duration and style before generating;
+- reusing approved image ingredients and character references;
+- testing a concise clip first when the available model/settings allow it;
+- changing one prompt variable per iteration and keeping rejected outputs traceable;
+- checking Flow's current in-product credit estimate/settings before a batch, since model options and costs can change.
+
+Choose the tool based on the quality/time tradeoff for that shot. Flow can save substantial Blender setup and render time; Blender remains available for shots that need stronger deterministic spatial control.

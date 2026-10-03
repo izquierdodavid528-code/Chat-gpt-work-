@@ -109,11 +109,11 @@ For each shot briefly state:
 - whether the asset is reusable;
 - expected technical risk.
 
-Do not send a shot to Blender merely because Blender is available.
+Compare Flow video, Flow still + Remotion, Remotion-native animation and Blender for each shot. State why the chosen method gives the best visual result and iteration time. Do not send a shot to Blender merely because Blender is available; use it when deterministic spatial control, rigging or exact editable motion materially matters.
 
 ## Iteration strategy
 
-Work from cheap to expensive:
+Work from fast visual tests to approved finals. Consider Flow video early for motion-led shots; use focused prompts, approved ingredients and one-variable revisions to make credit use efficient. Check the current in-product credit estimate before batches because model costs can change. Do not treat credit conservation as a reason to avoid a useful Flow clip.
 
 1. story/action beat;
 2. rough storyboard;

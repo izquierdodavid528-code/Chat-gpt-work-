@@ -47,7 +47,9 @@ Use the approved style frame as a reference image or ingredient, then generate o
 
 Save as **rubio-character-master-v1**. This becomes the identity reference. Later poses should reuse it as an ingredient/reference, not regenerate the character from text alone.
 
-### After the look is approved — one acting pose and one optional motion test
+### After the look is approved — acting pose and Flow video tests
+
+Flow video is a primary option for motion-led shots in this project, not merely a backup to image assets. Generate short clips for the pilot and compare them with Blender only where a shot needs deterministic 3D control. Use approved character/style images as ingredients where Flow offers that control.
 
 Generate a single full-body pose from the character master:
 
@@ -59,13 +61,41 @@ Then, only if the still pose matches, test one short image-to-video shot:
 
 Use the shortest available duration setting. If Flow only offers a longer clip, keep only the useful moment in Remotion. Reject clips that change the face, add fingers/limbs, invent writing, or drift between styles.
 
+#### Video prompt A — Rubio acting beat (image-to-video)
+
+Use the approved **rubio-character-master-v1** or pointing pose as the image ingredient. Choose portrait 9:16 and a short clip duration available in Flow.
+
+> Create a 4–6 second vertical 9:16 animated shot using the supplied illustrated Marco Rubio image as the exact identity and style reference. Preserve the same recognizable face, hairstyle, age, navy suit, coral-red tie, proportions, hand-drawn ink line and cut-paper texture in every frame. One continuous medium-full shot: Rubio studies a blank policy document, looks up with a controlled skeptical expression, turns his shoulders, makes one deliberate pointing gesture toward the blank page, then lets his arm settle with natural follow-through. Add a slight camera push, subtle jacket and tie motion, and one natural blink. Keep the document completely blank for accurate graphics to be added later. Polished editorial 2D cartoon, layered paper depth, warm ivory and muted navy/coral palette. Stable composition and clean silhouette. No cuts, no extra characters, no lip-sync, no speech, no sound, no generated words, numbers, maps, logos or watermark. Do not change identity, clothing, hands or art style.
+
+Filename: **rubio-flow-video-acting-v1.mp4**.
+
+#### Video prompt B — Havana harbor atmosphere / establishing shot (text-to-video or image-to-video)
+
+Use the approved style frame as a visual ingredient if available. Keep political/map facts out of the generated plate.
+
+> Create a 5-second vertical 9:16 establishing shot in the same original hand-drawn cut-paper editorial cartoon style as the supplied reference. A stylized Havana harbor sits in layered foreground, midground and distance: calm blue water ripples, a small generic tanker moves slowly across the harbor, a few clouds drift, and warm light shifts gently across the paper-textured skyline. Make one readable, elegant camera move gliding forward and slightly sideways, with restrained parallax and soft contact shadows. Keep all buildings generic and recognizable only as an illustrated Caribbean harbor atmosphere; no exact map, coastline, named landmark, flags, signage or factual claim. No text, letters, numbers, logos, watermark, collage, cuts, photorealism or sudden object changes. Maintain stable shapes, consistent ink outlines, warm ivory paper, muted navy, sea blue and coral accents.
+
+Filename: **habana-flow-video-establishing-v1.mp4**.
+
+#### Video prompt C — paper mechanism transformation (image-to-video)
+
+If the opening uses the document-to-barrier metaphor, generate this as its own short clip rather than building a Blender set solely for this transition.
+
+> Animate the supplied hand-drawn cut-paper policy-paper illustration into one 4–6 second vertical 9:16 continuous shot. The folded blank paper opens with a crisp physical hinge, its edge rises and transforms into a simple illustrated harbor gate, then stops firmly as a small generic tanker approaches and pauses. Use a single smooth camera move and clear anticipation, unfolding action, impact and settle; layered paper depth, ink outlines, warm paper grain and soft cast shadows. Keep the paper blank, the tanker generic and the gate free of symbols. Maintain the reference art style and stable geometry. No text, map, route line, dates, logos, flags, extra characters, cuts, photorealism or watermark.
+
+Filename: **policy-paper-flow-video-transition-v1.mp4**.
+
+#### Efficient credit use
+
+Use Flow’s current in-product settings/credit estimate to choose model and duration because options and costs can change. Make each test answer one visual question; reuse the approved reference ingredient, keep the action to one beat and revise one prompt dimension at a time. Keep good takes and rejects with clear filenames. The user has credits available, so use this strategy to reduce waste and rework—not to ration away Flow video. If one of these clips works, prefer it over a Blender build for that shot. Keep Blender for any remaining shot that needs exact editable 3D geometry, rigging or a controlled camera path.
+
 ## Flow steps
 
 1. Open Google Flow and create a project named **Rubio–La Habana 2026**.
 2. Generate the style frame in image mode. Save it to the project; do not generate multiple variants unless the first is unusable.
 3. Use that saved image as the reference for the character master. Save both approved images in one Flow collection such as **RUBIO_STYLE_LOCK**.
-4. Review the two images at phone size. Keep the image generation stage separate from video generation.
-5. Once the character is consistent, generate the single pointing pose. Test a video only if the still pose is approved.
+4. Review both images at phone size and approve the identity/style anchor.
+5. Generate the pointing pose, then create the acting video test and whichever pilot plate best serves the storyboard (harbor atmosphere or paper transformation). Flow video can be used directly where the take passes continuity checks; do not require a Blender remake.
 6. Download the original full-resolution PNG/JPG and any chosen MP4. Keep the prompt and the Flow asset/project name with the files. Do not use Flow’s clip sequence as the final edit; Remotion owns the 60-second timeline.
 7. Upload the files to the configured Drive project folder:
 
@@ -74,7 +104,7 @@ Use the shortest available duration setting. If Flow only offers a longer clip, 
 
    Suggested filenames: **rubio-styleframe-v1.png**, **rubio-character-master-v1.png**, **rubio-pointing-pose-v1.png**, **rubio-pointing-test-v1.mp4**.
 
-Google Flow’s current help describes creating videos from text, images, ingredients and frames; saving frames for reuse; editing clips; and arranging clips in Scenebuilder. Those features support this handoff, while Remotion remains the final editor. The controls and available models can vary by account and region, so use the closest image/reference controls present in the user’s Flow interface.
+Google Flow’s current help describes creating videos from text, images, ingredients and frames; saving frames for reuse; editing clips; and arranging clips in Scenebuilder. Use Flow for both still-image and video production where it serves the shot. Those features support this handoff, while Remotion remains the final timeline, compositor and editor. The controls and available models can vary by account and region, so use the closest image/reference controls present in the user’s Flow interface.
 
 ## Pilot shot routing
 
@@ -84,11 +114,11 @@ For the 8–12 second pilot, write the action and narration beats first, then ro
 |---|---|---|
 | Verified Florida–Cuba map, route, date and labels | Remotion | Keep geography and factual typography deterministic. |
 | Rubio character look, expressions, selected poses and paper-art background plates | Flow images | Build one coherent visual pack and reuse the same reference. |
-| One short character acting moment, only if it remains consistent | Flow video | Treat as a single insert; trim and composite in Remotion. |
-| One 2–3 second camera move through layered paper geography or a transforming harbor/bank set | Blender, only if it adds clear depth | EEVEE Next, shallow extruded layers, contact shadows, restrained depth of field and a controlled camera move. Render a low-cost preview before the approved final element. |
+| Character acting, harbor atmosphere or a paper mechanism transition | Flow video first-class option | Generate a short reference-led clip; use it directly if identity, motion and style stay stable. Remotion trims and composites it. |
+| A shot requiring exact spatial geometry, repeatable rigging or deterministic camera animation that Flow cannot hold | Blender complementary option | EEVEE Next, shallow extruded layers, contact shadows, restrained depth of field and a controlled camera move. Render a low-cost preview before the approved final element. |
 | Timeline, camera reframing, parallax, match-cuts, labels, subtitles and final mix | Remotion | Keep the edit deterministic and synchronize it to narration. |
 
-Do not put every shot in Blender. Build only the one hero move that gains real spatial depth; use the existing Blender Smart Render contract and do not create a duplicate renderer. Keep the 3D element short and reusable, then composite it in Remotion.
+Do not default to Blender when a Flow video can achieve the approved shot faster. Use the existing Blender Smart Render contract for the shots where Blender adds necessary deterministic spatial control; do not create a duplicate renderer. Keep any 3D element short and reusable, then composite it in Remotion.
 
 ## Acceptance gate before expanding to 60 seconds
 

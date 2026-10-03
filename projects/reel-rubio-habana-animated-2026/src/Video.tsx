@@ -367,6 +367,90 @@ const MayAct:React.FC=()=>{
   </AbsoluteFill>;
 };
 
+
+const OfacStamp:React.FC<{frame:number;delay:number;x:number;y:number;rotation?:number}> = ({frame,delay,x,y,rotation=-6}) => {
+  const p=spring({frame:Math.max(0,frame-delay),fps:30,config:{damping:8,stiffness:230,mass:.55}});
+  const hit=interpolate(p,[0,.72,1],[0,1,.92]);
+  return <div style={{position:"absolute",left:x,top:y,width:170,height:110,transform:`scale(${interpolate(p,[0,1],[1.8,1])}) rotate(${rotation}deg)`,opacity:p}}>
+    <div style={{position:"absolute",left:52,top:-70,width:68,height:80,border:"8px solid "+C.ink,borderBottom:0,borderRadius:"28px 28px 0 0",background:C.paper2}}/>
+    <div style={{width:170,height:105,borderRadius:20,background:C.red,border:"9px solid "+C.ink,boxShadow:`0 ${12*hit}px 0 rgba(32,39,42,.14)`,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"Arial",fontWeight:1000,fontSize:27,color:C.cream,letterSpacing:1.5}}>OFAC</div>
+  </div>;
+};
+
+const ListRow:React.FC<{label:string;frame:number;delay:number;accent?:boolean;sub?:string}> = ({label,frame,delay,accent=false,sub}) => {
+  const p=spring({frame:Math.max(0,frame-delay),fps:30,config:{damping:16,stiffness:150}});
+  return <div style={{height:118,borderBottom:"5px solid rgba(32,39,42,.18)",display:"flex",alignItems:"center",padding:"0 34px",opacity:p,transform:`translateX(${interpolate(p,[0,1],[-90,0])}px)`}}>
+    <div style={{width:26,height:26,borderRadius:"50%",background:accent?C.red:C.seaDark,border:"5px solid "+C.ink,marginRight:24}}/>
+    <div>
+      <div style={{fontFamily:"Arial",fontWeight:1000,fontSize:30,color:C.ink}}>{label}</div>
+      {sub&&<div style={{fontFamily:"Arial",fontWeight:800,fontSize:16,color:C.navy,letterSpacing:1,marginTop:5}}>{sub}</div>}
+    </div>
+  </div>;
+};
+
+const BankTransform:React.FC<{frame:number}> = ({frame}) => {
+  const p=spring({frame:Math.max(0,frame-235),fps:30,config:{damping:14,stiffness:135}});
+  const roof=interpolate(p,[0,1],[0,1]);
+  const col=(d:number)=>spring({frame:Math.max(0,frame-(250+d)),fps:30,config:{damping:11,stiffness:180}});
+  return <div style={{position:"absolute",left:160,top:720,width:760,height:680,opacity:p,transform:`translateY(${interpolate(p,[0,1],[180,0])}px)`}}>
+    <svg width="760" height="680" viewBox="0 0 760 680">
+      <rect x="88" y="300" width="584" height="220" rx="18" fill={C.cream} stroke={C.ink} strokeWidth="12"/>
+      <path d={`M70 300 L380 ${300-160*roof} L690 300 Z`} fill={C.paper2} stroke={C.ink} strokeWidth="12" strokeLinejoin="round"/>
+      {[0,1,2,3].map((i)=>{
+        const cp=col(i*12);
+        const x=145+i*145;
+        return <g key={i} opacity={cp} transform={`translate(0 ${interpolate(cp,[0,1],[90,0])})`}>
+          <rect x={x} y="325" width="72" height="160" rx="8" fill={i%2?C.paper2:C.cream} stroke={C.ink} strokeWidth="9"/>
+        </g>;
+      })}
+      <rect x="66" y="510" width="628" height="82" rx="18" fill={C.mustard} stroke={C.ink} strokeWidth="12"/>
+      <text x="380" y="562" textAnchor="middle" fontFamily="Arial" fontWeight="1000" fontSize="32" fill={C.ink}>BANCO EXTERIOR DE CUBA</text>
+    </svg>
+  </div>;
+};
+
+const DesignationsAct:React.FC=()=>{
+  const f=useCurrentFrame();
+  const roll=spring({frame:f,fps:30,config:{damping:15,stiffness:120}});
+  const shift=interpolate(f,[0,230],[0,-170],clamp);
+  const jun=spring({frame:Math.max(0,f-18),fps:30,config:{damping:11,stiffness:170}});
+  const sep=spring({frame:Math.max(0,f-185),fps:30,config:{damping:11,stiffness:170}});
+  const listFade=interpolate(f,[215,275],[1,0],clamp);
+
+  return <AbsoluteFill style={{background:C.paper,overflow:"hidden"}}>
+    <PaperTexture/>
+
+    <div style={{position:"absolute",left:70,top:70,fontFamily:"Arial",fontWeight:1000,fontSize:68,color:C.ink}}>DESIGNACIONES</div>
+
+    <div style={{position:"absolute",right:78,top:84,display:"flex",gap:16}}>
+      <div style={{padding:"13px 18px",background:C.cream,border:"7px solid "+C.ink,borderRadius:16,fontFamily:"Arial",fontWeight:1000,fontSize:24,color:C.red,opacity:jun,transform:`rotate(${interpolate(jun,[0,1],[-12,-3])}deg)`}}>04 JUN</div>
+      <div style={{padding:"13px 18px",background:C.cream,border:"7px solid "+C.ink,borderRadius:16,fontFamily:"Arial",fontWeight:1000,fontSize:24,color:C.red,opacity:sep,transform:`rotate(${interpolate(sep,[0,1],[12,3])}deg)`}}>03 SEP</div>
+    </div>
+
+    <div style={{position:"absolute",left:122,top:250,width:836,height:1110,opacity:listFade,transform:`translateY(${shift}px) scaleY(${interpolate(roll,[0,1],[.45,1])})`,transformOrigin:"top center"}}>
+      <div style={{position:"absolute",left:0,top:0,width:836,minHeight:1180,background:C.cream,border:"10px solid "+C.ink,borderRadius:28,boxShadow:"18px 20px 0 rgba(32,39,42,.12)",overflow:"hidden"}}>
+        <div style={{height:130,background:C.navy,borderBottom:"10px solid "+C.ink,display:"flex",alignItems:"center",padding:"0 36px"}}>
+          <div style={{fontFamily:"Arial",fontWeight:1000,fontSize:42,color:C.cream,letterSpacing:2}}>LISTA SDN</div>
+        </div>
+        <ListRow label="ICAP" frame={f} delay={38} accent sub="ejemplo de junio"/>
+        <ListRow label="MINFAR" frame={f} delay={62} accent sub="ejemplo de junio"/>
+        <ListRow label="PERSONAS" frame={f} delay={90} sub="otras entradas"/>
+        <ListRow label="OTRAS ENTIDADES" frame={f} delay={118} sub="otras entradas"/>
+        <ListRow label="BANCO EXTERIOR DE CUBA" frame={f} delay={190} accent sub="3 de septiembre"/>
+      </div>
+      <OfacStamp frame={f} delay={72} x={590} y={240}/>
+      <OfacStamp frame={f} delay={118} x={560} y={470} rotation={5}/>
+      <OfacStamp frame={f} delay={208} x={535} y={760} rotation={-4}/>
+    </div>
+
+    <BankTransform frame={f}/>
+
+    <div style={{position:"absolute",left:86,right:86,bottom:120,fontFamily:"Arial",fontWeight:1000,fontSize:29,lineHeight:1.05,color:C.ink,opacity:interpolate(f,[275,305],[0,1],clamp)}}>
+      La lista deja de ser papel:<br/>el siguiente objetivo se convierte en la escena.
+    </div>
+  </AbsoluteFill>;
+};
+
 const FuturePlaceholder:React.FC=()=>(
   <AbsoluteFill style={{background:C.paper,justifyContent:"center",alignItems:"center"}}>
     <PaperTexture/>
@@ -379,6 +463,7 @@ export const RubioHabanaAnimated:React.FC=()=>(
     <PaperTexture/>
     <Sequence from={0} durationInFrames={330}><OpeningAct/></Sequence>
     <Sequence from={330} durationInFrames={360}><MayAct/></Sequence>
-    <Sequence from={690} durationInFrames={TOTAL_FRAMES-690}><FuturePlaceholder/></Sequence>
+    <Sequence from={690} durationInFrames={360}><DesignationsAct/></Sequence>
+    <Sequence from={1050} durationInFrames={TOTAL_FRAMES-1050}><FuturePlaceholder/></Sequence>
   </AbsoluteFill>
 );

@@ -7,8 +7,8 @@
     "compositions": "remotion compositions src/index.ts",
     "render": "npm run render:rough-cut",
     "render:rough-cut": "remotion render src/index.ts RubioHabanaAnimated out/rubio-habana-animated.mp4 --codec=h264 --pixel-format=yuv420p --crf=18 --log=info",
-    "render:pilot": "remotion render src/index.ts AdvancedOpeningPilot out/rubio-habana-advanced-opening-pilot-v3.mp4 --codec=h264 --pixel-format=yuv420p --crf=18 --log=info",
-    "render:pilot:validation": "remotion render src/index.ts AdvancedOpeningPilot out/rubio-habana-advanced-opening-pilot-v3-validation.mp4 --frames=0-329 --codec=h264 --pixel-format=yuv420p --crf=18 --log=info"
+    "render:pilot": "remotion render src/index.ts AdvancedOpeningPilot out/rubio-habana-advanced-opening-pilot-v4.mp4 --codec=h264 --pixel-format=yuv420p --crf=18 --log=info",
+    "render:pilot:validation": "remotion render src/index.ts AdvancedOpeningPilot out/rubio-habana-advanced-opening-pilot-v4-validation.mp4 --frames=0-539 --codec=h264 --pixel-format=yuv420p --crf=18 --log=info"
   },
   "dependencies": {
     "@remotion/cli": "4.0.530",

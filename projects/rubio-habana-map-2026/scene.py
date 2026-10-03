@@ -105,12 +105,12 @@ world.node_tree.nodes["Background"].inputs["Strength"].default_value=0.15
 
 # Materials
 ocean=mat_principled("Ocean",(0.005,0.018,0.030),metallic=0.15,rough=0.28)
-land=mat_principled("Land",(0.055,0.075,0.083),metallic=0.3,rough=0.42)
-land_edge=mat_principled("LandEdge",(0.09,0.14,0.16),metallic=0.15,rough=0.35,emission=(0.05,0.15,0.18),emission_strength=0.35)
-red=mat_principled("PressureRed",(0.24,0.01,0.015),metallic=0.15,rough=0.25,emission=(0.95,0.015,0.02),emission_strength=5.5)
+land=mat_principled("Land",(0.065,0.090,0.100),metallic=0.24,rough=0.48)
+land_edge=mat_principled("LandEdge",(0.08,0.13,0.15),metallic=0.10,rough=0.40,emission=(0.04,0.12,0.14),emission_strength=0.24)
+red=mat_principled("PressureRed",(0.20,0.018,0.014),metallic=0.10,rough=0.32,emission=(0.58,0.035,0.018),emission_strength=2.25)
 warm=mat_principled("WarmText",(0.80,0.69,0.46),metallic=0.0,rough=0.5,emission=(0.75,0.52,0.20),emission_strength=1.7)
 white=mat_principled("WhiteText",(0.88,0.92,0.94),rough=0.45,emission=(0.72,0.82,0.88),emission_strength=1.2)
-blue=mat_principled("RouteBlue",(0.02,0.16,0.25),rough=0.3,emission=(0.02,0.55,0.85),emission_strength=4.2)
+blue=mat_principled("RouteBlue",(0.018,0.13,0.20),rough=0.34,emission=(0.02,0.38,0.55),emission_strength=2.6)
 
 # Ocean plane
 bpy.ops.mesh.primitive_plane_add(size=28, location=(0,0,-0.12))
@@ -154,24 +154,36 @@ route.data.keyframe_insert("bevel_factor_end",frame=1)
 route.data.bevel_factor_end=1.0
 route.data.keyframe_insert("bevel_factor_end",frame=45)
 
-# City markers
+# City markers: restrained, informational rather than target-like
 for name,(x,y),mat in [("Miami",miami,blue),("Havana",havana,red)]:
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=24,ring_count=12,radius=0.075,location=(x,y,0.18))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24,ring_count=12,radius=0.050,location=(x,y,0.18))
     s=bpy.context.active_object; s.name=name; s.data.materials.append(mat)
 
-# Pressure rings centered near Havana / north Cuba
-cx,cy=geo(-81.9,22.35)
+# Policy-layer contours.
+# Open, offset curves replace closed concentric rings so the overlay reads as
+# successive policy layers rather than a bullseye or literal physical action.
+cx,cy=geo(-81.9,22.55)
 starts=[25,40,55,70]
 for i,start in enumerate(starts):
-    bpy.ops.mesh.primitive_torus_add(major_radius=1.10+i*0.36,minor_radius=0.018,major_segments=96,minor_segments=10,location=(cx,cy,0.16+i*0.006))
-    t=bpy.context.active_object
-    t.name=f"PressureRing{i+1}"
-    t.scale=(1.75,0.72,1.0)
-    t.data.materials.append(red)
-    t.scale=(0.01,0.01,0.01)
-    t.keyframe_insert(data_path="scale",frame=max(1,start-7))
-    t.scale=(1.75,0.72,1.0)
-    t.keyframe_insert(data_path="scale",frame=start+12)
+    offset=i*0.34
+    pts=[
+        (cx-3.30-offset*0.18, cy+0.10+offset*0.22),
+        (cx-1.85-offset*0.08, cy+0.52+offset*0.34),
+        (cx-0.20, cy+0.76+offset*0.42),
+        (cx+1.55+offset*0.08, cy+0.62+offset*0.34),
+        (cx+3.15+offset*0.18, cy+0.18+offset*0.22),
+    ]
+    contour=make_bezier_line(
+        f"PolicyContour{i+1}",
+        pts,
+        0.155+i*0.006,
+        red,
+        0.010
+    )
+    contour.data.bevel_factor_end=0.01
+    contour.data.keyframe_insert("bevel_factor_end",frame=max(1,start-7))
+    contour.data.bevel_factor_end=1.0
+    contour.data.keyframe_insert("bevel_factor_end",frame=start+15)
 
 # Titles on map
 
@@ -201,7 +213,7 @@ scene.use_nodes=True
 nt=scene.node_tree
 nt.nodes.clear()
 rl=nt.nodes.new("CompositorNodeRLayers")
-gl=nt.nodes.new("CompositorNodeGlare"); gl.glare_type="FOG_GLOW"; gl.quality="HIGH"; gl.threshold=0.8; gl.size=6
+gl=nt.nodes.new("CompositorNodeGlare"); gl.glare_type="FOG_GLOW"; gl.quality="HIGH"; gl.threshold=1.15; gl.size=5
 comp=nt.nodes.new("CompositorNodeComposite")
 nt.links.new(rl.outputs["Image"],gl.inputs["Image"])
 nt.links.new(gl.outputs["Image"],comp.inputs["Image"])

@@ -88,3 +88,45 @@ requestId: `rubio-habana-animated-full-rough-cut-v1`
 range: `0-1799`
 
 The next gate is full 60-second visual QA. Do not add final narration or captions until that gate passes.
+
+
+## Full rough cut v1 visual audit
+
+Run: `37090763729`
+Status: SUCCESS
+Artifact: full 60-second validation MP4
+
+What worked:
+- illustrated explainer language is clearly different from the cancelled slide-style project;
+- opening uses acting objects instead of information cards;
+- May toolbox / sector pop-outs / State-Treasury arms read as animation;
+- OFAC list physically transforms into Banco Exterior;
+- finance token, U-turn and authorization objects communicate mechanisms through action;
+- attributed speech bubbles work as an illustrated close.
+
+Issues found in v1:
+1. Florida/Cuba silhouettes were too abstract.
+2. January customs elements lingered too far into the February beat.
+3. Finance scene still contained a large inner card that looked too dashboard-like.
+4. All finance pipes activated together instead of sequentially.
+5. Professional authorization tab did not fully fall away.
+6. Designations -> finance needed a stronger physical match-cut.
+7. Close opened with a brief nearly blank gray transition.
+
+All seven items are already fixed in current v2 code.
+
+## Current v2 improvements
+
+- more geographically recognizable Florida/Cuba using the prior verified simplified coordinate geometry;
+- earlier January fade during February;
+- bank zooms into camera before finance scene;
+- financial route activates in three sequential pipe segments;
+- cream dashboard panel removed from finance scene;
+- authorization tab visibly falls away;
+- close rebuilt for its actual 8-second duration with no dead zone;
+- explanatory on-screen copy reduced further.
+
+Current v2 render:
+- run `37091037962`
+- requestId `rubio-habana-animated-full-rough-cut-v2`
+- next gate: compare v2 representative frames against v1 before narration.

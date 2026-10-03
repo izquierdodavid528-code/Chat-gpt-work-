@@ -1,3 +1,7 @@
+## S12 integration gate — blocked on missing files
+
+Gate check for this turn: the only supplied local attachment is the prior `Rubio-La-Habana-60s-animatic-bridges-v3.mp4`. The existing Drive Flow image/video folders also contain only the previously catalogued assets; neither `s12-closing-two-positions-start-v1.png` nor `s12-closing-two-positions-v1.mp4` is present. Therefore S12 was not modified and no render was falsely attributed to these assets. The last verified base remains run 37161315638 (commit 5bf589e4983c2793e4ad6265f28e996288e71dc9), technical delivery and audio QA PASS. This gate can resume when both S12 files are uploaded here or placed in the existing Flow asset folders. Preserve the current render as the restore point; no creative polish or master-final work was performed.
+
 ## Motif bridge iteration — run 37161315638
 
 Render artifact: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37161315638. The transition pass adds thin route, gate, calendar, branch, stamp, facade, return-route, tab, lane and shoreline motifs around nine shot boundaries. It leaves the two boundaries around the Rubio acting insert clear so overlays do not cross his face. Removed the long placeholder-card fade that created a near-empty opening frame. Built and checked the full 60 s audio-bearing render: delivery PASS; audio QA PASS at -17.9 LUFS, -4.6 dBFS true peak, 2.5 LU LRA, 0.053 s sync delta.

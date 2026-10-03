@@ -1,7 +1,7 @@
 {
-  "requestId": "rubio-habana-map-v5-concurrency-release",
+  "requestId": "rubio-habana-map-hook-v5-open-contours-full-final",
   "engine": "blender",
   "projectSlug": "rubio-habana-map-2026",
   "blenderMode": "auto",
-  "validationFrameCount": "1"
+  "validationFrameCount": "0"
 }

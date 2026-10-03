@@ -17,7 +17,7 @@ Actúa como ingeniero sénior de Remotion y director técnico de animación narr
 
 Desarrolla el siguiente piloto narrativo a partir del puente físico ya creado: extiende la secuencia hacia la acción de febrero y haz que la escena se perciba claramente más dirigida, inmersiva y memorable que la V3. No agregues movimiento por cantidad. Cada beat debe tener una intención legible y una consecuencia visual.
 
-La propuesta del usuario describe el tema como “Marco Rubio y la versión económica con trabuco”. Los archivos del proyecto no definen quién es esa segunda figura ni la función exacta de la sátira. Antes de asignarle identidad, parecido o papel político, consulta la descripción que dé el usuario. Si esa información no está disponible, implementa el resto del piloto y deja el personaje como rig reutilizable configurable; no inventes una persona real ni hechos.
+El usuario aclaró que la “versión económica con trabuco” es Donald Trump. Incluye a Marco Rubio y a Trump como caricaturas vectoriales satíricas originales. Trump debe leerse como la versión económica de Rubio mediante una construcción de papel/cartón deliberadamente barata, con un trabuco antiguo como gag visual. El trabuco es un accesorio de caricatura: no apuntarlo a personas, no dispararlo y no presentarlo como una escena real. El personaje de Rubio no firma ni ejecuta la orden presidencial. El beat factual sigue siendo que la orden EO 14389 retiró las acciones arancelarias IEEPA, incluida EO 14380; atribuye esa acción al presidente y no añadas afirmaciones políticas nuevas.
 
 ## Dirección visual
 

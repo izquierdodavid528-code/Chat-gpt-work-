@@ -12,7 +12,7 @@ La pieza debe ser visualmente ambiciosa y profesional, pero factual y políticam
 Nunca atribuir a Rubio una medida adoptada formalmente por otra autoridad.
 
 ## Tesis del minuto
-**En 2026, la presión de Washington sobre La Habana no tomó una sola forma: se fue cerrando por capas —energía, sanciones, finanzas y movilidad—.**
+**En 2026, la presión de Washington sobre La Habana cambió de instrumentos y se amplió: empezó con una vía arancelaria ligada al petróleo, que fue retirada en febrero, y continuó mediante sanciones, finanzas y otras restricciones.**
 
 Ésta es la idea que debe entender un espectador aunque vea el reel sin sonido.
 
@@ -42,19 +42,24 @@ Visual:
 Voz:
 “En 2026, Washington elevó la presión sobre La Habana en varias capas.”
 
-### 00:05–00:14 — CAPA 1: PETRÓLEO
-Hecho:
-El 29 de enero de 2026, Donald Trump firmó la EO 14380, que declaró una emergencia nacional respecto a Cuba y creó un mecanismo que permite imponer aranceles adicionales a productos de países que vendan o suministren petróleo a Cuba.
+### 00:05–00:14 — PRIMER INSTRUMENTO: PETRÓLEO / ARANCELES
+Hechos:
+- 29 de enero: Donald Trump firma la EO 14380, que declara una emergencia nacional y crea un mecanismo de aranceles adicionales frente a países que suministren petróleo a Cuba.
+- 20 de febrero: la EO 14389 termina los aranceles adicionales impuestos bajo IEEPA, incluyendo los derivados de la EO 14380, aunque mantiene vigente la emergencia y otras acciones no arancelarias.
 
 Visual Blender:
 - tanker genérico realista;
 - ruta marítima;
 - documento EO 14380;
-- barrera arancelaria abstracta.
+- barrera arancelaria aparece;
+- corte documental a EO 14389;
+- la barrera arancelaria se retira, pero la línea de tiempo continúa hacia mayo.
 
 Texto:
 29 ENE · EO 14380
-ARANCELES POSIBLES A PAÍSES QUE SUMINISTREN PETRÓLEO
+VÍA ARANCELARIA
+20 FEB · EO 14389
+ARANCELES IEEPA: TERMINADOS
 
 ### 00:14–00:24 — CAPA 2: MARCO DE SANCIONES
 Hecho:

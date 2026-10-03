@@ -49,7 +49,8 @@ V5 control-frame finding:
 
 Status:
 - v5 STATIC CONTROLS: PASS for Remotion composite test.
-- v5 is not yet approved as a finished hook until motion + typography + music are reviewed together in the 5-second Remotion validation.
+- authoritative full-run control frames 1 / 53 / 105: PASS; all four open policy contours are visible by frame 105 and route/framing remain readable.
+- v5 is not yet approved as a finished hook until the assembled Blender motion and then motion + typography + music are reviewed together in the 5-second Remotion validation.
 
 ## D — Audio
 

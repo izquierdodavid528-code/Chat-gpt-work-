@@ -168,5 +168,5 @@ Current gate:
 - The run was a validation render; it proves composition/build/delivery checks, not final creative approval or a full-production Drive delivery.
 - Local commands: `npm run render:pilot:validation` for the 330-frame check and `npm run render:pilot` for the full 11-second composition. `npm run render` remains an alias for the 60-second rough cut.
 - Pilot delivery validation now uses a 10.9-second minimum so the complete 11-second composition can pass the existing output checks.
-- This remains an opening prototype. It contains no narration, captions, sound design, or the newly requested satirical “versión económica con trabuco” character; that character's identity and visual brief need to be specified before it is drawn into the story.
+- V3 remains an opening prototype with no narration, captions, or sound design. The user clarified that the satirical “versión económica con trabuco” is Donald Trump. V4 will test original paper-cutout caricatures of Rubio and Trump, with the antique trabuco used only as a non-firing visual gag; neither appears in the V3 render.
 

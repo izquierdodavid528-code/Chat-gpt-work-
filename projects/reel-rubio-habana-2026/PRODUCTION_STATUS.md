@@ -57,11 +57,17 @@ Validation request:
 - 6-frame render block: PASS
 - delivery verification: running at last status check
 
-Full request has already been issued:
+V4 full request:
 - requestId: `rubio-habana-map-hook-v4-clean-3d-plate-full`
-- validationFrameCount: 0
 - GitHub Actions run: `37085816242`
-- state at last check: waiting for validation concurrency group to release
+- result: CANCELLED intentionally after control-frame review
+- reason: closed concentric red rings read too much like a target/bullseye and were not acceptable as the preferred documentary language.
+
+V5 validation:
+- requestId: `rubio-habana-map-hook-v5-open-contours-validation`
+- validationFrameCount: 45
+- GitHub Actions run: `37087157661`
+- state at last check: started after v4 cancellation
 
 Next Blender gate:
 1. finish the already-running v4 105-frame delivery;
@@ -69,7 +75,7 @@ Next Blender gate:
 3. render the 0–149 Remotion composite before creative approval;
 4. compare against the prepared v5 candidate if v4 still reads too synthetic.
 
-V5 candidate is already prepared in `projects/rubio-habana-map-2026/scene.py` but has NOT been requested/rendered yet:
+V5 candidate is prepared in `projects/rubio-habana-map-2026/scene.py` and its 45-frame validation is now running:
 - closed concentric rings replaced with open offset policy contours;
 - red emission reduced;
 - route glow reduced;

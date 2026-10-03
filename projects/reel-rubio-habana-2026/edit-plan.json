@@ -3,7 +3,7 @@
   "project": "reel-rubio-habana-2026",
   "version": "v1-strategy",
   "title": "2026: La presión sobre La Habana",
-  "thesis": "En 2026 la presión de Washington sobre La Habana se amplió por capas: energía, sanciones, finanzas y movilidad.",
+  "thesis": "En 2026 la presión de Washington sobre La Habana cambió de instrumentos y se amplió: una vía arancelaria ligada al petróleo fue retirada en febrero, mientras otras sanciones y restricciones se expandieron después.",
   "targetDurationSeconds": 60,
   "output": {
     "width": 1080,
@@ -27,9 +27,9 @@
         "start": 5,
         "end": 14
       },
-      "message": "EO 14380 abre la capa de presión energética mediante posibles aranceles a países que suministren petróleo a Cuba.",
-      "visual": "Tanker genérico + ruta marítima + EO 14380.",
-      "sourceType": "White House EO 14380"
+      "message": "29 Jan: EO 14380 opens an oil-linked tariff route. 20 Feb: EO 14389 ends the additional IEEPA tariffs, while the emergency remains.",
+      "visual": "Tanker + EO 14380 barrier appears -> EO 14389 document -> tariff barrier retracts -> timeline continues.",
+      "sourceType": "White House EO 14380 + EO 14389"
     },
     {
       "id": "framework",

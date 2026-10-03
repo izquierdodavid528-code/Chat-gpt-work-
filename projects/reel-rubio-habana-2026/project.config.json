@@ -63,10 +63,10 @@
       "provenance": "U.S. Department of State official portrait; U.S. federal government work / public domain"
     },
     {
-      "url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Time%20Passes.mp3",
-      "local": "rubio-habana-bed.mp3",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/a/a6/Kevin_MacLeod_-_03_-_Impact_Moderato.ogg",
+      "local": "rubio-habana-bed.ogg",
       "required": true,
-      "provenance": "Time Passes — Kevin MacLeod (incompetech.com), licensed under CC BY 3.0"
+      "provenance": "Impact Moderato — Kevin MacLeod; Wikimedia Commons original file; CC BY 3.0"
     }
   ]
 }

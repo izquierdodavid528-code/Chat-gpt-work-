@@ -89,6 +89,23 @@ Use:
 Editorial guardrail:
 - do not generalize this to "all transactions with Cuba are prohibited."
 
+## 2026-09-30 — Travel / professional meetings / education
+
+Treasury / OFAC:
+https://ofac.treasury.gov/faqs/1274
+https://ofac.treasury.gov/faqs/1275
+https://ofac.treasury.gov/faqs/701
+https://ofac.treasury.gov/faqs/702
+
+Use:
+- general authorization for attendance at or organization of professional meetings or conferences in Cuba was eliminated, with specified wind-down provisions;
+- certain educational travel authorizations were narrowed;
+- group people-to-people educational travel authorization was removed, with specified grandfathering provisions.
+
+Editorial guardrail:
+- these are category-specific changes;
+- do not present them as a blanket prohibition on all travel to Cuba.
+
 ## Cuban official response
 
 MINREX communiqué reproduced by Granma, 2026-05-07:

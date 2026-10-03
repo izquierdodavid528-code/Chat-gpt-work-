@@ -49,7 +49,7 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
  const move=interpolate(p,[0,1],[70,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  return <AbsoluteFill style={{overflow:"hidden",background:"linear-gradient(145deg,#e8ddc6,#f7f0e3 54%,#d8d1c3)"}}>
   <Paper/>
-  <div style={{position:"absolute",left:"8%",right:"8%",top:"12%",height:"74%",transform:"translateY("+move+"px)",opacity:interpolate(p,[0,.025],[0,1],{extrapolateRight:"clamp"})}}>
+  <div style={{position:"absolute",left:"8%",right:"8%",top:"12%",height:"74%",transform:"translateY("+move+"px)",opacity:1}}>
    {shot.id==="S02"&&<div style={{...card,background:"#b9d9d8"}}>
     <div style={{position:"absolute",left:40,top:34,...label}}>CARIBE · ESQUEMA NO A ESCALA</div>
     <svg viewBox="0 0 900 600" style={{position:"absolute",inset:"70px 15px 15px",width:"calc(100% - 30px)",height:"calc(100% - 85px)"}}>

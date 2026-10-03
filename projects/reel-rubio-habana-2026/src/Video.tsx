@@ -67,8 +67,10 @@ const OilLayer:React.FC=()=>{
       <div style={{height:2,background:"#8b6f46",margin:"16px 0 20px"}}/>
       <div style={{fontFamily:"Georgia",color:"#181818",fontSize:34,fontWeight:800,lineHeight:1.1}}>Executive Order 14380</div>
       <div style={{fontFamily:"Arial",color:"#555",fontSize:22,marginTop:10}}>January 29, 2026</div>
+      <div style={{marginTop:22,paddingTop:18,borderTop:"1px solid #b8aa92",fontFamily:"Arial",color:"#6f3a3a",fontSize:20,fontWeight:800}}>FEB 20 · EO 14389 → additional IEEPA tariffs ended</div>
     </div>
-    <div style={{position:"absolute",left:70,right:70,bottom:220,color:INK,fontFamily:"Arial",fontSize:34,fontWeight:800,lineHeight:1.18}}>Aranceles adicionales posibles contra países que suministren petróleo a Cuba.</div>
+    <div style={{position:"absolute",left:70,right:70,bottom:300,color:INK,fontFamily:"Arial",fontSize:32,fontWeight:800,lineHeight:1.16}}>29 ENE · se abre una vía arancelaria ligada al suministro de petróleo.</div>
+    <div style={{position:"absolute",left:70,right:70,bottom:210,color:STEEL,fontFamily:"Arial",fontSize:25,fontWeight:750,lineHeight:1.18}}>20 FEB · EO 14389 termina esos aranceles IEEPA; la emergencia continúa.</div>
   </AbsoluteFill>
 };
 

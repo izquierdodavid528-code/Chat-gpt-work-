@@ -65,9 +65,15 @@ V4 full request:
 
 V5 validation:
 - requestId: `rubio-habana-map-hook-v5-open-contours-validation`
-- validationFrameCount: 45
 - GitHub Actions run: `37087157661`
-- state at last check: started after v4 cancellation
+- control frames 1 / 23 / 45: CREATIVE STATIC PASS
+- long validation blocks intentionally cancelled after control-frame approval.
+
+V5 final full render:
+- requestId: `rubio-habana-map-hook-v5-open-contours-full-final`
+- validationFrameCount: 0
+- GitHub Actions run: `37087696933`
+- state at last check: pending behind one-frame concurrency-release run `37087663265`.
 
 Next Blender gate:
 1. finish the already-running v4 105-frame delivery;

@@ -171,37 +171,37 @@ for i,start in enumerate(starts):
 
 # Titles on map
 make_text("FLORIDA",(*geo(-82.7,28.9),0.16),0.24,white,"FloridaLabel")
-make_text("CUBA",(*geo(-78.6,21.85),0.16),0.27,white,"CubaLabel")
+make_text("CUBA",(*geo(-80.15,21.95),0.16),0.22,white,"CubaLabel")
 make_text("LA HABANA",havana+(0.24,),0.18,red,"HavanaLabel")
 
 # Layer words, staged vertically in upper-air plane
 layers=[("PETROLEO",38),("SANCIONES",58),("FINANZAS",78),("MOVILIDAD",98)]
 for idx,(body,start) in enumerate(layers):
-    o=make_text(body,(3.25,-2.4+idx*0.55,0.35),0.24,white,f"Layer_{idx}")
+    o=make_text(body,(2.10,-2.35+idx*0.50,0.35),0.18,white,f"Layer_{idx}")
     o.data.align_x="RIGHT"
     o.scale=(0.001,0.001,0.001)
     o.keyframe_insert(data_path="scale",frame=start-5)
     o.scale=(1,1,1)
     o.keyframe_insert(data_path="scale",frame=start+8)
     # Red dot
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=16,ring_count=8,radius=0.045,location=(3.45,-2.28+idx*0.55,0.35))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16,ring_count=8,radius=0.038,location=(2.28,-2.24+idx*0.50,0.35))
     dot=bpy.context.active_object; dot.data.materials.append(red)
 
 # Main title lying on map
-make_text("2026",(-3.9,-3.9,0.32),0.22,warm,"Year")
-title=make_text("LA PRESION\nSE AMPLIA",(-3.9,-4.45,0.32),0.50,white,"MainTitle")
+make_text("2026",(-2.55,-3.55,0.32),0.18,warm,"Year")
+title=make_text("LA PRESION\nSE AMPLIA",(-2.55,-4.02,0.32),0.36,white,"MainTitle")
 title.data.space_line=0.78
-sub=make_text("La politica cambia de instrumentos.",(-3.9,-5.55,0.32),0.19,land_edge,"SubTitle")
+sub=make_text("La politica cambia de instrumentos.",(-2.55,-4.92,0.32),0.14,land_edge,"SubTitle")
 
 # Camera
 bpy.ops.object.camera_add(location=(0.6,-10.8,14.0))
 cam=bpy.context.active_object
 scene.camera=cam
-cam.data.lens=54
-look_at(cam,(0,-0.6,0.0))
+cam.data.lens=50
+look_at(cam,(-0.15,-0.55,0.0))
 cam.keyframe_insert(data_path="location",frame=1)
-cam.location=(0.25,-9.6,12.6)
-look_at(cam,(0,-0.35,0.0))
+cam.location=(0.15,-9.8,12.9)
+look_at(cam,(-0.15,-0.40,0.0))
 cam.keyframe_insert(data_path="location",frame=150)
 cam.keyframe_insert(data_path="rotation_euler",frame=150)
 

@@ -67,11 +67,6 @@
       "local": "rubio-habana-bed.ogg",
       "required": true,
       "provenance": "Impact Moderato — Kevin MacLeod; Wikimedia Commons original file; CC BY 3.0"
-    },
-    {
-      "url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Secretary_of_State_Marco_Rubio_official_portrait%2C_January_2025_%283x4_cropped%29.jpg",
-      "local": "rubio-official.jpg",
-      "required": true
     }
   ]
 }

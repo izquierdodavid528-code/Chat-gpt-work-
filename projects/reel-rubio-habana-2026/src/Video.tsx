@@ -3,6 +3,7 @@ import {AbsoluteFill, Audio, Img, Sequence, Video, interpolate, spring, staticFi
 
 export const ANIMATIC_FRAMES = 60 * 30;
 const BED = staticFile("rubio-habana-bed.ogg");
+const HOOK_PLATE = staticFile("rubio-habana-map.mp4");
 const RUBIO_PORTRAIT = staticFile("rubio-official-portrait.jpg");
 
 const BG="#081018";

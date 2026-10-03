@@ -136,7 +136,7 @@ const CargoBox:React.FC<{frame:number}> = ({frame}) => {
   const y=interpolate(frame,[156,220],[910,610],clamp);
   const s=interpolate(p,[0,1],[.2,1]);
   return (
-    <svg width="210" height="180" viewBox="0 0 210 180" style={{position:"absolute",left:x,top:y,transform:`scale(${s}) rotate(-3deg)`,transformOrigin:"center"}}>
+    <svg width="210" height="180" viewBox="0 0 210 180" style={{position:"absolute",left:x,top:y,transform:`scale(${s}) rotate(-3deg)`,transformOrigin:"center",opacity:p}}>
       <rect x="16" y="22" width="178" height="136" rx="12" fill={C.mustard} stroke={C.ink} strokeWidth="9"/>
       <path d="M60 24 V157 M104 24 V157 M148 24 V157" stroke={C.ink} strokeWidth="6" opacity=".65"/>
       <path d="M33 66 H178" stroke={C.cream} strokeWidth="7" opacity=".8"/>
@@ -145,12 +145,14 @@ const CargoBox:React.FC<{frame:number}> = ({frame}) => {
 };
 
 const CustomsGate:React.FC<{frame:number}> = ({frame}) => {
+  const gateIn=spring({frame:Math.max(0,frame-174),fps:30,config:{damping:15,stiffness:150}});
   const close=spring({frame:Math.max(0,frame-205),fps:30,config:{damping:13,stiffness:170}});
   const armRot=interpolate(close,[0,1],[-72,0]);
   const stamp=spring({frame:Math.max(0,frame-226),fps:30,config:{damping:10,stiffness:220}});
+  const gateOut=interpolate(frame,[282,314],[1,0],clamp);
   return (
     <>
-      <div style={{position:"absolute",right:70,top:420,width:260,height:260}}>
+      <div style={{position:"absolute",right:70,top:420,width:260,height:260,opacity:gateIn*gateOut,transform:`translateX(${interpolate(gateIn,[0,1],[120,0])}px)`}}>
         <div style={{position:"absolute",right:5,top:60,width:118,height:158,border:"9px solid "+C.ink,borderRadius:18,background:C.cream,boxShadow:"10px 12px 0 rgba(32,39,42,.12)"}}>
           <div style={{height:52,background:C.navy,borderBottom:"8px solid "+C.ink,borderRadius:"8px 8px 0 0",display:"flex",alignItems:"center",justifyContent:"center",color:C.cream,fontFamily:"Arial",fontWeight:900,fontSize:24}}>EE.UU.</div>
           <div style={{padding:18,fontFamily:"Arial",fontWeight:900,color:C.ink,fontSize:19,lineHeight:1.05}}>ADUANA</div>
@@ -161,12 +163,12 @@ const CustomsGate:React.FC<{frame:number}> = ({frame}) => {
       <div style={{
         position:"absolute",right:85,top:760,
         transform:`scale(${stamp}) rotate(-5deg)`,
-        opacity:stamp,
+        opacity:stamp*gateOut,
         border:"8px solid "+C.red,borderRadius:18,padding:"14px 20px",
         fontFamily:"Arial",fontSize:34,fontWeight:1000,color:C.red,
         background:"rgba(243,233,210,.88)"
       }}>29 ENE</div>
-      <div style={{position:"absolute",right:94,top:845,fontFamily:"Arial",fontSize:22,fontWeight:900,color:C.ink,opacity:stamp}}>EO 14380</div>
+      <div style={{position:"absolute",right:94,top:845,fontFamily:"Arial",fontSize:22,fontWeight:900,color:C.ink,opacity:stamp*gateOut}}>EO 14380</div>
     </>
   );
 };
@@ -244,7 +246,7 @@ const OpeningAct:React.FC=()=>{
       fontFamily:"Arial",fontWeight:1000,fontSize:86,lineHeight:.88,
       color:C.cream,textShadow:"5px 6px 0 "+C.ink,
       transform:`translateY(${interpolate(f,[0,28],[40,0],clamp)}px)`,
-      opacity:interpolate(f,[0,18],[0,1],clamp)
+      opacity:interpolate(f,[0,18,94,118],[0,1,1,0],clamp)
     }}>
       2026
     </div>
@@ -264,11 +266,104 @@ const OpeningAct:React.FC=()=>{
     <CalendarFlip frame={f}/>
     <EmergencyPaper frame={f}/>
 
-    <div style={{
-      position:"absolute",left:70,bottom:82,
-      fontFamily:"Arial",fontWeight:900,fontSize:18,letterSpacing:2,
-      color:C.ink,opacity:.7
-    }}>PROTOTIPO DE LENGUAJE VISUAL · ILUSTRACIÓN ORIGINAL</div>
+  </AbsoluteFill>;
+};
+
+
+const SectorToken:React.FC<{label:string;kind:"bolt"|"metal"|"bank"|"shield"|"crate";frame:number;delay:number;x:number;y:number;rot:number}> = ({label,kind,frame,delay,x,y,rot}) => {
+  const p=spring({frame:Math.max(0,frame-delay),fps:30,config:{damping:11,stiffness:185,mass:.7}});
+  const yy=interpolate(p,[0,1],[y+95,y]);
+  const r=interpolate(p,[0,1],[rot-18,rot]);
+  return <div style={{position:"absolute",left:x,top:yy,width:142,height:142,opacity:p,transform:`scale(${interpolate(p,[0,1],[.2,1])}) rotate(${r}deg)`,transformOrigin:"center"}}>
+    <svg width="142" height="142" viewBox="0 0 142 142">
+      <circle cx="71" cy="66" r="56" fill={C.cream} stroke={C.ink} strokeWidth="8"/>
+      {kind==="bolt"&&<path d="M78 24 L47 70 H67 L58 110 L96 58 H74 Z" fill={C.mustard} stroke={C.ink} strokeWidth="6" strokeLinejoin="round"/>}
+      {kind==="metal"&&<><rect x="36" y="43" width="70" height="24" rx="7" fill={C.seaDark} stroke={C.ink} strokeWidth="6"/><rect x="46" y="72" width="60" height="24" rx="7" fill={C.mustard} stroke={C.ink} strokeWidth="6"/></>}
+      {kind==="bank"&&<><path d="M30 58 L71 35 L112 58 Z" fill={C.paper2} stroke={C.ink} strokeWidth="6"/>{[42,65,88].map(v=><rect key={v} x={v} y="61" width="12" height="34" fill={C.cream} stroke={C.ink} strokeWidth="4"/>)}<path d="M28 101 H114" stroke={C.ink} strokeWidth="7"/></>}
+      {kind==="shield"&&<path d="M71 30 L105 43 V67 C105 91 90 106 71 115 C52 106 37 91 37 67 V43 Z" fill={C.green} stroke={C.ink} strokeWidth="7"/>}
+      {kind==="crate"&&<><rect x="34" y="39" width="74" height="65" rx="7" fill={C.red} stroke={C.ink} strokeWidth="7"/><path d="M48 39 V104 M71 39 V104 M94 39 V104 M34 60 H108" stroke={C.cream} strokeWidth="5"/></>}
+    </svg>
+    <div style={{position:"absolute",left:"50%",top:128,transform:"translateX(-50%)",whiteSpace:"nowrap",fontFamily:"Arial",fontWeight:1000,fontSize:15,letterSpacing:1.1,color:C.ink}}>{label}</div>
+  </div>;
+};
+
+const OfficialArm:React.FC<{side:"left"|"right";frame:number;delay:number;label:string}> = ({side,frame,delay,label}) => {
+  const p=spring({frame:Math.max(0,frame-delay),fps:30,config:{damping:15,stiffness:140}});
+  const from=side==="left"?-330:330;
+  const x=interpolate(p,[0,1],[from,0]);
+  const isLeft=side==="left";
+  return <div style={{position:"absolute",top:1160,left:isLeft?0:610,width:470,height:210,transform:`translateX(${x}px)`,opacity:p}}>
+    <svg width="470" height="210" viewBox="0 0 470 210">
+      <path d={isLeft?"M0 92 H310 Q350 92 388 118 L430 147":"M470 92 H160 Q120 92 82 118 L40 147"} fill="none" stroke={C.navy} strokeWidth="68" strokeLinecap="round"/>
+      <circle cx={isLeft?410:60} cy="146" r="42" fill={C.paper2} stroke={C.ink} strokeWidth="8"/>
+      <path d={isLeft?"M392 126 L448 105":"M78 126 L22 105"} stroke={C.paper2} strokeWidth="22" strokeLinecap="round"/>
+    </svg>
+    <div style={{position:"absolute",top:30,left:isLeft?36:290,padding:"12px 18px",background:C.cream,border:"7px solid "+C.ink,borderRadius:18,fontFamily:"Arial",fontWeight:1000,fontSize:28,color:C.ink,boxShadow:"8px 9px 0 rgba(32,39,42,.12)"}}>{label}</div>
+  </div>;
+};
+
+const RubioMini:React.FC<{frame:number}> = ({frame}) => {
+  const p=spring({frame:Math.max(0,frame-245),fps:30,config:{damping:12,stiffness:170}});
+  return <div style={{position:"absolute",left:90,top:1430,width:320,height:300,opacity:p,transform:`translateY(${interpolate(p,[0,1],[90,0])}px) rotate(-2deg)`}}>
+    <svg width="260" height="250" viewBox="0 0 260 250">
+      <path d="M52 246 C66 192 92 174 129 174 C171 174 200 194 214 246 Z" fill={C.navy} stroke={C.ink} strokeWidth="9"/>
+      <path d="M103 180 L129 222 L158 180" fill={C.cream} stroke={C.ink} strokeWidth="7"/>
+      <ellipse cx="131" cy="110" rx="72" ry="82" fill={C.paper2} stroke={C.ink} strokeWidth="9"/>
+      <path d="M61 105 C60 48 94 24 135 25 C174 25 204 51 202 91 C177 70 160 66 139 70 C111 74 90 65 61 105 Z" fill={C.ink}/>
+      <path d="M93 111 Q107 102 120 111 M144 111 Q158 102 171 111" fill="none" stroke={C.ink} strokeWidth="6" strokeLinecap="round"/>
+      <path d="M111 145 Q132 157 153 144" fill="none" stroke={C.ink} strokeWidth="6" strokeLinecap="round"/>
+    </svg>
+    <div style={{position:"absolute",left:150,top:176,padding:"10px 16px",background:C.red,color:C.cream,border:"6px solid "+C.ink,borderRadius:16,fontFamily:"Arial",fontSize:22,fontWeight:1000,transform:"rotate(3deg)",whiteSpace:"nowrap"}}>RUBIO · STATE</div>
+  </div>;
+};
+
+const MayAct:React.FC=()=>{
+  const f=useCurrentFrame();
+  const paperIn=spring({frame:f,fps:30,config:{damping:16,stiffness:120}});
+  const lid=spring({frame:Math.max(0,f-48),fps:30,config:{damping:13,stiffness:155}});
+  const date=spring({frame:Math.max(0,f-22),fps:30,config:{damping:11,stiffness:180}});
+  const stamp=spring({frame:Math.max(0,f-188),fps:30,config:{damping:10,stiffness:190}});
+
+  return <AbsoluteFill style={{background:C.paper,overflow:"hidden"}}>
+    <PaperTexture/>
+    <div style={{position:"absolute",left:70,top:70,fontFamily:"Arial",fontWeight:1000,fontSize:70,color:C.ink,opacity:interpolate(f,[0,24,260,300],[0,1,1,0],clamp)}}>MAYO</div>
+
+    <div style={{position:"absolute",left:235,top:220,width:610,height:510,opacity:paperIn,transform:`translateY(${interpolate(paperIn,[0,1],[120,0])}px)`}}>
+      <div style={{position:"absolute",left:90,top:45,width:430,height:250,background:C.cream,border:"10px solid "+C.ink,borderRadius:18,boxShadow:"14px 16px 0 rgba(32,39,42,.12)",transform:`rotate(${interpolate(lid,[0,1],[0,-14])}deg) translateY(${interpolate(lid,[0,1],[0,-55])}px)`,transformOrigin:"bottom left"}}>
+        <div style={{position:"absolute",left:44,right:44,top:56,height:9,background:C.navy,borderRadius:9}}/>
+        <div style={{position:"absolute",left:44,right:84,top:92,height:9,background:C.navy,borderRadius:9}}/>
+        <div style={{position:"absolute",left:44,right:64,top:128,height:9,background:C.navy,borderRadius:9}}/>
+        <div style={{position:"absolute",right:44,bottom:34,width:78,height:78,borderRadius:"50%",background:C.red,border:"7px solid "+C.ink}}/>
+      </div>
+      <div style={{position:"absolute",left:0,top:280,width:610,height:185,background:C.mustard,border:"10px solid "+C.ink,borderRadius:26,boxShadow:"14px 16px 0 rgba(32,39,42,.12)"}}>
+        <div style={{position:"absolute",left:205,top:-18,width:200,height:52,border:"9px solid "+C.ink,borderBottom:0,borderRadius:"24px 24px 0 0",background:C.paper2}}/>
+        <div style={{position:"absolute",left:275,top:52,width:62,height:52,borderRadius:12,background:C.red,border:"7px solid "+C.ink}}/>
+      </div>
+    </div>
+
+    <div style={{position:"absolute",right:72,top:88,transform:`scale(${date}) rotate(4deg)`,opacity:date,padding:"16px 20px",background:C.cream,border:"7px solid "+C.ink,borderRadius:18,fontFamily:"Arial",fontWeight:1000,fontSize:26,color:C.red,boxShadow:"8px 9px 0 rgba(32,39,42,.12)"}}>1 MAY · EO 14404</div>
+
+    <SectorToken label="ENERGÍA" kind="bolt" frame={f} delay={72} x={86} y={750} rot={-8}/>
+    <SectorToken label="METALES" kind="metal" frame={f} delay={88} x={282} y={690} rot={5}/>
+    <SectorToken label="FINANZAS" kind="bank" frame={f} delay={104} x={470} y={760} rot={-3}/>
+    <SectorToken label="SEGURIDAD" kind="shield" frame={f} delay={120} x={660} y={700} rot={7}/>
+    <SectorToken label="DEFENSA" kind="crate" frame={f} delay={136} x={842} y={770} rot={-6}/>
+
+    <div style={{position:"absolute",left:142,top:1030,width:800,height:4,background:C.ink,opacity:interpolate(f,[155,185],[0,.16],clamp)}}/>
+
+    <OfficialArm side="left" frame={f} delay={166} label="STATE"/>
+    <OfficialArm side="right" frame={f} delay={178} label="TREASURY"/>
+
+    <div style={{position:"absolute",left:465,top:1260,width:150,height:120,transform:`scale(${stamp}) rotate(-5deg)`,opacity:stamp}}>
+      <div style={{width:130,height:78,background:C.red,border:"8px solid "+C.ink,borderRadius:16,boxShadow:"8px 9px 0 rgba(32,39,42,.12)"}}/>
+      <div style={{position:"absolute",left:36,top:-58,width:58,height:70,border:"8px solid "+C.ink,borderBottom:0,borderRadius:"25px 25px 0 0",background:C.paper2}}/>
+    </div>
+
+    <RubioMini frame={f}/>
+
+    <div style={{position:"absolute",right:90,bottom:150,width:470,fontFamily:"Arial",fontSize:30,fontWeight:1000,lineHeight:1.05,color:C.ink,opacity:interpolate(f,[230,260],[0,1],clamp)}}>
+      La orden presidencial<br/>se convierte en herramientas<br/>de implementación.
+    </div>
   </AbsoluteFill>;
 };
 
@@ -283,6 +378,7 @@ export const RubioHabanaAnimated:React.FC=()=>(
   <AbsoluteFill>
     <PaperTexture/>
     <Sequence from={0} durationInFrames={330}><OpeningAct/></Sequence>
-    <Sequence from={330} durationInFrames={TOTAL_FRAMES-330}><FuturePlaceholder/></Sequence>
+    <Sequence from={330} durationInFrames={360}><MayAct/></Sequence>
+    <Sequence from={690} durationInFrames={TOTAL_FRAMES-690}><FuturePlaceholder/></Sequence>
   </AbsoluteFill>
 );

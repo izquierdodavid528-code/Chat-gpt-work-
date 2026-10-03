@@ -37,59 +37,42 @@ No manual Drive-to-GitHub asset copy should be needed for the Blender hook.
 
 ## Hook state
 
-The first Blender attempt exposed visual safe-area problems:
-- typography rendered inside Blender was clipped;
-- right-side labels exceeded the vertical safe area;
-- lower title treatment invaded the frame;
-- the 3D plate and editorial typography were too tightly coupled.
+The project has moved from v4 to **v5 open contours**.
 
-Current solution:
-- Blender v4 is a clean 3D plate only;
-- no political/editorial typography is baked into Blender;
-- Remotion owns all titles, labels and hierarchy;
-- Blender keeps Florida/Cuba geometry, Miami-Havana route and pressure rings.
-
-Validation request:
-- requestId: `rubio-habana-map-hook-v4-clean-3d-plate-validation`
-- GitHub Actions run: `37085181118`
-- build-master: PASS
-- reference frames: PASS visual inspection
-- 6-frame render block: PASS
-- delivery verification: running at last status check
-
-V4 full request:
-- requestId: `rubio-habana-map-hook-v4-clean-3d-plate-full`
-- GitHub Actions run: `37085816242`
-- result: CANCELLED intentionally after control-frame review
-- reason: closed concentric red rings read too much like a target/bullseye and were not acceptable as the preferred documentary language.
+Why v5 replaced v4:
+- closed red pressure rings read too much like a bullseye / literal physical targeting;
+- v5 uses open, offset policy-layer contours instead;
+- marker sizes and glow were reduced;
+- land and route materials are more restrained;
+- the result reads as an explanatory documentary map rather than a target graphic.
 
 V5 validation:
 - requestId: `rubio-habana-map-hook-v5-open-contours-validation`
-- GitHub Actions run: `37087157661`
-- control frames 1 / 23 / 45: CREATIVE STATIC PASS
-- long validation blocks intentionally cancelled after control-frame approval.
+- run: `37087157661`
+- build-master: PASS
+- inspected control frames: 1 / 23 / 45
+- visual result: PASS for framing, route readability and non-bullseye policy contours
 
-V5 final full render:
+Superseded/cancelled full runs:
+- v4 full run `37085816242` — cancelled after v5 replaced the scene
+- first v5 full run `37087440277` — cancelled during concurrency cleanup
+
+Concurrency release:
+- run `37087663265`
+- 1-frame validation used only to release the previous validation concurrency group
+
+**Current authoritative full Blender run:**
 - requestId: `rubio-habana-map-hook-v5-open-contours-full-final`
+- run: `37087696933`
 - validationFrameCount: 0
-- GitHub Actions run: `37087696933`
-- state at last check: pending behind one-frame concurrency-release run `37087663265`.
+- status at last update: queued behind the 1-frame release run
 
 Next Blender gate:
-1. finish the already-running v4 105-frame delivery;
-2. inspect final MP4 motion and framing;
-3. render the 0–149 Remotion composite before creative approval;
-4. compare against the prepared v5 candidate if v4 still reads too synthetic.
-
-V5 candidate is prepared in `projects/rubio-habana-map-2026/scene.py` and its 45-frame validation is now running:
-- closed concentric rings replaced with open offset policy contours;
-- red emission reduced;
-- route glow reduced;
-- city markers reduced;
-- compositor glow reduced.
-
-Reason:
-the v4 control frames are technically clean, but the closed red rings can read like a bullseye/target rather than neutral policy layers.
+1. let run `37087696933` render all 105 frames;
+2. inspect control frames 1 / 53 / 105;
+3. inspect final MP4 motion and framing;
+4. accept the Drive delivery only if creative QA passes;
+5. then trigger Remotion validation using the imported plate.
 
 ## Remotion state
 

@@ -9,18 +9,18 @@
   "blenderVersion": "4.5.14",
   "frameStart": 1,
   "fps": 30,
-  "frames": 150,
+  "frames": 105,
   "resolution": "1080x1920",
   "render": {
     "parallel": {
       "safe": true,
       "simulationPolicy": "none",
-      "blockSize": 25,
-      "maxParallel": 6,
+      "blockSize": 21,
+      "maxParallel": 5,
       "controlFrames": [
         1,
-        75,
-        150
+        53,
+        105
       ],
       "minFrames": 60,
       "packResources": true

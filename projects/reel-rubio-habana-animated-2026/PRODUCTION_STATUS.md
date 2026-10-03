@@ -1,172 +1,69 @@
-# PRODUCTION STATUS — Illustrated Rubio / La Habana 2026
+# PRODUCTION STATUS — Rubio / La Habana 2026
 
-Updated: 2026-10-03 after review of the V6 validation
+Updated: 2026-10-03 after review of Flow pilot v2.
 
-## Latest state — V6 is not an approved master
+## Objective
 
-- The main branch preserves the earlier 60-second rough-cut baseline. The latest cartoon experiment remains isolated on branch `memorias-cartoon-v6`; it has not replaced main.
-- V6 source commit rendered by run [37129519131](https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37129519131): `e182964b1c4d6bc502a34a0635eef1d07d9fdaef`. The branch documentation head is `528aad5191441f8065b65a7fcd48700394556bda`.
-- Technical result: 60 seconds, 1080×1920, 30 fps, H.264. The render has zero audio streams; the Blender job was skipped; the Drive delivery step was skipped. The successful run produced a validation artifact, not a final delivery.
-- Creative review: a frame sample at five-second intervals and source-code review confirm added paper texture, ambient layers, facial details and some movement. The piece still relies on flat SVG scenes and repeated simple character loops; the figures are small in many shots, with limited pose-to-pose acting and spatial interaction. It has no Flow-generated assets or Blender-rendered shot.
-- The user's current target is a professional illustrated political explainer with the broad storytelling qualities of Memorias de Pez. No current version has final creative approval. The new task is an isolated 8–12-second opening pilot, not another full-reel render.
-- Flow is a manual user handoff for both images and video; it is a first-class shot source and can replace selected Blender work. Use the copy-ready still/video prompts and credit-efficient iteration notes in [FLOW_ASSET_BRIEFS.md](FLOW_ASSET_BRIEFS.md). The repository automates asset sync, rendering and QA after upload, but does not call Google Flow itself.
-- Preserve the earlier main-branch baseline. Do not add final narration, captions, sound or full-reel render until the opening pilot's look and motion are approved.
+Produce a professional 60-second Spanish-language illustrated explainer with a coherent voice track, original editorial-cartoon art direction, story-led actions, accurate policy details, music and sound design. Use the broad visual grammar the user likes in Memorias de Pez—clear explanation through maps, acting objects, visual metaphors, brisk rhythm and visual callbacks—without copying that channel's drawings, layouts, branding or signature style.
 
-The historical V2 notes below are retained for provenance. Their former “PASS” and “approved” wording records the state at that earlier milestone; it does not override the user's later feedback or imply that V2 or V6 is the final look.
+The 60-second film is the goal. The current 9.3-second render is only a Flow integration and transition test.
 
-## Historical project state — V2 baseline
+## Current source of truth
 
-Replacement project for the cancelled slide-style reel.
+- Main branch is unchanged: composition RubioHabanaAnimated, 60 seconds, 1080×1920 at 30 fps.
+- Open pilot PR: https://github.com/izquierdodavid528-code/Chat-gpt-work-/pull/4
+- Pilot branch: pilot/rubio-flow-opening.
+- Latest validation run: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37138611848
+- Run result: PASS for technical delivery checks. Output is H.264, 1080×1920, 30 fps, 9.3 seconds. It has no audio stream.
+- Creative review: the wipe transitions remove the double-exposure fault in v1, but the pilot is not approved as a final look. The shift from map to character feels abrupt, the paper motif dominates, and the sequence has no narration-led dramatic arc.
+- The latest pilot plays four Flow clips: harbor, Rubio with a document, document animation, document-to-harbor-gate. It does not cover the six-act 60-second story.
+- The pilot configuration on its branch selects RubioFlowOpeningPilot and validation output. Do not merge PR #4 as-is: preserve the main composition and restore production configuration before any eventual merge.
+- The validation workflow skipped Drive delivery. The MP4 exists as a GitHub Actions artifact, not as a final Drive master.
 
-State recorded at that milestone:
-- composition: `RubioHabanaAnimated`
-- 1080x1920
-- 30 fps
-- 1800 frames / 60 seconds
-- original vector illustration built in Remotion
-- no Blender dependency
-- no photorealistic synthetic political footage
+## Flow assets received and used
 
-## Scene timing
+The following references and clips were provided and saved in the project Drive asset folder under 02 - Reel Rubio Habana 2026/assets/flow:
 
-- 00:00–00:18 — hook + January oil/tariff mechanism + February rollback
-- 00:18–00:29 — May EO 14404 toolbox / sectors / State-Treasury implementation
-- 00:29–00:41 — OFAC designations -> bank transformation
-- 00:41–00:52 — finance network + U-turn + professional/education authorization changes
-- 00:52–01:00 — attributed official framings + documented timeline close
+Still images:
+- rubio-document-harbor-reference-v1.jpg
+- rubio-character-master-v1.jpg
+- rubio-policy-map-reference-v1.jpg
 
-## Completed visual work
+Video clips:
+- habana-harbor-ships-v1.mp4
+- rubio-document-acting-v1.mp4
+- rubio-document-harbor-animation-v1.mp4
+- rubio-paper-to-harbor-gate-v1.mp4
 
-### Opening
-- hand-drawn Florida/Cuba map
-- animated oil/document/bank/badge objects
-- tanker
-- cargo match-cut
-- customs gate
-- January date stamp
-- February calendar
-- tariff removal
-- paper wipe into May
+The source clips are 720×1280, 30 fps and 6.016 seconds each. The pilot scales them to 1080×1920; check sharpness on a phone before using them in the final master. These are real Flow-generated video assets, not placeholders. Flow is a manual user-operated stage; GitHub does not call Flow or spend Flow credits.
 
-### May
-- executive-order paper turns into an illustrated toolbox
-- five sector tokens jump out
-- State / Treasury arms enter
-- implementation stamp
-- clearly illustrated Rubio figure in State lane
+## Audio and story status
 
-### Designations
-- animated SDN list
-- multiple OFAC stamp hits
-- June / September chronology
-- list transforms into illustrated Banco Exterior de Cuba
+- NARRATION_V2 is retained as history. It has 145 words and is too dense to assume it will fit naturally in 60 seconds with breathing room.
+- NARRATION_V3 is a shorter draft for a scratch voice/timing test; it is not a locked final script.
+- SOUND_DESIGN_V1 is a prepared cue guide, not an executed mix.
+- No approved narration recording, final SFX/music mix, synced captions or final audio QA currently exists.
+- The six-act story is captured in STORYBOARD_V2. Map geometry, dates, labels, policy names and exact text belong in Remotion or verified sourced material, not generated pixels.
 
-### Finance / mobility
-- camera metaphorically enters the bank
-- money token moves through pipes
-- U-turn mechanism is crossed out
-- route closes
-- professional badge loses authorization tag
-- education lane narrows
+## Next production gates
 
-### Close
-- pullback to Cuba + accumulated policy objects
-- White House and MINREX framings remain explicitly attributed
-- timeline Jan -> Feb -> May -> Jun -> Sep
-- final documented summary
+1. Read and source-check the NARRATION_V3 draft. Record or synthesize a scratch voice and time it; revise words to leave natural pauses inside 60 seconds.
+2. Build a full 60-second silent/voice animatic in Remotion using the six-act timing, existing Flow clips and simple placeholders. It should tell the complete story before generating many more assets.
+3. Review the animatic for phone-size readability, pacing, character continuity and factual scope. Rework story timing before polishing.
+4. Generate the two planned Flow tests in FLOW_PROMPTS_V1: Rubio's May acting beat and the textless ledger-to-bank transformation. Use still images as image references when creating a new shot. In the user's Flow experience, attaching a source video edits that clip instead of creating a separate scene.
+5. Import only approved Flow outputs. Remotion owns timeline, accurate maps/data/labels, composites, captions and voice/SFX sync.
+6. Add Blender only for a specific shot where deterministic depth, perspective, lighting or reusable camera/rig motion materially improves the result. Do not route the entire reel through Blender.
+7. Complete final voice, SFX, music, captions and fact/visual/audio QA; render the final 60-second master and verify the delivered Drive file.
 
-## Previous visual test
+## Acceptance criteria for the 60-second master
 
-11-second language test:
-- GitHub run: `37090283653`
-- status: SUCCESS
-
-23-second acts 1-2 test:
-- GitHub run: `37090559903`
-- status: SUCCESS
-- visually reviewed
-
-Findings already fixed:
-- customs booth appearing too early
-- cargo box visible before cue
-- February scene crowding
-- abrupt February -> May transition
-- unnecessary explanatory copy in May
-- rough cut retimed to narration structure
-
-## Historical render request
-
-requestId: `rubio-habana-animated-full-rough-cut-v1`
-range: `0-1799`
-
-The next gate is full 60-second visual QA. Do not add final narration or captions until that gate passes.
-
-
-## Full rough cut v1 visual audit
-
-Run: `37090763729`
-Status: SUCCESS
-Artifact: full 60-second validation MP4
-
-What worked:
-- illustrated explainer language is clearly different from the cancelled slide-style project;
-- opening uses acting objects instead of information cards;
-- May toolbox / sector pop-outs / State-Treasury arms read as animation;
-- OFAC list physically transforms into Banco Exterior;
-- finance token, U-turn and authorization objects communicate mechanisms through action;
-- attributed speech bubbles work as an illustrated close.
-
-Issues found in v1:
-1. Florida/Cuba silhouettes were too abstract.
-2. January customs elements lingered too far into the February beat.
-3. Finance scene still contained a large inner card that looked too dashboard-like.
-4. All finance pipes activated together instead of sequentially.
-5. Professional authorization tab did not fully fall away.
-6. Designations -> finance needed a stronger physical match-cut.
-7. Close opened with a brief nearly blank gray transition.
-
-All seven items are already fixed in current v2 code.
-
-## Rough cut v2 improvements
-
-- more geographically recognizable Florida/Cuba using the prior verified simplified coordinate geometry;
-- earlier January fade during February;
-- bank zooms into camera before finance scene;
-- financial route activates in three sequential pipe segments;
-- cream dashboard panel removed from finance scene;
-- authorization tab visibly falls away;
-- close rebuilt for its actual 8-second duration with no dead zone;
-- explanatory on-screen copy reduced further.
-
-Current v2 render:
-- run `37091037962`
-- requestId `rubio-habana-animated-full-rough-cut-v2`
-- next gate: compare v2 representative frames against v1 before narration.
-
-
-## Rough cut v2 milestone (historical)
-
-Run `37091037962`: SUCCESS.
-
-Visual QA:
-- opening geography: PASS after v2 map revision;
-- May toolbox / State-Treasury / Rubio: PASS;
-- designations -> bank transformation: PASS;
-- finance / mobility: PASS after dashboard removal and sequential routing;
-- close: PASS after 8-second retiming.
-
-Minor post-v2 cleanup:
-- redundant hook sentence removed in commit `0221c3f34eea2042e87e15896c101c8e411292c0`.
-
-Narration:
-- `NARRATION_V2.md`
-- 145 spoken words
-- targeted for a natural ~60 second delivery.
-
-Sound:
-- `SOUND_DESIGN_V1.md` prepared.
-- Final voice/SFX generation has not been run yet because external generation may consume connected-service credits.
-
-Historical gate after the V2 milestone:
-- the V2 rough cut passed the recorded visual review at that time;
-- the user's later feedback supersedes that creative approval. V2 and V6 remain reference versions, not final masters.
+- Complete 60-second story, not a montage of generated clips.
+- Spanish narration is clear, natural, timed to scene actions, and leaves breathing room.
+- Visible story action changes every roughly 0.7–1.5 seconds without frantic clutter.
+- Rubio remains recognizably the same illustrated character, with meaningful pose and prop interaction.
+- Flow clips share a clear art direction and join through motivated action/match cuts; no identity drift or paper-only repetition.
+- Accurate dates, borders, labels and policy details are composited in Remotion.
+- U-turn, conference and educational restrictions remain category-specific; no claim of a blanket travel ban.
+- Music and SFX support, never bury, the narration.
+- Caption, safe-area, phone-size, visual and audio checks pass.
+- Production render lands in the project Drive renders folder and is verified there.

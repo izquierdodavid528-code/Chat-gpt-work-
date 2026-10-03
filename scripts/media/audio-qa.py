@@ -32,6 +32,10 @@ def parse_loudness(stderr):
         lra = as_float(lra_matches[-1])
     return integrated, true_peak, lra
 
+def parse_volume(stderr):
+    matches = re.findall(r"max_volume:\s*(-?(?:\d+(?:\.\d+)?|inf))\s*dB", stderr)
+    return as_float(matches[-1]) if matches else None
+
 def parse_silence(stderr):
     starts = [float(x) for x in re.findall(r"silence_start:\s*([0-9.]+)", stderr)]
     ends = [(float(a), float(b)) for a, b in re.findall(
@@ -161,7 +165,36 @@ else:
     if args.validation:
         checks["loudness"] = "SKIP_VALIDATION"
         checks["silence"] = "SKIP_VALIDATION"
-        warnings.append("Loudness and silence gates skipped for validation-frame renders.")
+        warnings.append("Full loudness and silence gates skipped for validation-frame renders.")
+
+        validation_signal = audio_cfg.get("validationSignal", {})
+        if bool(validation_signal.get("enabled", False)):
+            min_peak_dbfs = float(validation_signal.get("minPeakDbfs", -45.0))
+            code, _, volume_err = run([
+                "ffmpeg", "-hide_banner", "-nostats", "-i", str(media_path),
+                "-map", "0:a:0",
+                "-af", "volumedetect",
+                "-f", "null", "-"
+            ])
+            if code != 0:
+                checks["validationSignal"] = "FAIL"
+                errors.append("FFmpeg validation signal analysis failed.")
+            else:
+                validation_peak_dbfs = parse_volume(volume_err)
+                metrics["validationPeakDbfs"] = validation_peak_dbfs
+                signal_ok = (
+                    validation_peak_dbfs is not None
+                    and math.isfinite(validation_peak_dbfs)
+                    and validation_peak_dbfs >= min_peak_dbfs
+                )
+                checks["validationSignal"] = "PASS" if signal_ok else "FAIL"
+                if not signal_ok:
+                    errors.append(
+                        f"Validation audio is effectively silent: measured peak "
+                        f"{validation_peak_dbfs} dBFS, required at least {min_peak_dbfs} dBFS."
+                    )
+        else:
+            checks["validationSignal"] = "DISABLED"
     else:
         code, _, loudness_err = run([
             "ffmpeg", "-hide_banner", "-nostats", "-i", str(media_path),

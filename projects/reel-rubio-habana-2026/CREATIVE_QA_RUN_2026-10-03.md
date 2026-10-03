@@ -36,14 +36,20 @@ PROVISIONAL / not yet approved
 - Official Marco Rubio portrait added; it is not synthetic.
 - Blender typography was removed; Remotion owns editorial typography.
 
-Known concern:
-- the Blender Florida–Cuba plate is technically clean but visually stylized.
-- Current rings read as bright concentric red policy layers; they may look too much like a target/bullseye when viewed without the Remotion overlay.
-- Current land geometry is simplified rather than cartographically detailed.
+V4 finding:
+- the Blender Florida–Cuba plate was technically clean but its closed bright concentric rings read too much like a target/bullseye;
+- v4 full render was intentionally cancelled after control-frame review.
 
-Decision rule:
-- do NOT call the Blender hook creatively approved until the 5-second Remotion composite is reviewed.
-- if the composite still reads as sensational / game-like / too synthetic, redesign the rings and coastline rather than merely adding more effects.
+V5 control-frame finding:
+- v5 replaces closed rings with open offset policy contours;
+- red/blue emission and compositor glow are reduced;
+- city markers are smaller;
+- frames 1 / 23 / 45 no longer read as a target;
+- land geometry remains intentionally simplified and explanatory rather than cartographically detailed.
+
+Status:
+- v5 STATIC CONTROLS: PASS for Remotion composite test.
+- v5 is not yet approved as a finished hook until motion + typography + music are reviewed together in the 5-second Remotion validation.
 
 ## D — Audio
 
@@ -68,6 +74,7 @@ PASS for current copy, with source ledger
 - State/Treasury delegation is stated from Sec. 5.
 - OFAC June 4 and September 3 examples are dated.
 - September CRL / U-turn scope is not generalized to all Cuba transactions.
+- Mobility layer is now backed by OFAC FAQs 1274/1275: professional-meeting authorization removed and certain educational travel authorizations narrowed; it is not presented as a blanket travel ban.
 - Cuban official framing is explicitly attributed to MINREX.
 
 ## Current stop condition

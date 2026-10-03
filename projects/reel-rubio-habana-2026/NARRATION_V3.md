@@ -51,7 +51,7 @@ Primary sources:
 Editorial guardrail:
 - U.S. government rationales for individual designations remain attributed.
 
-## 00:37-00:50 - Indirect transactions / U-turn
+## 00:37-00:50 - Finance / mobility
 
 > A finales de septiembre, las reglas alcanzaron determinadas transacciones financieras indirectas con entidades de la Cuba Restricted List, se retiró la autorización U-turn y se restringieron reuniones profesionales y ciertos viajes educativos.
 

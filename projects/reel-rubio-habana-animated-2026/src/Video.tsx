@@ -549,6 +549,75 @@ const FinanceMobilityAct:React.FC=()=>{
   </AbsoluteFill>;
 };
 
+
+const SpeechBubble:React.FC<{side:"left"|"right";frame:number;delay:number;title:string;lines:string[]}> = ({side,frame,delay,title,lines}) => {
+  const p=spring({frame:Math.max(0,frame-delay),fps:30,config:{damping:12,stiffness:165}});
+  const out=interpolate(frame,[delay+110,delay+145],[1,0],clamp);
+  const left=side==="left";
+  return <div style={{position:"absolute",top:300,left:left?60:560,width:460,minHeight:290,opacity:p*out,transform:`translateX(${interpolate(p,[0,1],[left?-140:140,0])}px) rotate(${left?-2:2}deg)`,background:C.cream,border:"9px solid "+C.ink,borderRadius:34,padding:"30px 34px",boxShadow:"12px 14px 0 rgba(32,39,42,.14)"}}>
+    <div style={{fontFamily:"Arial",fontWeight:1000,fontSize:22,letterSpacing:2,color:left?C.seaDark:C.red}}>{title}</div>
+    <div style={{marginTop:18,fontFamily:"Arial",fontWeight:1000,fontSize:34,lineHeight:1.02,color:C.ink}}>
+      {lines.map((l,i)=><React.Fragment key={l}>{l}{i<lines.length-1&&<br/>}</React.Fragment>)}
+    </div>
+    <div style={{position:"absolute",bottom:-42,left:left?92:300,width:62,height:62,background:C.cream,borderLeft:"9px solid "+C.ink,borderBottom:"9px solid "+C.ink,transform:"rotate(-45deg)"}}/>
+  </div>;
+};
+
+const TimelineTag:React.FC<{x:number;frame:number;delay:number;top:string;bottom:string;accent?:boolean}> = ({x,frame,delay,top,bottom,accent=false}) => {
+  const p=spring({frame:Math.max(0,frame-delay),fps:30,config:{damping:12,stiffness:170}});
+  return <div style={{position:"absolute",left:x,top:1290,width:160,textAlign:"center",opacity:p,transform:`translateY(${interpolate(p,[0,1],[55,0])}px)`}}>
+    <div style={{margin:"0 auto",width:28,height:28,borderRadius:"50%",background:accent?C.red:C.mustard,border:"6px solid "+C.ink}}/>
+    <div style={{marginTop:14,fontFamily:"Arial",fontWeight:1000,fontSize:25,color:C.ink}}>{top}</div>
+    <div style={{marginTop:5,fontFamily:"Arial",fontWeight:900,fontSize:14,letterSpacing:.8,color:C.navy}}>{bottom}</div>
+  </div>;
+};
+
+const FinalMechanism:React.FC<{frame:number}> = ({frame}) => {
+  const p=spring({frame:Math.max(0,frame-185),fps:30,config:{damping:15,stiffness:135}});
+  const orbit=(base:number)=>base+Math.sin((frame+base)/22)*8;
+  return <div style={{position:"absolute",left:0,top:560,width:1080,height:600,opacity:p,transform:`scale(${interpolate(p,[0,1],[1.35,1])})`}}>
+    <svg width="1080" height="600" viewBox="0 0 1080 600">
+      <path d="M238 310 C322 278 420 274 540 272 C650 269 770 244 840 250 C782 292 703 318 611 332 C483 350 353 362 254 346 C225 341 212 324 238 310 Z" fill={C.green} stroke={C.ink} strokeWidth="11"/>
+      <text x="510" y="410" textAnchor="middle" fontFamily="Arial" fontWeight="1000" fontSize="38" fill={C.ink}>CUBA</text>
+      <path d="M160 125 C310 82 770 78 930 136" fill="none" stroke={C.red} strokeWidth="8" strokeLinecap="round" strokeDasharray="18 22" opacity=".7"/>
+    </svg>
+    <div style={{position:"absolute",left:110,top:70,transform:`rotate(${orbit(-10)/8}deg)`}}><OilBarrel x={0} y={0} scale={.9}/></div>
+    <div style={{position:"absolute",left:315,top:20,transform:`rotate(${orbit(20)/8}deg)`}}><DocumentIcon x={0} y={0} scale={.9}/></div>
+    <div style={{position:"absolute",right:310,top:30,transform:`rotate(${orbit(50)/8}deg)`}}><BankIcon x={0} y={0} scale={.95}/></div>
+    <div style={{position:"absolute",right:110,top:85,transform:`rotate(${orbit(80)/8}deg)`}}><BadgeIcon x={0} y={0} scale={.88}/></div>
+  </div>;
+};
+
+const CloseAct:React.FC=()=>{
+  const f=useCurrentFrame();
+  const wipe=interpolate(f,[0,55],[1,0],clamp);
+  const line=interpolate(f,[185,300],[0,1],clamp);
+  const final=spring({frame:Math.max(0,f-286),fps:30,config:{damping:15,stiffness:135}});
+  return <AbsoluteFill style={{background:C.paper,overflow:"hidden"}}>
+    <PaperTexture/>
+    <div style={{position:"absolute",inset:0,background:C.navy,opacity:wipe,transform:`scale(${interpolate(f,[0,55],[1,1.8],clamp)})`,borderRadius:interpolate(f,[0,55],[0,180],clamp)}}/>
+
+    <SpeechBubble side="left" frame={f} delay={40} title="CASA BLANCA" lines={["seguridad nacional","y política exterior"]}/>
+    <SpeechBubble side="right" frame={f} delay={65} title="MINREX" lines={["recrudecimiento","del bloqueo"]}/>
+
+    <FinalMechanism frame={f}/>
+
+    <div style={{position:"absolute",left:110,right:110,top:1302,height:8,background:"rgba(32,39,42,.18)",borderRadius:8,opacity:interpolate(f,[180,205],[0,1],clamp)}}>
+      <div style={{width:`${line*100}%`,height:"100%",background:C.ink,borderRadius:8}}/>
+    </div>
+    <TimelineTag x={92} frame={f} delay={190} top="29 ENE" bottom="PETRÓLEO" accent/>
+    <TimelineTag x={278} frame={f} delay={210} top="20 FEB" bottom="ARANCEL"/>
+    <TimelineTag x={464} frame={f} delay={230} top="1 MAY" bottom="MARCO"/>
+    <TimelineTag x={650} frame={f} delay={250} top="JUN" bottom="SDN"/>
+    <TimelineTag x={836} frame={f} delay={270} top="SEP" bottom="FINANZAS" accent/>
+
+    <div style={{position:"absolute",left:76,right:76,bottom:125,opacity:final,transform:`translateY(${interpolate(final,[0,1],[70,0])}px)`}}>
+      <div style={{fontFamily:"Arial",fontWeight:1000,fontSize:29,letterSpacing:2,color:C.red}}>2026</div>
+      <div style={{marginTop:12,fontFamily:"Arial",fontWeight:1000,fontSize:57,lineHeight:.98,color:C.ink}}>LAS RESTRICCIONES<br/>CAMBIARON DE FORMA<br/>Y SE AMPLIARON.</div>
+    </div>
+  </AbsoluteFill>;
+};
+
 const FuturePlaceholder:React.FC=()=>(
   <AbsoluteFill style={{background:C.paper,justifyContent:"center",alignItems:"center"}}>
     <PaperTexture/>
@@ -563,6 +632,6 @@ export const RubioHabanaAnimated:React.FC=()=>(
     <Sequence from={330} durationInFrames={360}><MayAct/></Sequence>
     <Sequence from={690} durationInFrames={360}><DesignationsAct/></Sequence>
     <Sequence from={1050} durationInFrames={360}><FinanceMobilityAct/></Sequence>
-    <Sequence from={1410} durationInFrames={TOTAL_FRAMES-1410}><FuturePlaceholder/></Sequence>
+    <Sequence from={1410} durationInFrames={390}><CloseAct/></Sequence>
   </AbsoluteFill>
 );

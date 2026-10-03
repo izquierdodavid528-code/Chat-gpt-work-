@@ -53,10 +53,10 @@ Editorial guardrail:
 
 ## 00:37-00:50 - Indirect transactions / U-turn
 
-> A finales de septiembre, las reglas alcanzaron determinadas transacciones financieras indirectas con entidades de la Cuba Restricted List y se retiró la autorización U-turn.
+> A finales de septiembre, las reglas alcanzaron determinadas transacciones financieras indirectas con entidades de la Cuba Restricted List, se retiró la autorización U-turn y se restringieron reuniones profesionales y ciertos viajes educativos.
 
 Primary sources:
-- OFAC FAQs updated 2026-09-29.
+- OFAC FAQs updated 2026-09-29, including FAQs 1274 and 1275.
 - CACR amendment effective 2026-09-30.
 
 Editorial guardrail:

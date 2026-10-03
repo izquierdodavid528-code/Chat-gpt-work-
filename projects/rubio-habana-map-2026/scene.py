@@ -89,6 +89,10 @@ scene.render.fps=30
 scene.frame_start=1
 scene.frame_end=150
 scene.render.image_settings.file_format="PNG"
+try:
+    scene.eevee.taa_render_samples = 32
+except Exception:
+    pass
 scene.render.film_transparent=False
 scene.view_settings.look="AgX - Medium High Contrast"
 

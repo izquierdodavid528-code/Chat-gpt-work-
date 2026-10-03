@@ -95,7 +95,7 @@ The project delivery QA now requires at least 59 seconds so an obsolete 20-secon
 
 ## Factual / editorial guardrails
 
-Use `fact-matrix.json`, `RESEARCH_BRIEF.md`, `NARRATION_V2.md`, and `CREATIVE_QA.md` as mandatory gates.
+Use `fact-matrix.json`, `RESEARCH_BRIEF.md`, `NARRATION_V3.md`, and `CREATIVE_QA.md` as mandatory gates.
 
 Key rules:
 - presidential EOs are signed by the President, not Rubio;
@@ -108,13 +108,13 @@ Key rules:
 
 ## Next production steps
 
-1. Finish Blender v4 validation.
-2. Launch full 105-frame Blender hook.
-3. Visual QA on control frames and final MP4.
-4. Trigger a short Remotion validation using the imported Blender plate.
-5. Review the full 60-second animatic visually.
-6. Replace only the scenes that clearly benefit from Blender; keep simpler explanatory graphics in Remotion.
-7. Add final narration.
-8. Generate captions from the final narration timing.
-9. Run creative QA.
+1. Let validation delivery verification finish and release the Blender concurrency group.
+2. Complete the already-launched full 105-frame hook render (run 37085816242).
+3. Visual QA on Blender control frames 1 / 53 / 105 and the final hook MP4.
+4. Trigger a short Remotion validation using the automatically imported Blender plate.
+5. Review representative frames from all six chapters of the 60-second animatic.
+6. Redesign only scenes that fail the creative gate; do not add Blender where Remotion communicates better.
+7. Generate/record the final voice from `NARRATION_V3.md`.
+8. Generate captions from the final narration waveform/timing.
+9. Run complete creative + factual + audio QA.
 10. Render the 60-second production master.

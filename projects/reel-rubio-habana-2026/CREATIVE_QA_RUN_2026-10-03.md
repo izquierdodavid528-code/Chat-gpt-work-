@@ -82,8 +82,8 @@ PASS for current copy, with source ledger
 Do not render the 60-second production master yet.
 
 Required sequence:
-1. finish 105-frame Blender delivery;
+1. finish authoritative 105-frame Blender v5 delivery (run 37087906808);
 2. confirm delivery QA + Drive upload;
 3. render a 0–149 Remotion hook validation;
 4. review the hook composite;
-5. only then decide whether Blender v4 is accepted or needs a v5 redesign.
+5. only then approve or reject Blender v5 as the production hook after motion + typography review.

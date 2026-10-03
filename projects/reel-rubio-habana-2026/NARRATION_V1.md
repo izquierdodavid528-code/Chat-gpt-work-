@@ -3,9 +3,9 @@
 Duración objetivo: ~60 s
 Tono: documental, firme, neutral.
 
-> En 2026, Washington amplió la presión sobre La Habana por varias vías.
+> En 2026, Washington cambió y amplió la presión sobre La Habana por varias vías.
 >
-> El 29 de enero, Donald Trump firmó una orden que abrió la puerta a aranceles contra países que suministraran petróleo a Cuba.
+> El 29 de enero, Donald Trump abrió una vía arancelaria contra países que suministraran petróleo a Cuba. Esos aranceles bajo IEEPA fueron terminados el 20 de febrero, aunque la emergencia siguió vigente.
 >
 > En mayo, otra orden amplió las autoridades de sanción y delegó parte de la implementación al Departamento de Estado y al Tesoro.
 >

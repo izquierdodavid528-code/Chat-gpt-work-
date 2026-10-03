@@ -61,19 +61,20 @@ Concurrency release:
 - run `37087663265`
 - 1-frame validation used only to release the previous validation concurrency group
 
-**Current authoritative full Blender run:
-- requestId: `rubio-habana-map-hook-v5-open-contours-full-authoritative`
-- run: `37087906808`
+**Current authoritative full Blender run**
+- requestId: `rubio-habana-map-hook-v5-open-contours-full-final-retry`
+- run: `37088519777`
 - validationFrameCount: 0
-- prior release/full runs were automatically superseded after the concurrency fix
+- status at last check: build-master PASS through contract verification; rendering reference control frames
+- earlier v4/v5 full attempts are superseded and should not be used for delivery.
 
 Concurrency policy:
-- `.github/workflows/blender-smart-render.yml` now uses latest-request-wins for a project;
-- a newer render request cancels an older validation or production render;
-- the previous one-frame "release" workaround is no longer needed.
+- latest request wins per Blender project;
+- do not create another `render.request.json` change while run `37088519777` is active;
+- unrelated workspace self-tests use different project concurrency groups and do not replace this delivery.
 
 Next Blender gate:
-1. let run `37087696933` render all 105 frames;
+1. let run `37088519777` render all 105 frames;
 2. inspect control frames 1 / 53 / 105;
 3. inspect final MP4 motion and framing;
 4. accept the Drive delivery only if creative QA passes;
@@ -125,8 +126,8 @@ Key rules:
 
 ## Next production steps
 
-1. Let validation delivery verification finish and release the Blender concurrency group.
-2. Complete the already-launched full 105-frame hook render (run 37085816242).
+1. Complete authoritative full v5 Blender run `37088519777` without issuing another same-project request.
+2. Confirm verified MP4 delivery and Drive upload.
 3. Visual QA on Blender control frames 1 / 53 / 105 and the final hook MP4.
 4. Trigger a short Remotion validation using the automatically imported Blender plate.
 5. Review representative frames from all six chapters of the 60-second animatic.

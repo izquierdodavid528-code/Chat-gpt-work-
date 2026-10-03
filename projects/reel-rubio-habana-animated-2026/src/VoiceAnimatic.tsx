@@ -134,6 +134,55 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
   </div>
  </AbsoluteFill>;
 };
+
+type Bridge = { cut:number; exit:string; enter:string };
+const bridgePaths:Record<string,string>={
+ wake:"M-100 1190 C110 1230 255 1030 405 1080 C555 1130 720 1280 1180 1120",
+ route:"M-100 1060 C180 1090 360 1020 520 940 C690 855 855 725 1180 650",
+ gate:"M540 360 C525 590 550 800 540 1180",
+ underline:"M250 1010 C420 1005 650 1015 830 1010",
+ calendar:"M340 510 L740 510 L740 1080 L340 1080 Z M640 510 L640 620 L740 620",
+ paper:"M300 450 L780 450 L780 1190 L300 1190 Z M650 450 L650 580 L780 580",
+ branch:"M540 520 L540 790 M540 790 L325 1050 M540 790 L755 1050",
+ ledger:"M325 1050 L540 820 L755 1050 M380 1110 L700 1110",
+ stamp:"M540 620 C650 620 720 700 720 810 C720 920 650 1000 540 1000 C430 1000 360 920 360 810 C360 700 430 620 540 620 Z",
+ arch:"M320 1180 L320 850 Q540 480 760 850 L760 1180",
+ uturn:"M310 820 L310 965 Q310 1110 455 1110 L625 1110 Q770 1110 770 965 L770 820",
+ tab:"M365 690 L715 690 L715 1060 L365 1060 Z",
+ divider:"M540 520 L540 1210",
+ lanes:"M300 530 L300 890 Q300 1080 540 1080 Q780 1080 780 1350",
+ coast:"M270 1200 C375 1160 410 1030 515 1040 C620 1050 675 1120 810 900",
+};
+const bridges:Bridge[]=[
+ {cut:102,exit:"wake",enter:"route"},
+ {cut:165,exit:"route",enter:"gate"},
+ {cut:316,exit:"gate",enter:"underline"},
+ {cut:530,exit:"calendar",enter:"paper"},
+ {cut:684,exit:"paper",enter:"branch"},
+ {cut:905,exit:"branch",enter:"ledger"},
+ {cut:1023,exit:"stamp",enter:"arch"},
+ {cut:1110,exit:"arch",enter:"uturn"},
+ {cut:1260,exit:"uturn",enter:"tab"},
+ {cut:1361,exit:"tab",enter:"divider"},
+ {cut:1509,exit:"lanes",enter:"coast"},
+];
+const BridgeTransition:React.FC<{bridge:Bridge}>=({bridge})=>{
+ const f=useCurrentFrame();
+ const p=interpolate(f,[0,17],[0,1],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+ const out=interpolate(p,[0,.52],[.92,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+ const inn=interpolate(p,[.48,1],[0,.92],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+ const outDraw=interpolate(p,[0,.46],[1800,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+ const inDraw=interpolate(p,[.54,1],[1800,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+ return <AbsoluteFill style={{pointerEvents:"none"}}>
+  <svg viewBox="0 0 1080 1920" style={{position:"absolute",inset:0,width:"100%",height:"100%",overflow:"visible"}}>
+   <path d={bridgePaths[bridge.exit]} fill="none" stroke="#fffaf0" strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" opacity={out}/>
+   <path d={bridgePaths[bridge.exit]} fill="none" stroke="#ce6259" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1800" strokeDashoffset={outDraw} opacity={out}/>
+   <path d={bridgePaths[bridge.enter]} fill="none" stroke="#fffaf0" strokeWidth="26" strokeLinecap="round" strokeLinejoin="round" opacity={inn}/>
+   <path d={bridgePaths[bridge.enter]} fill="none" stroke="#ce6259" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1800" strokeDashoffset={inDraw} opacity={inn}/>
+  </svg>
+ </AbsoluteFill>;
+};
+
 const ShotLayer: React.FC<{shot:Shot}>=({shot})=>{
  const frame=useCurrentFrame();
  const zoom=interpolate(frame,[0,shot.duration],[1.01,1.045],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
@@ -152,6 +201,7 @@ const ShotLayer: React.FC<{shot:Shot}>=({shot})=>{
 export const RubioSixtySecondAnimatic: React.FC=()=> <AbsoluteFill>
  <Paper/>
  {shots.map(shot=><Sequence key={shot.id} from={shot.from} durationInFrames={shot.duration}><ShotLayer shot={shot}/></Sequence>)}
+ {bridges.map((bridge,i)=><Sequence key={i} from={bridge.cut-9} durationInFrames={18}><BridgeTransition bridge={bridge}/></Sequence>)}
  {VOICE_SCRATCH_READY&&<Audio src={staticFile(VOICE_SCRATCH_FILE)} volume={1}/>}
  {VOICE_SCRATCH_READY&&<Audio src={staticFile(MUSIC_BED_FILE)} volume={1}/>}
  {VOICE_SCRATCH_READY&&<Audio src={staticFile(SFX_CUES_FILE)} volume={1}/>}

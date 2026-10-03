@@ -22,7 +22,7 @@ Ese mes también cambiaron reglas bancarias y de viaje. OFAC retiró la autoriza
 ## 00:52–01:00 — Attributed close
 La Casa Blanca cita seguridad; el MINREX denuncia el recrudecimiento del bloqueo.
 
-Spoken draft: about 107 words. This leaves room for measured delivery, pauses and visual holds; validate with an actual scratch recording. Put the specific scope and the 30 October wind-down date in Remotion captions rather than rushing them into the voice.
+Spoken draft: about 116 words. This leaves room for measured delivery, pauses and visual holds; validate with an actual scratch recording. Put the specific scope and the 30 October wind-down date in Remotion captions rather than rushing them into the voice.
 
 ## Accuracy and scope notes
 

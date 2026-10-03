@@ -9,10 +9,16 @@ Actualizado: 2026-10-02
 La evidencia primaria muestra una ampliación por capas. No es correcto atribuir todo personalmente a Rubio.
 
 ### 29 enero — EO 14380
-Donald Trump firmó la EO 14380, que declaró una emergencia nacional respecto a Cuba y estableció un mecanismo que permite imponer aranceles adicionales a productos de países que vendan o suministren petróleo a Cuba.
+Donald Trump firmó la EO 14380, que declaró una emergencia nacional respecto a Cuba y estableció una vía de aranceles adicionales vinculada a países que suministraran petróleo a Cuba.
 
-Fuente primaria:
-White House / Executive Order 14380.
+### 20 febrero — EO 14389
+La Casa Blanca terminó los aranceles adicionales impuestos bajo IEEPA en varias órdenes, incluida la EO 14380. La misma orden especificó que las emergencias nacionales y las acciones no arancelarias correspondientes permanecían vigentes.
+
+Implicación editorial:
+no presentar la vía arancelaria de enero como una medida que siguió acumulándose sin cambios durante todo 2026.
+
+Fuentes primarias:
+White House / EO 14380 y EO 14389.
 
 ### 1 mayo — EO 14404
 Trump firmó la EO 14404. Amplió las autoridades de sanción contra personas/entidades vinculadas a conductas y sectores definidos en la orden, incluidas posibles medidas sobre instituciones financieras extranjeras. La orden delega implementación al Secretario de Estado y al Secretario del Tesoro.

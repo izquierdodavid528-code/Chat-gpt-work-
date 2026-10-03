@@ -151,7 +151,7 @@ const CustomsGate:React.FC<{frame:number}> = ({frame}) => {
   const close=spring({frame:Math.max(0,frame-205),fps:30,config:{damping:13,stiffness:170}});
   const armRot=interpolate(close,[0,1],[-72,0]);
   const stamp=spring({frame:Math.max(0,frame-226),fps:30,config:{damping:10,stiffness:220}});
-  const gateOut=interpolate(frame,[282,314],[1,0],clamp);
+  const gateOut=interpolate(frame,[268,300],[1,0],clamp);
   return (
     <>
       <div style={{position:"absolute",right:70,top:420,width:260,height:260,opacity:gateIn*gateOut,transform:`translateX(${interpolate(gateIn,[0,1],[120,0])}px)`}}>
@@ -466,7 +466,7 @@ const MoneyToken:React.FC<{x:number;y:number;rotation?:number;scale?:number}> = 
 );
 
 const FinancePipe:React.FC<{x:number;y:number;w:number;h:number;rot?:number;active?:number}> = ({x,y,w,h,rot=0,active=1}) => (
-  <div style={{position:"absolute",left:x,top:y,width:w,height:h,transform:`rotate(${rot}deg)`,transformOrigin:"left center",borderRadius:999,background:C.paper2,border:"8px solid "+C.ink,overflow:"hidden"}}>
+  <div style={{position:"absolute",left:x,top:y,width:w,height:h,transform:`rotate(${rot}deg)`,transformOrigin:"left center",borderRadius:999,background:C.cream,border:"8px solid "+C.ink,overflow:"hidden",boxShadow:"8px 9px 0 rgba(0,0,0,.12)"}}>
     <div style={{width:`${Math.max(0,Math.min(1,active))*100}%`,height:"100%",background:C.seaDark}}/>
   </div>
 );
@@ -534,10 +534,10 @@ const FinanceMobilityAct:React.FC=()=>{
     <div style={{position:"absolute",inset:0,background:"radial-gradient(circle at 50% 35%, rgba(111,166,183,.38), transparent 48%)"}}/>
     <div style={{position:"absolute",left:50,right:50,top:50,bottom:50,border:"12px solid "+C.ink,borderRadius:40,boxShadow:"inset 0 0 0 8px rgba(255,246,230,.08)"}}/>
 
-    <div style={{position:"absolute",left:78,top:72,fontFamily:"Arial",fontWeight:1000,fontSize:62,color:C.cream,opacity:interpolate(f,[0,24],[0,1],clamp)}}>DENTRO DEL SISTEMA</div>
+    <div style={{position:"absolute",left:78,top:78,fontFamily:"Arial",fontWeight:1000,fontSize:46,color:C.cream,opacity:interpolate(f,[0,24],[0,1],clamp)}}>RED FINANCIERA</div>
     <div style={{position:"absolute",right:85,top:92,padding:"12px 18px",background:C.cream,border:"7px solid "+C.ink,borderRadius:16,fontFamily:"Arial",fontWeight:1000,fontSize:23,color:C.red,transform:"rotate(3deg)"}}>29 SEP</div>
 
-    <div style={{position:"absolute",left:80,top:280,width:920,height:680,borderRadius:40,background:C.paper,border:"10px solid "+C.ink,boxShadow:"16px 18px 0 rgba(0,0,0,.16)",transform:`scale(${interpolate(door,[0,1],[1.15,1])})`}}>
+    <div style={{position:"absolute",left:35,top:300,width:1010,height:690,transform:`scale(${interpolate(door,[0,1],[1.15,1])})`}}>
       <FinancePipe x={85} y={365} w={310} h={80} active={route1}/>
       <FinancePipe x={370} y={365} w={270} h={80} rot={-17} active={route2}/>
       <FinancePipe x={605} y={290} w={220} h={80} rot={25} active={route3}/>
@@ -557,7 +557,7 @@ const FinanceMobilityAct:React.FC=()=>{
 
 const SpeechBubble:React.FC<{side:"left"|"right";frame:number;delay:number;title:string;lines:string[]}> = ({side,frame,delay,title,lines}) => {
   const p=spring({frame:Math.max(0,frame-delay),fps:30,config:{damping:12,stiffness:165}});
-  const out=interpolate(frame,[delay+110,delay+145],[1,0],clamp);
+  const out=interpolate(frame,[delay+68,delay+98],[1,0],clamp);
   const left=side==="left";
   return <div style={{position:"absolute",top:300,left:left?60:560,width:460,minHeight:290,opacity:p*out,transform:`translateX(${interpolate(p,[0,1],[left?-140:140,0])}px) rotate(${left?-2:2}deg)`,background:C.cream,border:"9px solid "+C.ink,borderRadius:34,padding:"30px 34px",boxShadow:"12px 14px 0 rgba(32,39,42,.14)"}}>
     <div style={{fontFamily:"Arial",fontWeight:1000,fontSize:22,letterSpacing:2,color:left?C.seaDark:C.red}}>{title}</div>
@@ -578,7 +578,7 @@ const TimelineTag:React.FC<{x:number;frame:number;delay:number;top:string;bottom
 };
 
 const FinalMechanism:React.FC<{frame:number}> = ({frame}) => {
-  const p=spring({frame:Math.max(0,frame-185),fps:30,config:{damping:15,stiffness:135}});
+  const p=spring({frame:Math.max(0,frame-92),fps:30,config:{damping:15,stiffness:135}});
   const orbit=(base:number)=>base+Math.sin((frame+base)/22)*8;
   return <div style={{position:"absolute",left:0,top:560,width:1080,height:600,opacity:p,transform:`scale(${interpolate(p,[0,1],[1.35,1])})`}}>
     <svg width="1080" height="600" viewBox="0 0 1080 600">
@@ -594,28 +594,27 @@ const FinalMechanism:React.FC<{frame:number}> = ({frame}) => {
 };
 
 const CloseAct:React.FC=()=>{
-  const rf=useCurrentFrame();
-  const f=rf*(390/240);
-  const wipe=interpolate(f,[0,55],[1,0],clamp);
-  const line=interpolate(f,[185,300],[0,1],clamp);
-  const final=spring({frame:Math.max(0,f-286),fps:30,config:{damping:15,stiffness:135}});
-  return <AbsoluteFill style={{background:C.paper,overflow:"hidden"}}>
+  const f=useCurrentFrame();
+  const reveal=interpolate(f,[0,28],[0,1],clamp);
+  const line=interpolate(f,[112,184],[0,1],clamp);
+  const final=spring({frame:Math.max(0,f-168),fps:30,config:{damping:15,stiffness:135}});
+  return <AbsoluteFill style={{background:C.navy,overflow:"hidden"}}>
     <PaperTexture/>
-    <div style={{position:"absolute",inset:0,background:C.navy,opacity:wipe,transform:`scale(${interpolate(f,[0,55],[1,1.8],clamp)})`,borderRadius:interpolate(f,[0,55],[0,180],clamp)}}/>
+    <div style={{position:"absolute",inset:0,background:C.navy,clipPath:`circle(${(1-reveal)*150}% at 50% 44%)`}}/>
 
-    <SpeechBubble side="left" frame={f} delay={40} title="CASA BLANCA" lines={["seguridad nacional","y política exterior"]}/>
-    <SpeechBubble side="right" frame={f} delay={65} title="MINREX" lines={["recrudecimiento","del bloqueo"]}/>
+    <SpeechBubble side="left" frame={f} delay={12} title="CASA BLANCA" lines={["seguridad nacional","y política exterior"]}/>
+    <SpeechBubble side="right" frame={f} delay={26} title="MINREX" lines={["recrudecimiento","del bloqueo"]}/>
 
     <FinalMechanism frame={f}/>
 
     <div style={{position:"absolute",left:110,right:110,top:1302,height:8,background:"rgba(32,39,42,.18)",borderRadius:8,opacity:interpolate(f,[180,205],[0,1],clamp)}}>
       <div style={{width:`${line*100}%`,height:"100%",background:C.ink,borderRadius:8}}/>
     </div>
-    <TimelineTag x={92} frame={f} delay={190} top="29 ENE" bottom="PETRÓLEO" accent/>
-    <TimelineTag x={278} frame={f} delay={210} top="20 FEB" bottom="ARANCEL"/>
-    <TimelineTag x={464} frame={f} delay={230} top="1 MAY" bottom="MARCO"/>
-    <TimelineTag x={650} frame={f} delay={250} top="JUN" bottom="SDN"/>
-    <TimelineTag x={836} frame={f} delay={270} top="SEP" bottom="FINANZAS" accent/>
+    <TimelineTag x={92} frame={f} delay={112} top="29 ENE" bottom="PETRÓLEO" accent/>
+    <TimelineTag x={278} frame={f} delay={126} top="20 FEB" bottom="ARANCEL"/>
+    <TimelineTag x={464} frame={f} delay={140} top="1 MAY" bottom="MARCO"/>
+    <TimelineTag x={650} frame={f} delay={154} top="JUN" bottom="SDN"/>
+    <TimelineTag x={836} frame={f} delay={168} top="SEP" bottom="FINANZAS" accent/>
 
     <div style={{position:"absolute",left:76,right:76,bottom:125,opacity:final,transform:`translateY(${interpolate(final,[0,1],[70,0])}px)`}}>
       <div style={{fontFamily:"Arial",fontWeight:1000,fontSize:29,letterSpacing:2,color:C.red}}>2026</div>

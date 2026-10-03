@@ -1,3 +1,5 @@
+> Status note (2026-10-03): this is a prepared sound-design plan, not an executed mix. The pilot render contains no audio stream. Build the final mix only after the scratch narration timing is locked.
+
 # SOUND DESIGN V1 — Illustrated Rubio / La Habana 2026
 
 Goal: reinforce the animated explainer language without making the political subject feel sensationalized.

@@ -26,6 +26,12 @@ Music: "Impact Moderato" by Kevin MacLeod (incompetech.com), licensed under CC B
 Official U.S. Department of State portrait of Secretary Marco Rubio.  
 U.S. federal government work / public domain.
 
+Source / archived media:
+https://commons.wikimedia.org/wiki/File:Official_portrait_of_Secretary_Marco_Rubio_(3x4_cropped).jpg
+
+Original author/source:
+U.S. Department of State.
+
 Production use:
 - identification insert in the EO 14404 / State Department section;
 - not presented as footage of a specific sanction decision;

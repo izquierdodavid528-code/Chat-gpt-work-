@@ -17,6 +17,12 @@ The workspace uses a **hybrid shot-by-shot pipeline**:
 
 Remotion is the orchestration layer. Flow and Blender are suppliers of reusable visual material, not mandatory render engines for the entire video.
 
+### Flow handoff boundary
+
+Google Flow is currently operated manually by the user. This repository has no Flow API credentials or GitHub Actions generation step. The assistant prepares shot-specific prompts, filenames, framing and acceptance checks; the user generates and exports the chosen files, then uploads them to the project’s Google Drive folder. Verify the files before integrating them. Do not claim the Flow stage is automated or generate assets that have not been supplied.
+
+Start with a small approved style pack. Keep factual geography, dates, official names, map labels and captions in Remotion or sourced media. Use Flow for original illustrations, consistent characters, poses, backgrounds and selected short motion plates.
+
 ---
 
 ## Core rule: choose the cheapest tool that preserves the intended quality

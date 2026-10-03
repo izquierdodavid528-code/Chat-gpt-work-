@@ -97,24 +97,40 @@ const OilLayer:React.FC=()=>{
 const Framework:React.FC=()=>{
   const f=useCurrentFrame();
   const p=spring({frame:f,fps:30,config:{damping:180,stiffness:150}});
-  return <AbsoluteFill style={{background:"#080c11"}}>
-    <div style={{position:"absolute",left:70,top:120,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>CAPA 2 · MARCO LEGAL</div>
-    <div style={{position:"absolute",left:70,top:175,right:70,color:INK,fontFamily:"Arial",fontSize:54,fontWeight:900,lineHeight:1}}>1 MAY · EO 14404</div>
-    <div style={{position:"absolute",left:95,top:360,width:890,height:540,borderRadius:28,border:"1px solid rgba(126,151,168,.26)",background:"radial-gradient(circle at 50% 50%,rgba(126,151,168,.14),rgba(6,10,14,.95))"}}>
-      {["STATE","TREASURY","BANCOS","ENTIDADES"].map((t,i)=>{
-        const ang=[-110,-20,70,160][i]*Math.PI/180;
-        const x=445+Math.cos(ang)*280;
-        const y=270+Math.sin(ang)*180;
-        return <React.Fragment key={t}>
-          <div style={{position:"absolute",left:445,top:270,width:Math.abs(x-445),height:2,background:"rgba(217,54,54,.34)",transformOrigin:"left",transform:`rotate(${Math.atan2(y-270,x-445)}rad)`}}/>
-          <div style={{position:"absolute",left:x-80,top:y-30,width:160,height:60,borderRadius:30,background:"#132331",border:"1px solid rgba(126,151,168,.35)",display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:16,fontWeight:900,letterSpacing:1.2}}>{t}</div>
-        </React.Fragment>
-      })}
-      <div style={{position:"absolute",left:355,top:185,width:180,height:180,borderRadius:"50%",border:"4px solid "+RED,display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:28,fontWeight:900,transform:`scale(${.85+.15*p})`}}>EO 14404</div>
+  const delegation=spring({frame:Math.max(0,f-90),fps:30,config:{damping:180,stiffness:150}});
+  const sectors=["ENERGÍA","DEFENSA","MINERÍA","FINANZAS","SEGURIDAD"];
+  return <AbsoluteFill style={{background:"radial-gradient(circle at 25% 35%,rgba(33,66,85,.28),transparent 34%),#070b10",overflow:"hidden"}}>
+    <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(126,151,168,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(126,151,168,.045) 1px,transparent 1px)",backgroundSize:"56px 56px"}}/>
+    <div style={{position:"absolute",left:70,top:108,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>CAPA 2 · AUTORIDADES DE SANCIÓN</div>
+    <div style={{position:"absolute",left:70,top:164,right:70,color:INK,fontFamily:"Arial",fontSize:58,fontWeight:900,lineHeight:1}}>1 MAY · EO 14404</div>
+    <div style={{position:"absolute",left:70,top:265,right:70,color:STEEL,fontFamily:"Arial",fontSize:24,fontWeight:650,lineHeight:1.25}}>La orden amplía criterios de sanción y distribuye funciones de implementación.</div>
+
+    <div style={{position:"absolute",left:70,right:70,top:420,height:350,borderRadius:30,border:"1px solid rgba(126,151,168,.25)",background:"rgba(8,17,24,.78)",padding:"34px 36px"}}>
+      <div style={{color:STEEL,fontFamily:"Arial",fontSize:16,fontWeight:900,letterSpacing:2}}>SECTORES NOMBRADOS EN LA ORDEN</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:14,marginTop:28}}>
+        {sectors.map((s,i)=>{
+          const sp=spring({frame:Math.max(0,f-18-i*10),fps:30,config:{damping:180,stiffness:160}});
+          return <div key={s} style={{padding:"18px 22px",borderRadius:18,border:"1px solid rgba(126,151,168,.34)",background:"rgba(18,35,47,.88)",color:INK,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:1.1,opacity:sp,transform:`translateY(${interpolate(sp,[0,1],[18,0])}px)`}}>{s}</div>;
+        })}
+      </div>
+      <div style={{position:"absolute",left:36,right:36,bottom:34,height:3,background:"rgba(126,151,168,.12)"}}>
+        <div style={{width:`${p*100}%`,height:"100%",background:"linear-gradient(90deg,"+RED+","+GOLD+")"}}/>
+      </div>
     </div>
-    <div style={{position:"absolute",left:70,right:70,bottom:330,color:INK,fontFamily:"Arial",fontSize:38,fontWeight:900,lineHeight:1.14}}>El marco de sanciones se amplía.</div>
-    <div style={{position:"absolute",left:70,right:70,bottom:235,color:STEEL,fontFamily:"Arial",fontSize:25,fontWeight:650,lineHeight:1.25}}>La orden delega funciones de implementación a State y Treasury.</div>
-    <div style={{position:"absolute",right:70,bottom:120,color:RED,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2}}>RUBIO · SECRETARIO DE ESTADO</div>
+
+    <div style={{position:"absolute",left:70,right:70,top:830,height:460,borderRadius:30,border:"1px solid rgba(217,54,54,.22)",background:"linear-gradient(135deg,rgba(217,54,54,.07),rgba(15,28,38,.72))",padding:"38px"}}>
+      <div style={{color:GOLD,fontFamily:"Arial",fontSize:17,fontWeight:900,letterSpacing:2}}>SEC. 5 · DELEGACIÓN</div>
+      <div style={{position:"absolute",left:60,top:135,width:340,height:130,borderRadius:24,border:"1px solid rgba(126,151,168,.35)",background:"#10212d",display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:30,fontWeight:900,opacity:delegation,transform:`translateX(${interpolate(delegation,[0,1],[-28,0])}px)`}}>STATE</div>
+      <div style={{position:"absolute",right:60,top:135,width:340,height:130,borderRadius:24,border:"1px solid rgba(126,151,168,.35)",background:"#10212d",display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:30,fontWeight:900,opacity:delegation,transform:`translateX(${interpolate(delegation,[0,1],[28,0])}px)`}}>TREASURY</div>
+      <div style={{position:"absolute",left:405,top:178,width:70,height:3,background:RED,opacity:delegation}}/>
+      <div style={{position:"absolute",left:60,right:60,bottom:48,color:STEEL,fontFamily:"Arial",fontSize:22,fontWeight:700,lineHeight:1.28,opacity:delegation}}>Ambos departamentos reciben autoridad para implementar la orden dentro de sus competencias.</div>
+    </div>
+
+    <div style={{position:"absolute",left:70,right:70,bottom:260,padding:"26px 30px",borderLeft:"4px solid "+RED,background:"rgba(217,54,54,.055)"}}>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:30,fontWeight:900,lineHeight:1.16}}>Marco Rubio · Secretario de Estado</div>
+      <div style={{color:STEEL,fontFamily:"Arial",fontSize:21,fontWeight:700,marginTop:8,lineHeight:1.25}}>Papel documentado: voz pública e implementación desde State; no firmante de la orden presidencial.</div>
+    </div>
+    <div style={{position:"absolute",right:70,bottom:120,color:STEEL,fontFamily:"Arial",fontSize:16,fontWeight:800,letterSpacing:1.2}}>FUENTE · CASA BLANCA · EXECUTIVE ORDER 14404</div>
   </AbsoluteFill>;
 };
 

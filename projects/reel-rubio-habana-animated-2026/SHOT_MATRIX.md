@@ -1,8 +1,12 @@
+## Transition review — run 37161315638
+
+Nine boundaries carry restrained line motifs from the visual mechanism in the outgoing shot to the next (wake/route, route/gate, gate/calendar, branch/register, stamp/facade, facade/U-turn, U-turn/tab, tab/lane, lane/coast). The two S05 character boundaries stay clean. Card entrance opacity is immediate to avoid a blank first beat. Full render delivery and audio QA pass. Representative-frame review is complete; play through at full speed for creative acceptance. The closing still remains static pending the documented S12b Flow actor asset.
+
 
 
 ## Latest reviewed render — 37159002008
 
-Full render has embedded narration, restrained pad and action-linked cues. Delivery and dedicated media-audio QA both PASS: H.264 vertical 1080×1920/30, 60.053 s container; stereo AAC 48 kHz; -17.9 LUFS / -4.6 dBFS TP / 2.5 LU LRA; A/V duration delta 0.053 s. S04 card now reads “ARANCELES” and “RETIRADOS” with no wrap; S06 delegation graphic enters earlier and visibly. S08 shows the completed bank façade on the final beat. Remaining: motivated transitions, additional visual depth/continuity, and human listening/factual/creative reviews. Current render is only an animatic. No additional Flow asset is currently justified for the unresolved information graphics.
+Full render has embedded narration, restrained pad and action-linked cues. Delivery and dedicated media-audio QA both PASS: H.264 vertical 1080×1920/30, 60.053 s container; stereo AAC 48 kHz; -17.9 LUFS / -4.6 dBFS TP / 2.5 LU LRA; A/V duration delta 0.053 s. S04 card now reads “ARANCELES” and “RETIRADOS” with no wrap; S06 delegation graphic enters earlier and visibly. S08 shows the completed bank façade on the final beat. A thin motif bridge layer now runs across nine of eleven boundaries; the two cuts into/out of S05 remain clear of Rubio's face. Render 37161315638 passes delivery and audio QA. Frame checks near transitions confirm cards appear at the cut and the bridge overlay avoids the actor, but they do not replace full-speed creative review. Additional depth/continuity and human listening/factual/creative reviews remain. S12b needs the one documented closing Flow acting plate; exact information graphics stay in Remotion.
 
 
 

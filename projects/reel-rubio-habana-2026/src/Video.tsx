@@ -196,10 +196,11 @@ const FinanceLayer:React.FC=()=>{
   const f=useCurrentFrame();
   const progress=interpolate(f,[20,155],[0,1],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
   const block=spring({frame:Math.max(0,f-150),fps:30,config:{damping:18,stiffness:95,mass:.65}});
-  const uturn=spring({frame:Math.max(0,f-225),fps:30,config:{damping:180,stiffness:160}});
+  const uturn=spring({frame:Math.max(0,f-215),fps:30,config:{damping:180,stiffness:160}});
+  const mobility=spring({frame:Math.max(0,f-255),fps:30,config:{damping:180,stiffness:160}});
   return <AbsoluteFill style={{background:"linear-gradient(180deg,#071019,#05080c)",overflow:"hidden"}}>
     <div style={{position:"absolute",left:70,top:120,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>29–30 SEPTIEMBRE</div>
-    <div style={{position:"absolute",left:70,top:176,right:70,color:INK,fontFamily:"Arial",fontSize:58,fontWeight:900,lineHeight:1.02}}>LA RED<br/>FINANCIERA</div>
+    <div style={{position:"absolute",left:70,top:176,right:70,color:INK,fontFamily:"Arial",fontSize:58,fontWeight:900,lineHeight:1.02}}>FINANZAS Y<br/>MOVILIDAD</div>
     <div style={{position:"absolute",left:70,top:330,right:70,color:STEEL,fontFamily:"Arial",fontSize:21,fontWeight:800,lineHeight:1.25}}>CRL · CUBA RESTRICTED LIST</div>
     <div style={{position:"absolute",left:80,right:80,top:465,height:600,borderRadius:32,border:"1px solid rgba(126,151,168,.25)",background:"radial-gradient(circle at 50% 50%,rgba(20,48,65,.35),rgba(5,10,15,.96))"}}>
       {[
@@ -213,11 +214,18 @@ const FinanceLayer:React.FC=()=>{
       <div style={{position:"absolute",left:568,top:510,color:RED,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2,opacity:block}}>RUTA BLOQUEADA</div>
     </div>
     <div style={{position:"absolute",left:70,right:70,bottom:360,color:INK,fontFamily:"Arial",fontSize:34,fontWeight:900,lineHeight:1.16}}>OFAC extiende la prohibición a transacciones financieras indirectas con entidades de la CRL.</div>
-    <div style={{position:"absolute",left:70,right:70,bottom:220,padding:"24px 28px",borderRadius:18,border:"1px solid rgba(217,54,54,.28)",background:"rgba(217,54,54,.07)",opacity:uturn,transform:`translateY(${interpolate(uturn,[0,1],[25,0])}px)`}}>
-      <div style={{color:GOLD,fontFamily:"Arial",fontSize:17,fontWeight:900,letterSpacing:2}}>CAMBIO REGULATORIO</div>
-      <div style={{color:INK,fontFamily:"Arial",fontSize:31,fontWeight:900,marginTop:8}}>U-turn · autorización retirada</div>
+    <div style={{position:"absolute",left:70,right:70,bottom:185,display:"flex",gap:18}}>
+      <div style={{width:450,minHeight:132,padding:"20px 22px",borderRadius:18,border:"1px solid rgba(217,54,54,.28)",background:"rgba(217,54,54,.07)",opacity:uturn,transform:`translateY(${interpolate(uturn,[0,1],[25,0])}px)`}}>
+        <div style={{color:GOLD,fontFamily:"Arial",fontSize:15,fontWeight:900,letterSpacing:2}}>FINANZAS</div>
+        <div style={{color:INK,fontFamily:"Arial",fontSize:26,fontWeight:900,marginTop:8}}>U-turn · autorización retirada</div>
+      </div>
+      <div style={{flex:1,minHeight:132,padding:"20px 22px",borderRadius:18,border:"1px solid rgba(126,151,168,.28)",background:"rgba(126,151,168,.06)",opacity:mobility,transform:`translateY(${interpolate(mobility,[0,1],[25,0])}px)`}}>
+        <div style={{color:STEEL,fontFamily:"Arial",fontSize:15,fontWeight:900,letterSpacing:2}}>MOVILIDAD</div>
+        <div style={{color:INK,fontFamily:"Arial",fontSize:22,fontWeight:900,marginTop:7,lineHeight:1.12}}>Reuniones profesionales: autorización eliminada</div>
+        <div style={{color:STEEL,fontFamily:"Arial",fontSize:17,fontWeight:750,marginTop:7}}>Educación: autorizaciones más estrechas</div>
+      </div>
     </div>
-    <div style={{position:"absolute",right:70,bottom:120,color:STEEL,fontFamily:"Arial",fontSize:16,fontWeight:800,letterSpacing:1.2}}>FUENTE · OFAC · ACTUALIZACIÓN 29 SEP 2026</div>
+    <div style={{position:"absolute",right:70,bottom:92,color:STEEL,fontFamily:"Arial",fontSize:15,fontWeight:800,letterSpacing:1.1}}>FUENTE · OFAC · FAQs 1274–1275 · 29 SEP 2026</div>
   </AbsoluteFill>;
 };
 

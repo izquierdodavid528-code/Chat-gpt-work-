@@ -13,7 +13,7 @@ Professional 60-second Spanish-language vertical illustrated explainer, 1080×19
 - The old main illustration remains a baseline, not the new final direction.
 
 ## Latest render audit
-Run 37138611848 completed with technical PASS. Actual artifact inspected: H.264 1080×1920, 30 fps, 9.3 seconds, no audio stream; audio QA is NOT_ENABLED. Visual review confirms repeated harbor/paper motif and abrupt map-to-character jump; it covers only a small opening test. No complete story, narration, mix, captions or final QA. This is not an approved film.
+Run 37138611848 completed with technical PASS. Actual artifact inspected: H.264 1080×1920, 30 fps, 9.3 seconds, no audio stream; audio QA is NOT_ENABLED. Visual review of the actual frames shows the harbor opening cutting directly to Rubio with the document; there is no map in this render. The later document/bridge transformation makes the paper motif recur and does not yet create a complete narrative arc. No complete story, narration, mix, captions or final QA. This is not an approved film.
 
 ## Assets
 Drive source: 02 - Reel Rubio Habana 2026/assets/flow. Three stills and six Flow clips are inventoried in FLOW_ASSET_BRIEFS.md. All six supplied source clips are 720×1280, 24 fps, about 6.016 sec, with AAC; previous docs incorrectly said 30 fps. New files:

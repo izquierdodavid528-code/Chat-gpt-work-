@@ -64,7 +64,7 @@ Editorial guardrail:
 
 ## 00:50-01:00 - Close
 
-> Washington presenta estas medidas como presion sobre el gobierno cubano. La Habana las denuncia como coercion economica. Lo documentado es que, durante 2026, las restricciones se hicieron mas amplias y cambiaron de forma.
+> La Casa Blanca vincula estas medidas a seguridad nacional y politica exterior. Autoridades cubanas las denuncian como coercion economica. Lo documentado es que, durante 2026, la arquitectura de restricciones cambio y se amplio.
 
 Treatment:
 - visually separate the two attributed official interpretations;

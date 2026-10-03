@@ -14,6 +14,7 @@ import {
   ParticleField,
   SceneCamera,
 } from "./primitives";
+import {FebruaryAct} from "./FebruaryAct";
 
 const C = {
   paper: "#F3E9D2",
@@ -28,7 +29,7 @@ const C = {
   cream: "#FFF6E6",
 };
 
-export const PILOT_FRAMES = 330;
+export const PILOT_FRAMES = 540;
 
 const T = {
   route: 30,
@@ -422,7 +423,7 @@ const ScreenGraphics: React.FC<{frame: number}> = ({frame}) => {
 
 export const AdvancedOpeningPilot: React.FC = () => {
   const frame = useCurrentFrame();
-  const vignette = interpolate(frame, [0, 120, 260, 329], [0.09, 0.03, 0.07, 0.14], {
+  const vignette = interpolate(frame, [0, 120, 260, 329, 420, 539], [0.09, 0.03, 0.07, 0.10, 0.04, 0.08], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
@@ -460,6 +461,7 @@ export const AdvancedOpeningPilot: React.FC = () => {
 
       <ScreenGraphics frame={frame}/>
       <FebruaryBridge frame={frame}/>
+      <FebruaryAct frame={frame}/>
 
       <AbsoluteFill
         style={{

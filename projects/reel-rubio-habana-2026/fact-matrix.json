@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "project": "reel-rubio-habana-2026",
+  "updated": "2026-10-02",
+  "facts": [
+    {
+      "id": "eo14380-oil-tariff-route",
+      "date": "2026-01-29",
+      "claim": "EO 14380 declared a national emergency with respect to Cuba and created an additional-tariff mechanism tied to countries supplying oil to Cuba.",
+      "actor": "President Donald Trump",
+      "sourceType": "primary",
+      "source": "White House / EO 14380",
+      "visualAllowed": [
+        "generic tanker",
+        "Cuba/Florida map",
+        "official-order document treatment",
+        "abstract tariff barrier"
+      ],
+      "visualNotAllowed": [
+        "Rubio signing the order",
+        "specific supplier country unless separately sourced",
+        "fabricated interdiction footage"
+      ],
+      "attribution": "fact"
+    },
+    {
+      "id": "eo14389-ieepa-tariff-end",
+      "date": "2026-02-20",
+      "claim": "EO 14389 ended additional tariffs imposed under IEEPA, including those associated with EO 14380, while leaving the underlying emergency and non-tariff actions in place.",
+      "actor": "President Donald Trump",
+      "sourceType": "primary",
+      "source": "White House / EO 14389",
+      "visualAllowed": [
+        "EO 14389 document",
+        "tariff barrier retracting",
+        "timeline continuing after rollback"
+      ],
+      "visualNotAllowed": [
+        "depicting January tariffs as unchanged through the full year"
+      ],
+      "attribution": "fact"
+    },
+    {
+      "id": "eo14404-sanctions-framework",
+      "date": "2026-05-01",
+      "claim": "EO 14404 expanded sanctions authorities related to Cuba and delegated implementation functions to the Secretary of State and Secretary of the Treasury.",
+      "actor": "President Donald Trump; State; Treasury",
+      "sourceType": "primary",
+      "source": "White House / EO 14404",
+      "visualAllowed": [
+        "official-order macro",
+        "State/Treasury institutional nodes",
+        "authentic Rubio still/video as Secretary of State"
+      ],
+      "visualNotAllowed": [
+        "Rubio shown signing the EO",
+        "Rubio presented as sole author of the sanctions regime"
+      ],
+      "attribution": "fact"
+    },
+    {
+      "id": "ofac-june4-designations",
+      "date": "2026-06-04",
+      "claim": "OFAC added multiple Cuba-related individuals and entities to the SDN list, including ICAP and MINFAR.",
+      "actor": "Treasury / OFAC",
+      "sourceType": "primary",
+      "source": "OFAC Recent Action 20260604",
+      "visualAllowed": [
+        "official lists",
+        "institution/entity cards",
+        "network nodes labeled by category"
+      ],
+      "visualNotAllowed": [
+        "asserting unverified criminal conduct beyond the official attributed rationale"
+      ],
+      "attribution": "fact for designation; rationale attributed to US government"
+    },
+    {
+      "id": "ofac-sept3-bank",
+      "date": "2026-09-03",
+      "claim": "OFAC designated Banco Exterior de Cuba and additional Cuba-related targets under EO 14404.",
+      "actor": "Treasury / OFAC",
+      "sourceType": "primary",
+      "source": "OFAC Recent Action 20260903",
+      "visualAllowed": [
+        "bank node",
+        "SWIFT-style abstract network",
+        "official list card"
+      ],
+      "visualNotAllowed": [
+        "fabricated bank failure or customer footage"
+      ],
+      "attribution": "fact"
+    },
+    {
+      "id": "ofac-sept29-indirect",
+      "date": "2026-09-29",
+      "claim": "OFAC updated Cuba-related restrictions affecting indirect transactions with Cuba Restricted List entities and removed the U-turn authorization in the September regulatory changes.",
+      "actor": "Treasury / OFAC",
+      "sourceType": "primary",
+      "source": "OFAC FAQs / Sep 29 regulatory update",
+      "visualAllowed": [
+        "A-B-C payment graph",
+        "transaction path blocked",
+        "regulation document"
+      ],
+      "visualNotAllowed": [
+        "claiming all Cuba transactions became prohibited"
+      ],
+      "attribution": "fact, with exact scope preserved"
+    },
+    {
+      "id": "rubio-role",
+      "date": "2026",
+      "claim": "Marco Rubio served as Secretary of State and was a public voice and implementing official for parts of the Cuba policy, but did not personally sign the presidential executive orders.",
+      "actor": "Marco Rubio",
+      "sourceType": "primary/official",
+      "source": "State Department + White House executive orders",
+      "visualAllowed": [
+        "authentic official photo/video",
+        "lower-third identity",
+        "State Department context"
+      ],
+      "visualNotAllowed": [
+        "synthetic Rubio footage",
+        "voice clone",
+        "Rubio depicted as sole author of all measures"
+      ],
+      "attribution": "fact"
+    }
+  ]
+}

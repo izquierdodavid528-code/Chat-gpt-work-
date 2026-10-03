@@ -131,6 +131,16 @@ jobs:
             echo "No project assets folder found; continuing for asset-free project."
           fi
 
+      - name: Import configured Drive render dependencies
+        if: env.SKIP_DRIVE != 'true'
+        run: |
+          set -euo pipefail
+          python3 scripts/remotion/pull-drive-imports.py \
+            "$PROJECT_DIR/project.config.json" \
+            "$PROJECT_DIR/public" \
+            "drive:$DRIVE_BASE/$DRIVE_PROJECT" \
+            "$RUNNER_TEMP/rclone.conf"
+
       - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:

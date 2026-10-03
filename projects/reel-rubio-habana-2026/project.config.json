@@ -50,5 +50,13 @@
       "local": "rubio-habana-map.mp4",
       "required": true
     }
+  ],
+  "remoteAssetImports": [
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Official_portrait_of_Secretary_Marco_Rubio_%283x4_cropped%29.jpg/960px-Official_portrait_of_Secretary_Marco_Rubio_%283x4_cropped%29.jpg",
+      "local": "rubio-official-portrait.jpg",
+      "required": true,
+      "provenance": "U.S. Department of State official portrait; U.S. federal government work / public domain"
+    }
   ]
 }

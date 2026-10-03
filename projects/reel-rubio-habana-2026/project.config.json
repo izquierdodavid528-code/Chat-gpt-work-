@@ -41,6 +41,10 @@
         "maxLeadingSeconds": 1.2,
         "maxTrailingSeconds": 1.5,
         "maxContinuousSeconds": 3
+      },
+      "validationSignal": {
+        "enabled": true,
+        "minPeakDbfs": -45
       }
     }
   },
@@ -57,6 +61,12 @@
       "local": "rubio-official-portrait.jpg",
       "required": true,
       "provenance": "U.S. Department of State official portrait; U.S. federal government work / public domain"
+    },
+    {
+      "url": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Time%20Passes.mp3",
+      "local": "rubio-habana-bed.mp3",
+      "required": true,
+      "provenance": "Time Passes — Kevin MacLeod (incompetech.com), licensed under CC BY 3.0"
     }
   ]
 }

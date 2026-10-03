@@ -130,3 +130,31 @@ Current v2 render:
 - run `37091037962`
 - requestId `rubio-habana-animated-full-rough-cut-v2`
 - next gate: compare v2 representative frames against v1 before narration.
+
+
+## Rough cut v2 milestone
+
+Run `37091037962`: SUCCESS.
+
+Visual QA:
+- opening geography: PASS after v2 map revision;
+- May toolbox / State-Treasury / Rubio: PASS;
+- designations -> bank transformation: PASS;
+- finance / mobility: PASS after dashboard removal and sequential routing;
+- close: PASS after 8-second retiming.
+
+Minor post-v2 cleanup:
+- redundant hook sentence removed in commit `0221c3f34eea2042e87e15896c101c8e411292c0`.
+
+Narration:
+- `NARRATION_V2.md`
+- 145 spoken words
+- targeted for a natural ~60 second delivery.
+
+Sound:
+- `SOUND_DESIGN_V1.md` prepared.
+- Final voice/SFX generation has not been run yet because external generation may consume connected-service credits.
+
+Current gate:
+- illustrated animation language is approved for rough-cut continuation;
+- next production phase is narration + SFX + captions + final mix.

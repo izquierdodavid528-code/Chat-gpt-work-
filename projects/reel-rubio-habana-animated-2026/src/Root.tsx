@@ -2,7 +2,7 @@ import React from "react";
 import {Composition} from "remotion";
 import {RubioHabanaAnimated, TOTAL_FRAMES} from "./Video";
 import {AdvancedOpeningPilot, PILOT_FRAMES} from "./advanced/OpeningPilot";
-import {CartoonExplainerV5, CARTOON_FILM_FRAMES} from "./advanced/CartoonExplainerV5";
+import {CartoonExplainerV6, CARTOON_FILM_FRAMES} from "./advanced/CartoonExplainerV6";
 
 export const RemotionRoot: React.FC = () => (
   <>
@@ -15,8 +15,8 @@ export const RemotionRoot: React.FC = () => (
       height={1920}
     />
     <Composition
-      id="CartoonExplainerV5"
-      component={CartoonExplainerV5}
+      id="CartoonExplainerV6"
+      component={CartoonExplainerV6}
       durationInFrames={CARTOON_FILM_FRAMES}
       fps={30}
       width={1080}

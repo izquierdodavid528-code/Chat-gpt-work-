@@ -52,8 +52,8 @@ const MapHook:React.FC=()=>{
     </div>
     <LayerLabel text="PETRÓLEO" y={1260} delay={74}/>
     <LayerLabel text="SANCIONES" y={1330} delay={88}/>
-    <LayerLabel text="DESIGNACIONES" y={1400} delay={102}/>
-    <LayerLabel text="FINANZAS" y={1470} delay={116}/>
+    <LayerLabel text="FINANZAS" y={1400} delay={102}/>
+    <LayerLabel text="MOVILIDAD" y={1470} delay={116}/>
     <div style={{position:"absolute",right:90,top:120,width:12,height:12,borderRadius:99,background:RED,boxShadow:"0 0 18px rgba(217,54,54,.55)",transform:`scale(${pulse})`}}/>
     <div style={{position:"absolute",right:74,bottom:82,color:STEEL,fontFamily:"Arial",fontSize:14,fontWeight:900,letterSpacing:2,opacity:.72}}>GRÁFICA EXPLICATIVA</div>
   </AbsoluteFill>;

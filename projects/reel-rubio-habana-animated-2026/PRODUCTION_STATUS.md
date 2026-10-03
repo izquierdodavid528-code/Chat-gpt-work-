@@ -1,12 +1,24 @@
 # PRODUCTION STATUS — Illustrated Rubio / La Habana 2026
 
-Updated: 2026-10-03
+Updated: 2026-10-03 after review of the V6 validation
 
-## Project state
+## Latest state — V6 is not an approved master
+
+- The main branch preserves the earlier 60-second rough-cut baseline. The latest cartoon experiment remains isolated on branch `memorias-cartoon-v6`; it has not replaced main.
+- V6 source commit rendered by run [37129519131](https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37129519131): `e182964b1c4d6bc502a34a0635eef1d07d9fdaef`. The branch documentation head is `528aad5191441f8065b65a7fcd48700394556bda`.
+- Technical result: 60 seconds, 1080×1920, 30 fps, H.264. The render has zero audio streams; the Blender job was skipped; the Drive delivery step was skipped. The successful run produced a validation artifact, not a final delivery.
+- Creative review: a frame sample at five-second intervals and source-code review confirm added paper texture, ambient layers, facial details and some movement. The piece still relies on flat SVG scenes and repeated simple character loops; the figures are small in many shots, with limited pose-to-pose acting and spatial interaction. It has no Flow-generated assets or Blender-rendered shot.
+- The user's current target is a professional illustrated political explainer with the broad storytelling qualities of Memorias de Pez. No current version has final creative approval. The new task is an isolated 8–12-second opening pilot, not another full-reel render.
+- Flow generation is a manual user handoff. Use the prompts and file-routing instructions in [FLOW_ASSET_BRIEFS.md](FLOW_ASSET_BRIEFS.md). The repository does not automatically call Google Flow.
+- Preserve the earlier main-branch baseline. Do not add final narration, captions, sound or full-reel render until the opening pilot's look and motion are approved.
+
+The historical V2 notes below are retained for provenance. Their former “PASS” and “approved” wording records the state at that earlier milestone; it does not override the user's later feedback or imply that V2 or V6 is the final look.
+
+## Historical project state — V2 baseline
 
 Replacement project for the cancelled slide-style reel.
 
-Current rough cut:
+State recorded at that milestone:
 - composition: `RubioHabanaAnimated`
 - 1080x1920
 - 30 fps
@@ -82,7 +94,7 @@ Findings already fixed:
 - unnecessary explanatory copy in May
 - rough cut retimed to narration structure
 
-## Current render request
+## Historical render request
 
 requestId: `rubio-habana-animated-full-rough-cut-v1`
 range: `0-1799`
@@ -115,7 +127,7 @@ Issues found in v1:
 
 All seven items are already fixed in current v2 code.
 
-## Current v2 improvements
+## Rough cut v2 improvements
 
 - more geographically recognizable Florida/Cuba using the prior verified simplified coordinate geometry;
 - earlier January fade during February;
@@ -132,7 +144,7 @@ Current v2 render:
 - next gate: compare v2 representative frames against v1 before narration.
 
 
-## Rough cut v2 milestone
+## Rough cut v2 milestone (historical)
 
 Run `37091037962`: SUCCESS.
 
@@ -155,6 +167,6 @@ Sound:
 - `SOUND_DESIGN_V1.md` prepared.
 - Final voice/SFX generation has not been run yet because external generation may consume connected-service credits.
 
-Current gate:
-- illustrated animation language is approved for rough-cut continuation;
-- next production phase is narration + SFX + captions + final mix.
+Historical gate after the V2 milestone:
+- the V2 rough cut passed the recorded visual review at that time;
+- the user's later feedback supersedes that creative approval. V2 and V6 remain reference versions, not final masters.

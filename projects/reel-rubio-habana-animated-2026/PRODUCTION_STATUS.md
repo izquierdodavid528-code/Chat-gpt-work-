@@ -170,3 +170,13 @@ Current gate:
 - Pilot delivery validation now uses a 10.9-second minimum so the complete 11-second composition can pass the existing output checks.
 - V3 remains an opening prototype with no narration, captions, or sound design. The user clarified that the satirical “versión económica con trabuco” is Donald Trump. V4 will test original paper-cutout caricatures of Rubio and Trump, with the antique trabuco used only as a non-firing visual gag; neither appears in the V3 render.
 
+
+
+## V5 cartoon de 60 segundos — en validación
+
+- Rama: `memorias-cartoon-v5` (se mantiene aislada de `main`).
+- Composición: `CartoonExplainerV5`, vertical 1080×1920, 30 fps, 1800 frames.
+- Dirección: caricaturas 2D articuladas, mapas y objetos que actúan, gesto facial y corporal, rutas y páginas que enlazan escenas mediante solapamiento; sin imitar diseños concretos del canal de referencia.
+- Secuencia basada en `NARRATION_V2.md`: enero, febrero, mayo, designación OFAC y reglas financieras/de viaje de septiembre, con atribuciones integradas.
+- La versión previa V4 tenía demasiado espacio libre y encuadre lateral al introducir personajes; V5 reajusta la composición para mantener las acciones en el centro.
+- Render y revisión de todos los 60 s pendientes en GitHub Actions antes de aceptar dirección final.

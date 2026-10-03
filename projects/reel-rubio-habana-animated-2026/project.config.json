@@ -1,10 +1,10 @@
 {
   "slug": "reel-rubio-habana-animated-2026",
   "type": "remotion",
-  "compositionId": "AdvancedOpeningPilot",
+  "compositionId": "CartoonExplainerV5",
   "driveProjectDir": "03 - Reel Rubio Habana Animated 2026",
   "studioPort": 3000,
-  "outputFile": "out/rubio-habana-advanced-opening-pilot-v4.mp4",
+  "outputFile": "out/rubio-habana-cartoon-explainer-v5.mp4",
   "render": {
     "concurrency": "100%",
     "expectedCodec": "h264",
@@ -12,6 +12,6 @@
     "expectedHeight": 1920,
     "expectedFps": 30,
     "requireAudio": false,
-    "minDurationSeconds": 17.9
+    "minDurationSeconds": 59.9
   }
 }

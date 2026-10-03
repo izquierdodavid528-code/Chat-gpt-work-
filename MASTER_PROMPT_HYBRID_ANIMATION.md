@@ -109,11 +109,11 @@ For each shot briefly state:
 - whether the asset is reusable;
 - expected technical risk.
 
-Do not send a shot to Blender merely because Blender is available.
+Compare Flow video, Flow still + Remotion, Remotion-native animation and Blender for each shot. State why the chosen method gives the best visual result and iteration time. Do not send a shot to Blender merely because Blender is available; use it when deterministic spatial control, rigging or exact editable motion materially matters.
 
 ## Iteration strategy
 
-Work from cheap to expensive:
+Work from fast visual tests to approved finals. Consider Flow video early for motion-led shots; use focused prompts, approved ingredients and one-variable revisions to make credit use efficient. Check the current in-product credit estimate before batches because model costs can change. Do not treat credit conservation as a reason to avoid a useful Flow clip.
 
 1. story/action beat;
 2. rough storyboard;
@@ -125,6 +125,20 @@ Work from cheap to expensive:
 8. visual QA;
 9. audio/caption QA;
 10. final render.
+
+<!-- previous list replaced -->
+<!-- Work from cheap to expensive:
+
+1. story/action beat;
+2. rough storyboard;
+3. proxy assets;
+4. Remotion timing;
+5. representative-frame or low-res previews;
+6. final Flow/Blender asset generation;
+7. final integration;
+8. visual QA;
+9. audio/caption QA;
+10. final render. -->
 
 Do not spend final-render compute on a shot whose timing/composition has not been approved.
 

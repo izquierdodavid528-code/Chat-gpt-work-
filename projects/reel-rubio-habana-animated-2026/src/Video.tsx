@@ -255,15 +255,6 @@ const OpeningAct:React.FC=()=>{
       2026
     </div>
 
-    <div style={{
-      position:"absolute",left:78,top:205,width:700,
-      fontFamily:"Arial",fontWeight:950,fontSize:48,lineHeight:1.02,
-      color:C.ink,
-      opacity:interpolate(f,[14,40,72,94],[0,1,1,0],clamp)
-    }}>
-      La presión llega por<br/>varios caminos.
-    </div>
-
     <Tanker frame={f}/>
     <CargoBox frame={f}/>
     <CustomsGate frame={f}/>

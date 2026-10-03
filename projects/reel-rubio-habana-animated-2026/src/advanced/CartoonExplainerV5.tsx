@@ -361,14 +361,14 @@ const Closing: React.FC<{f:number}> = ({f})=>{
       <path d="M-476 -104 Q-468 -132 -433 -128 L-36 -124 Q-4 -121 -3 -92 L-14 66 Q-19 93 -49 92 L-445 86 Q-478 83 -479 54 Z" fill={C.blueDeep} stroke={C.ink} strokeWidth="8"/>
       <path d="M-3 0 L22 -20 L42 2 L20 20 Z" fill={C.cream} stroke={C.ink} strokeWidth="6"/>
       {txt(-238,-56,21,"CASA BLANCA",C.gold,1000)}
-      {txt(-238,-18,18,"INVoca seguridad y política exterior",C.cream,800)}
-      {txt(-238,20,18,"para justificar sus medidas",C.cream,800)}
+      {txt(-238,-18,18,"INVOCA SEGURIDAD NACIONAL",C.cream,800)}
+      {txt(-238,20,18,"Y POLÍTICA EXTERIOR",C.cream,800)}
       <path d="M-42 92 L-2 128 L13 91" fill={C.blueDeep} stroke={C.ink} strokeWidth="7" strokeLinejoin="round"/>
       <path d="M40 -104 Q46 -129 79 -128 L437 -125 Q473 -121 475 -91 L463 60 Q460 88 429 88 L71 83 Q42 79 39 51 Z" fill={C.gold} stroke={C.ink} strokeWidth="8"/>
       <path d="M42 0 L16 -20 L-5 1 L18 20 Z" fill={C.gold} stroke={C.ink} strokeWidth="6"/>
       {txt(256,-53,21,"MINREX",C.red,1000)}
-      {txt(256,-15,18,"DENUNCIA EL RECRUD. DEL BLOQUEO",C.ink,800)}
-      {txt(256,22,18,"y el daño a la población cubana",C.ink,800)}
+      {txt(256,-15,18,"DENUNCIA EL RECRUDECIMIENTO",C.ink,800)}
+      {txt(256,22,18,"DEL BLOQUEO Y EL DAÑO A CUBA",C.ink,800)}
       <path d="M429 85 L466 120 L483 83" fill={C.gold} stroke={C.ink} strokeWidth="7" strokeLinejoin="round"/>
     </g>
     {txt(540,1664,28,"EN 2026 LAS RESTRICCIONES CAMBIARON",C.red,1000)}

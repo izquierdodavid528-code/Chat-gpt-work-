@@ -1,5 +1,5 @@
 import React from "react";
-import {AbsoluteFill, Audio, Img, Sequence, interpolate, spring, staticFile, useCurrentFrame} from "remotion";
+import {AbsoluteFill, Audio, Img, Sequence, Video, interpolate, spring, staticFile, useCurrentFrame} from "remotion";
 
 export const ANIMATIC_FRAMES = 60 * 30;
 const BED = staticFile("rubio-habana-bed.ogg");

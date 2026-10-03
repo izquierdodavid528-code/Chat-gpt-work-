@@ -194,6 +194,7 @@ const FinanceLayer:React.FC=()=>{
   return <AbsoluteFill style={{background:"linear-gradient(180deg,#071019,#05080c)",overflow:"hidden"}}>
     <div style={{position:"absolute",left:70,top:120,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>29–30 SEPTIEMBRE</div>
     <div style={{position:"absolute",left:70,top:176,right:70,color:INK,fontFamily:"Arial",fontSize:58,fontWeight:900,lineHeight:1.02}}>LA RED<br/>FINANCIERA</div>
+    <div style={{position:"absolute",left:70,top:330,right:70,color:STEEL,fontFamily:"Arial",fontSize:21,fontWeight:800,lineHeight:1.25}}>CRL · CUBA RESTRICTED LIST</div>
     <div style={{position:"absolute",left:80,right:80,top:465,height:600,borderRadius:32,border:"1px solid rgba(126,151,168,.25)",background:"radial-gradient(circle at 50% 50%,rgba(20,48,65,.35),rgba(5,10,15,.96))"}}>
       {[
         {label:"A",x:145,y:250},
@@ -210,6 +211,7 @@ const FinanceLayer:React.FC=()=>{
       <div style={{color:GOLD,fontFamily:"Arial",fontSize:17,fontWeight:900,letterSpacing:2}}>CAMBIO REGULATORIO</div>
       <div style={{color:INK,fontFamily:"Arial",fontSize:31,fontWeight:900,marginTop:8}}>U-turn · autorización retirada</div>
     </div>
+    <div style={{position:"absolute",right:70,bottom:120,color:STEEL,fontFamily:"Arial",fontSize:16,fontWeight:800,letterSpacing:1.2}}>FUENTE · OFAC · ACTUALIZACIÓN 29 SEP 2026</div>
   </AbsoluteFill>;
 };
 

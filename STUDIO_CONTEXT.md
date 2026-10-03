@@ -7,12 +7,13 @@
 This repository is the control center for a reusable remote multimedia studio.
 
 Architecture:
-- ChatGPT / Codex: planning, editing, automation and maintenance.
-- GitHub: source code, configuration, version history and GitHub Actions.
+- ChatGPT / Codex: creative direction, planning, editing, code, automation and maintenance.
+- Flow / generative visual tools: visual development, character/background/prop assets and selective short motion plates.
+- GitHub: source code, configuration, prompts/manifests, version history and GitHub Actions.
 - Codespaces / VS Code Web: interactive remote workspace from Android or desktop.
-- Blender: 3D / motion / compositing.
-- Remotion: assembly, subtitles, text, motion graphics and final video composition.
-- Google Drive: large assets, renders and delivery files.
+- Blender: selective 3D / rigged / spatial animation, not the default renderer for the whole reel.
+- Remotion: master timeline, 2D/2.5D animation, compositing, subtitles, audio and final video composition.
+- Google Drive: large assets, Blender/Flow intermediates, renders and delivery files.
 
 Repository:
 - `izquierdodavid528-code/Chat-gpt-work-`
@@ -20,6 +21,19 @@ Repository:
 
 Drive root:
 - `Remotion Projects`
+
+## Canonical hybrid animation workflow
+
+Read `HYBRID_ANIMATION_PIPELINE.md` before designing an animated project.
+
+Shot routing rule:
+- Remotion first for 2D/2.5D, editorial timing, maps, typography, transitions and compositing.
+- Flow for reusable visual assets and selective short generated-motion plates.
+- Blender only when real depth, rigging, spatial camera motion, perspective or lighting materially improves the shot.
+- Blender defaults to EEVEE Next and short reusable segments; do not render a complete social reel in Blender unless the project is genuinely 3D-first.
+- Validate timing with proxies/low-cost previews before generating or rendering expensive final assets.
+
+For new animation sessions, `MASTER_PROMPT_HYBRID_ANIMATION.md` is the canonical startup prompt.
 
 ## Canonical Blender workflow
 
@@ -162,13 +176,15 @@ The experiment showed that parallel EEVEE rendering reduced wall-clock frame com
 
 When asked to continue studio work:
 1. read this file;
-2. read the target project's `project.config.json`;
-3. read `WORKSPACE_AUDIT.md` for the validated production contract;
-4. read `WORKSPACE_GUIDE.md` only when broader architecture is needed;
-5. use the generic workflows instead of inventing duplicate automation;
-6. keep Drive for heavy assets/renders and GitHub for source/config;
-7. never expose `RCLONE_CONFIG_B64` or other secrets;
-8. do not call a render "final" until its verification/delivery job succeeds.
+2. for animation work, read `HYBRID_ANIMATION_PIPELINE.md`;
+3. read the target project's `project.config.json`;
+4. read `WORKSPACE_AUDIT.md` for the validated production contract;
+5. read `WORKSPACE_GUIDE.md` only when broader architecture is needed;
+6. use the generic workflows instead of inventing duplicate automation;
+7. keep Drive for heavy assets/renders and GitHub for source/config/prompts;
+8. route each shot to the cheapest tool that preserves intended quality;
+9. never expose `RCLONE_CONFIG_B64` or other secrets;
+10. do not call a render "final" until its verification/delivery job succeeds.
 
 ## Recovery and known boundaries
 

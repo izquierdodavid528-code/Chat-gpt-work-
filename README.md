@@ -2,8 +2,10 @@
 
 For any new ChatGPT/Codex session working on multimedia projects, **read [STUDIO_CONTEXT.md](STUDIO_CONTEXT.md) first**.
 
-The reusable production architecture, Blender render contract, Drive/GitHub division of responsibilities, and canonical workflows are documented in:
+The reusable production architecture, hybrid animation policy, Blender render contract, Drive/GitHub division of responsibilities, and canonical workflows are documented in:
 - `STUDIO_CONTEXT.md` — concise cross-chat state and operating rules.
+- `HYBRID_ANIMATION_PIPELINE.md` — canonical Flow + Remotion + Blender creative-production model.
+- `MASTER_PROMPT_HYBRID_ANIMATION.md` — reusable startup prompt for animation sessions.
 - `WORKSPACE_AUDIT.md` — latest validated production audit and known limits.
 - `WORKSPACE_GUIDE.md` — detailed workspace documentation.
 - `.github/workflows/blender-smart-render.yml` — canonical audited Blender final render.

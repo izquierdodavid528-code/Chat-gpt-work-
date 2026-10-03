@@ -14,14 +14,17 @@ Para continuar el workspace desde un chat nuevo, usar este orden como fuente de 
 6. usar `Blender Smart Render` para Blender y no crear workflows específicos por proyecto salvo que exista una necesidad que el workflow genérico no pueda representar;
 7. no declarar una entrega final hasta que hayan pasado el contrato del master, integridad de frames, fidelity gate cuando aplique, verificación de video y entrega de producción.
 
-GitHub es la fuente de verdad para código, configuración, historial y estado de automatización. Drive es la fuente de verdad para assets pesados y entregas finales.
+GitHub es la fuente de verdad para código, configuración, prompts/manifiestos, historial y estado de automatización. Drive es la fuente de verdad para assets pesados, recursos generados, renders intermedios y entregas finales.
+
+Para animación, la política creativa canónica está en `HYBRID_ANIMATION_PIPELINE.md` y el prompt de arranque reutilizable en `MASTER_PROMPT_HYBRID_ANIMATION.md`.
 
 ## Arquitectura
 
 - **GitHub**: codigo, historial, configuracion y automatizaciones.
 - **Codespaces / VS Code Web**: entorno Linux remoto interactivo.
-- **Remotion Studio**: previsualizacion visual de composiciones en el puerto 3000.
-- **Blender GUI**: interfaz completa de Blender via noVNC en el puerto 6080.
+- **Flow / IA visual**: departamento de arte para personajes, fondos, props, placas y clips breves cuando aporten valor.
+- **Remotion Studio**: timeline maestro, 2D/2.5D, composicion y previsualizacion visual en el puerto 3000.
+- **Blender GUI**: herramienta selectiva para 3D, rigging y movimiento espacial via noVNC en el puerto 6080.
 - **Google Drive**: assets grandes y renders.
 - **GitHub Actions**: renders reproducibles y tareas autonomas.
 - **ChatGPT/Codex**: planificacion, edicion, codigo y mantenimiento.
@@ -99,6 +102,19 @@ npm run drive:push-render -- mi-proyecto
 ```
 
 Para que esto funcione sin autenticacion manual en cada Codespace, crear un secreto de Codespaces llamado `RCLONE_CONFIG_B64` con el mismo contenido seguro usado por el workflow. Nunca guardar ese valor en archivos del repositorio.
+
+## Flujo creativo híbrido
+
+Antes de producir un plano, clasificarlo como:
+- `R`: Remotion nativo;
+- `F`: asset estático generado con Flow;
+- `FV`: clip breve generado con Flow;
+- `B`: plano/elemento selectivo de Blender;
+- `S`: material auténtico de fuente externa.
+
+Regla económica: usar la herramienta más barata que conserve la calidad visual buscada. Remotion sigue siendo el ensamblador y timeline maestro; Flow aporta riqueza visual; Blender se reserva para profundidad, rigs, perspectiva y cámara 3D que realmente justifiquen su coste.
+
+Para Blender, usar EEVEE Next por defecto, previews económicos antes del final y segmentos cortos/reutilizables. Cycles solo cuando un benchmark real justifique el coste.
 
 ## Renders automaticos
 

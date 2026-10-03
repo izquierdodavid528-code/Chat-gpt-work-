@@ -12,7 +12,7 @@ Professional 60-second Spanish-language vertical illustrated explainer, 1080×19
 - Current isolated work branch animatic/rubio-60s-source-checked derives from the docs branch based on main. Neither main nor pilot branch has been changed.
 - The old main illustration remains a baseline, not the new final direction.
 
-## Latest render audit
+## Prior pilot render audit
 Run 37138611848 completed with technical PASS. Actual artifact inspected: H.264 1080×1920, 30 fps, 9.3 seconds, no audio stream; audio QA is NOT_ENABLED. Visual review of the actual frames shows the harbor opening cutting directly to Rubio with the document; there is no map in this render. The later document/bridge transformation makes the paper motif recur and does not yet create a complete narrative arc. No complete story, narration, mix, captions or final QA. This is not an approved film.
 
 ## Assets
@@ -20,6 +20,12 @@ Drive source: 02 - Reel Rubio Habana 2026/assets/flow. Three stills and six Flow
 - rubio-may-document-acting-v1.mp4 — identity/style stable, point unclear, paper motion awkward; reaction insert only for now.
 - ofac-ledger-to-bank-v1.mp4 — readable page-to-bank morph, blank facade; recommended for OFAC transition.
 Mute all clip audio by default. Check upscaling and 24-to-30 cadence.
+
+## Latest full animatic render and review
+
+Run 37155793209 completed successfully after the bank-source retime. Downloaded and inspected artifact: H.264, 1080×1920, 30 fps, 60.032 s container duration (1800-frame composition), one 48 kHz stereo AAC track. Delivery report is TECHNICAL PASS. FFmpeg analysis of the embedded voice measured -18.4 LUFS integrated, 2.4 LU LRA, -5.2 dBFS true peak and -5.3 dBFS sample peak; no clipping. The repository audio-QA report says NOT_ENABLED, so these are direct media measurements, not an automated audio-QA pass.
+
+A contact sheet across all 12 shot windows and a six-frame sequence of S08 were inspected. The second render now reveals the bank facade by the spoken bank name. Caption lines remain within two lines at phone preview size. Eight scenes intentionally remain marked BLOCKING PLACEHOLDER · NOT FINAL ART: they need original sourced Remotion maps, routes, calendar/state-change diagrams and category graphics. This is a VOICE-LED ANIMATIC, not a creative or final pass; it still lacks final scene animation, SFX, music, final voice approval and full visual/factual/audio QA.
 
 ## Voice and animatic status
 
@@ -29,8 +35,8 @@ The first full render reached technical PASS at 60.032 s, H.264 1080×1920 / 30 
 
 ## Next
 
-1. Run the full 60-second render on this isolated branch with Drive assets enabled; check build, audio QA and artifact.
-2. Inspect motion, phone framing, visual holds, Flow timing, captions and speech onsets; update the matrix from findings.
-3. Request Flow generation only for gaps where a physical action or acting shot is better in Flow than Remotion; exact text, map geography and labels stay in Remotion.
-4. After animatic review, lock voice performance and timing, then add action-linked SFX, restrained music and finalized captions.
-5. Continue factual, visual and audio QA separately; the 9.3-second pilot is not approved.
+1. Replace the eight blockouts with the sourced Remotion map, route, gate/calendar, delegation, register and travel-category motion; add exact bank/date labels.
+2. Keep the existing Flow harbor, Rubio reaction, bank transformation and map still. No new Flow generation is justified by the reviewed gaps at this stage; prompt only if a later shot needs a specific organic action or acting take that Remotion cannot hold.
+3. Add restrained music and action-linked SFX after motion timing is stable; verify OFAC, U-turn and MINREX aloud.
+4. Recheck phrase captions, safe areas and mobile readability on the next render.
+5. Complete separate factual, creative, audio and final passes. Neither this animatic nor the older 9.3-second pilot is creatively approved.

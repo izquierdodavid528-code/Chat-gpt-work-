@@ -1,0 +1,103 @@
+# PRODUCTION STATUS — Reel Rubio / La Habana 2026
+
+Updated: 2026-10-03
+
+## Current objective
+
+Produce a 60-second vertical (1080x1920, 30 fps) neutral documentary-style animated reel explaining the documented expansion and change of U.S. Cuba-policy instruments during 2026, without presenting recreations as real footage and without attributing presidential executive orders personally to Marco Rubio.
+
+## Current master architecture
+
+- Remotion project: `projects/reel-rubio-habana-2026`
+- Blender hook project: `projects/rubio-habana-map-2026`
+- Drive project directory: `Remotion Projects/02 - Reel Rubio Habana 2026`
+- GitHub Actions entrypoint: `.github/workflows/studio-render-request.yml`
+- Remotion renderer: `.github/workflows/remotion-drive-render.yml`
+- Blender renderer: `.github/workflows/blender-smart-render.yml`
+
+## Automation state
+
+Cross-engine dependency import is automated.
+
+Blender production deliveries are written to:
+
+`Remotion Projects/02 - Reel Rubio Habana 2026/renders/`
+
+The Remotion project now declares:
+
+`renders/rubio-habana-map.mp4 -> public/rubio-habana-map.mp4`
+
+via `driveAssetImports` in `project.config.json`.
+
+The generic import implementation is:
+
+`scripts/remotion/pull-drive-imports.py`
+
+No manual Drive-to-GitHub asset copy should be needed for the Blender hook.
+
+## Hook state
+
+The first Blender attempt exposed visual safe-area problems:
+- typography rendered inside Blender was clipped;
+- right-side labels exceeded the vertical safe area;
+- lower title treatment invaded the frame;
+- the 3D plate and editorial typography were too tightly coupled.
+
+Current solution:
+- Blender v4 is a clean 3D plate only;
+- no political/editorial typography is baked into Blender;
+- Remotion owns all titles, labels and hierarchy;
+- Blender keeps Florida/Cuba geometry, Miami-Havana route and pressure rings.
+
+Current validation request:
+- requestId: `rubio-habana-map-hook-v4-clean-3d-plate-validation`
+- validationFrameCount: 6
+- GitHub Actions run: `37085181118`
+
+After technical validation passes:
+1. set validationFrameCount back to 0;
+2. issue a new requestId;
+3. render all 105 frames;
+4. inspect beginning/middle/end frames before accepting the plate;
+5. allow Blender delivery to upload `rubio-habana-map.mp4` to Drive.
+
+## Remotion state
+
+The animatic has been expanded from 20 seconds to the full 60-second chapter structure:
+
+- 0–5 s: hook / map
+- 5–14 s: oil / EO 14380 and EO 14389 rollback
+- 14–24 s: EO 14404 framework
+- 24–37 s: designations
+- 37–50 s: indirect transactions / U-turn change
+- 50–60 s: neutral close
+
+The hook already references the Blender plate and stretches the 3.5-second plate across the 5-second hook using playbackRate 0.7.
+
+The project delivery QA now requires at least 59 seconds so an obsolete 20-second render cannot pass as a production delivery.
+
+## Factual / editorial guardrails
+
+Use `fact-matrix.json`, `RESEARCH_BRIEF.md`, `NARRATION_V2.md`, and `CREATIVE_QA.md` as mandatory gates.
+
+Key rules:
+- presidential EOs are signed by the President, not Rubio;
+- Rubio is shown as Secretary of State / public and implementing official where documented;
+- U.S. government rationales remain attributed;
+- no synthetic documentary-looking footage of political figures;
+- do not imply the January IEEPA tariff mechanism persisted unchanged after the February rollback;
+- do not claim U.S. measures alone explain Cuba's economic conditions;
+- final close describes competing official interpretations without choosing one.
+
+## Next production steps
+
+1. Finish Blender v4 validation.
+2. Launch full 105-frame Blender hook.
+3. Visual QA on control frames and final MP4.
+4. Trigger a short Remotion validation using the imported Blender plate.
+5. Review the full 60-second animatic visually.
+6. Replace only the scenes that clearly benefit from Blender; keep simpler explanatory graphics in Remotion.
+7. Add final narration.
+8. Generate captions from the final narration timing.
+9. Run creative QA.
+10. Render the 60-second production master.

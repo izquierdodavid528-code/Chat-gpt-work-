@@ -49,7 +49,7 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
  const move=interpolate(p,[0,1],[70,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  return <AbsoluteFill style={{overflow:"hidden",background:"linear-gradient(145deg,#e8ddc6,#f7f0e3 54%,#d8d1c3)"}}>
   <Paper/>
-  <div style={{position:"absolute",left:"8%",right:"8%",top:"12%",height:"74%",transform:"translateY("+move+"px)",opacity:interpolate(p,[0,.18],[0,1],{extrapolateRight:"clamp"})}}>
+  <div style={{position:"absolute",left:"8%",right:"8%",top:"12%",height:"74%",transform:"translateY("+move+"px)",opacity:interpolate(p,[0,.07],[0,1],{extrapolateRight:"clamp"})}}>
    {shot.id==="S02"&&<div style={{...card,background:"#b9d9d8"}}>
     <div style={{position:"absolute",left:40,top:34,...label}}>CARIBE · ESQUEMA NO A ESCALA</div>
     <svg viewBox="0 0 900 600" style={{position:"absolute",inset:"70px 15px 15px",width:"calc(100% - 30px)",height:"calc(100% - 85px)"}}>
@@ -83,7 +83,7 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
     </div>
     <div style={{position:"absolute",left:"48%",top:"36%",width:100,height:8,background:coral,transform:"rotate(-22deg) scaleX("+p+")",transformOrigin:"left"}}/>
     <div style={{position:"absolute",left:"64%",top:"24%",width:"25%",height:"46%",background:"#f6ead4",border:"3px solid "+navy,borderRadius:16,boxShadow:"12px 14px 0 rgba(52,69,86,.13)",transform:"rotate(3deg)"}}>
-     <div style={{...tiny,margin:"22px 18px"}}>20 FEB</div><div style={{font:"800 44px Arial",color:navy,margin:"8px 18px"}}>SE RETIRAN</div>
+     <div style={{...tiny,margin:"22px 18px"}}>20 FEB</div><div style={{font:"800 29px Arial",color:navy,margin:"8px 18px"}}>SE RETIRAN</div>
     </div>
     <div style={{position:"absolute",left:"21%",right:"21%",bottom:"11%",padding:22,borderRadius:18,background:"rgba(78,154,160,.16)",border:"2px solid "+teal,display:"flex",justifyContent:"space-around",alignItems:"center"}}>
      <span style={tiny}>EMERGENCIA</span><span style={{font:"800 26px Arial",color:teal}}>SIGUE VIGENTE</span>

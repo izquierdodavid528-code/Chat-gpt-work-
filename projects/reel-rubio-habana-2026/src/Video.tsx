@@ -50,27 +50,47 @@ const MapHook:React.FC=()=>{
 
 const OilLayer:React.FC=()=>{
   const f=useCurrentFrame();
-  const shipX=interpolate(f,[0,270],[-120,760],{extrapolateRight:"clamp"});
-  const doc=spring({frame:Math.max(0,f-24),fps:30,config:{damping:180,stiffness:160}});
-  return <AbsoluteFill style={{background:"linear-gradient(180deg,#081018,#0c1823)",overflow:"hidden"}}>
-    <div style={{position:"absolute",top:110,left:70,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>CAPA 1 · PETRÓLEO</div>
-    <div style={{position:"absolute",top:166,left:70,right:70,color:INK,fontFamily:"Arial",fontSize:54,fontWeight:900,lineHeight:1.02}}>29 ENE · EO 14380</div>
-    <div style={{position:"absolute",top:310,left:70,right:70,height:470,borderRadius:32,background:"linear-gradient(180deg,#0f2b3c,#07111a)",border:"1px solid rgba(126,151,168,.25)",overflow:"hidden"}}>
-      <div style={{position:"absolute",bottom:0,left:0,right:0,height:150,background:"linear-gradient(180deg,rgba(20,65,90,.2),rgba(5,18,28,.95))"}}/>
-      <div style={{position:"absolute",bottom:95,left:shipX,width:260,height:44,background:"#334957",borderRadius:"8px 28px 6px 6px",boxShadow:"0 10px 30px rgba(0,0,0,.4)"}}/>
-      <div style={{position:"absolute",bottom:139,left:shipX+65,width:75,height:48,background:"#657b88",borderRadius:6}}/>
-      <div style={{position:"absolute",bottom:190,left:shipX+95,width:4,height:80,background:"#879aa5"}}/>
-      <div style={{position:"absolute",bottom:128,left:120,right:120,height:2,background:"linear-gradient(90deg,transparent,rgba(217,54,54,.75),transparent)"}}/>
+  const mechanism=spring({frame:Math.max(0,f-18),fps:30,config:{damping:180,stiffness:150}});
+  const jan=spring({frame:Math.max(0,f-34),fps:30,config:{damping:180,stiffness:160}});
+  const feb=spring({frame:Math.max(0,f-142),fps:30,config:{damping:180,stiffness:160}});
+  const rollback=interpolate(f,[150,215],[0,1],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+  return <AbsoluteFill style={{background:"radial-gradient(circle at 74% 28%,rgba(19,68,92,.34),transparent 34%),linear-gradient(180deg,#07111a,#070b10)",overflow:"hidden"}}>
+    <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(126,151,168,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(126,151,168,.05) 1px,transparent 1px)",backgroundSize:"54px 54px",maskImage:"linear-gradient(180deg,black,transparent 80%)"}}/>
+    <div style={{position:"absolute",top:108,left:70,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>CAPA 1 · PETRÓLEO</div>
+    <div style={{position:"absolute",top:164,left:70,right:70,color:INK,fontFamily:"Arial",fontSize:56,fontWeight:900,lineHeight:1.02}}>ENERO → FEBRERO</div>
+    <div style={{position:"absolute",top:270,left:70,right:70,color:STEEL,fontFamily:"Arial",fontSize:24,fontWeight:650,lineHeight:1.25}}>Una vía arancelaria aparece el 29 de enero y es retirada el 20 de febrero.</div>
+
+    <div style={{position:"absolute",left:70,right:70,top:405,height:430,borderRadius:30,border:"1px solid rgba(126,151,168,.24)",background:"rgba(6,15,22,.72)",boxShadow:"0 28px 80px rgba(0,0,0,.22)",overflow:"hidden"}}>
+      <div style={{position:"absolute",left:48,top:54,color:STEEL,fontFamily:"Arial",fontSize:17,fontWeight:900,letterSpacing:2}}>MECANISMO · EO 14380</div>
+      <div style={{position:"absolute",left:56,top:145,width:225,height:94,borderRadius:18,border:"1px solid rgba(126,151,168,.34)",background:"#10212d",display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:1.2,opacity:mechanism}}>PAÍS PROVEEDOR</div>
+      <div style={{position:"absolute",left:330,top:177,width:180,height:3,background:"rgba(126,151,168,.35)",transformOrigin:"left",transform:`scaleX(${mechanism})`}}>
+        <div style={{position:"absolute",right:-8,top:-6,width:14,height:14,borderTop:"3px solid "+STEEL,borderRight:"3px solid "+STEEL,transform:"rotate(45deg)"}}/>
+      </div>
+      <div style={{position:"absolute",left:345,top:128,color:GOLD,fontFamily:"Arial",fontSize:17,fontWeight:900,letterSpacing:2,opacity:mechanism}}>PETRÓLEO</div>
+      <div style={{position:"absolute",right:56,top:145,width:225,height:94,borderRadius:18,border:"1px solid rgba(217,54,54,.42)",background:"rgba(217,54,54,.08)",display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:24,fontWeight:900,letterSpacing:1.6,opacity:mechanism}}>CUBA</div>
+      <div style={{position:"absolute",left:150,right:150,top:300,height:2,background:"rgba(217,54,54,.38)",opacity:jan}}/>
+      <div style={{position:"absolute",left:225,right:225,top:330,padding:"17px 22px",borderRadius:16,border:"1px solid rgba(217,54,54,.44)",background:"rgba(217,54,54,.10)",textAlign:"center",color:INK,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:.5,opacity:jan,transform:`translateY(${interpolate(jan,[0,1],[16,0])}px)`}}>POSIBLE ARANCEL ADICIONAL<br/><span style={{fontSize:15,color:STEEL,letterSpacing:1.5}}>SOBRE IMPORTACIONES DE ESE PAÍS</span></div>
+      <div style={{position:"absolute",left:155,right:155,top:298,height:4,background:RED,transformOrigin:"right",transform:`scaleX(${1-rollback})`,opacity:.9}}/>
     </div>
-    <div style={{position:"absolute",left:90,top:850,width:900,padding:"34px 36px",background:"rgba(245,241,232,.94)",borderRadius:20,boxShadow:"0 28px 80px rgba(0,0,0,.38)",opacity:doc,transform:`translateY(${interpolate(doc,[0,1],[38,0])}px)`}}>
-      <div style={{fontFamily:"Georgia",color:"#262626",fontSize:24,fontWeight:700,letterSpacing:.5}}>THE WHITE HOUSE</div>
-      <div style={{height:2,background:"#8b6f46",margin:"16px 0 20px"}}/>
-      <div style={{fontFamily:"Georgia",color:"#181818",fontSize:34,fontWeight:800,lineHeight:1.1}}>Executive Order 14380</div>
-      <div style={{fontFamily:"Arial",color:"#555",fontSize:22,marginTop:10}}>January 29, 2026</div>
-      <div style={{marginTop:22,paddingTop:18,borderTop:"1px solid #b8aa92",fontFamily:"Arial",color:"#6f3a3a",fontSize:20,fontWeight:800}}>20 FEB · EO 14389 → additional IEEPA tariffs ended</div>
+
+    <div style={{position:"absolute",left:70,right:70,top:900,height:360}}>
+      <div style={{position:"absolute",left:24,top:26,bottom:26,width:2,background:"rgba(126,151,168,.25)"}}/>
+      <div style={{position:"absolute",left:13,top:36,width:24,height:24,borderRadius:"50%",background:RED,boxShadow:"0 0 22px rgba(217,54,54,.55)"}}/>
+      <div style={{position:"absolute",left:58,top:18,right:0,padding:"24px 28px",borderRadius:20,border:"1px solid rgba(126,151,168,.22)",background:"rgba(242,240,234,.06)",opacity:jan}}>
+        <div style={{color:GOLD,fontFamily:"Arial",fontSize:17,fontWeight:900,letterSpacing:2}}>29 ENE · EO 14380</div>
+        <div style={{color:INK,fontFamily:"Arial",fontSize:29,fontWeight:900,marginTop:8,lineHeight:1.16}}>Se crea el mecanismo arancelario ligado al suministro de petróleo a Cuba.</div>
+        <div style={{color:STEEL,fontFamily:"Arial",fontSize:17,fontWeight:700,marginTop:12}}>Fuente: Casa Blanca · Executive Order 14380</div>
+      </div>
+
+      <div style={{position:"absolute",left:13,top:210,width:24,height:24,borderRadius:"50%",background:INK,border:"5px solid "+RED}}/>
+      <div style={{position:"absolute",left:58,top:190,right:0,padding:"24px 28px",borderRadius:20,border:"1px solid rgba(217,54,54,.28)",background:"rgba(217,54,54,.07)",opacity:feb,transform:`translateY(${interpolate(feb,[0,1],[18,0])}px)`}}>
+        <div style={{color:RED,fontFamily:"Arial",fontSize:17,fontWeight:900,letterSpacing:2}}>20 FEB · EO 14389</div>
+        <div style={{color:INK,fontFamily:"Arial",fontSize:29,fontWeight:900,marginTop:8,lineHeight:1.16}}>Terminan los aranceles adicionales bajo IEEPA; la emergencia sigue vigente.</div>
+        <div style={{color:STEEL,fontFamily:"Arial",fontSize:17,fontWeight:700,marginTop:12}}>Fuente: Casa Blanca · Executive Order 14389</div>
+      </div>
     </div>
-    <div style={{position:"absolute",left:70,right:70,bottom:300,color:INK,fontFamily:"Arial",fontSize:32,fontWeight:800,lineHeight:1.16}}>29 ENE · se abre una vía arancelaria ligada al suministro de petróleo.</div>
-    <div style={{position:"absolute",left:70,right:70,bottom:210,color:STEEL,fontFamily:"Arial",fontSize:25,fontWeight:750,lineHeight:1.18}}>20 FEB · termina esa vía arancelaria IEEPA; la emergencia continúa.</div>
+
+    <div style={{position:"absolute",left:70,right:70,bottom:165,color:STEEL,fontFamily:"Arial",fontSize:21,fontWeight:650,lineHeight:1.28}}>La secuencia evita presentar la medida de enero como si hubiera permanecido sin cambios durante todo 2026.</div>
   </AbsoluteFill>;
 };
 

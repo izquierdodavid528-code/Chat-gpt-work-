@@ -172,11 +172,12 @@ Current gate:
 
 
 
-## V5 cartoon de 60 segundos — en validación
+## V5 cartoon de 60 segundos — validación técnica y revisión visual completadas
 
-- Rama: `memorias-cartoon-v5` (se mantiene aislada de `main`).
+- Rama: `memorias-cartoon-v5`; `main` permanece intacta.
 - Composición: `CartoonExplainerV5`, vertical 1080×1920, 30 fps, 1800 frames.
-- Dirección: caricaturas 2D articuladas, mapas y objetos que actúan, gesto facial y corporal, rutas y páginas que enlazan escenas mediante solapamiento; sin imitar diseños concretos del canal de referencia.
-- Secuencia basada en `NARRATION_V2.md`: enero, febrero, mayo, designación OFAC y reglas financieras/de viaje de septiembre, con atribuciones integradas.
-- La versión previa V4 tenía demasiado espacio libre y encuadre lateral al introducir personajes; V5 reajusta la composición para mantener las acciones en el centro.
-- Render y revisión de todos los 60 s pendientes en GitHub Actions antes de aceptar dirección final.
+- Dirección: caricaturas 2D articuladas, mapas y props que actúan, gestos faciales y corporales, ruta visual continua y relevos de escena sincronizados para evitar huecos.
+- Secuencia basada en `NARRATION_V2.md`: ruta petrolera y órdenes de enero/febrero, autoridades de mayo, OFAC, reglas financieras/de viaje y cierre con atribuciones.
+- El trabuco es un gag visual no letal, llevado hacia abajo; no se apunta ni dispara.
+- GitHub Actions run `37123096661` completó con PASS: H.264, 1080×1920, 30 fps, 60 s. Revisión visual de muestras a lo largo del clip y del cierre a tamaño completo; se corrigieron ritmo de escenas, fundidos, composición final y rótulos.
+- Esta entrega es una prueba visual sin voz, música ni efectos. El render es de validación y no se publicó como entrega de producción en Drive. Falta sincronizar con narración/sonido cuando se cree el máster.

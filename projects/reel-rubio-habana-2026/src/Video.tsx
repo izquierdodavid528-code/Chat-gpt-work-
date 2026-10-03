@@ -1,8 +1,9 @@
 import React from "react";
-import {AbsoluteFill, Audio, Sequence, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
+import {AbsoluteFill, Audio, Sequence, Video, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from "remotion";
 
 export const ANIMATIC_FRAMES = 20 * 30;
 const BED = staticFile("rubio-habana-animatic-bed.wav");
+const HOOK_PLATE = staticFile("rubio-habana-map.mp4");
 
 const BG="#081018";
 const INK="#F2F0EA";
@@ -22,29 +23,27 @@ const LayerLabel: React.FC<{text:string; y:number; delay:number}> = ({text,y,del
 const MapHook:React.FC=()=>{
   const f=useCurrentFrame();
   const pulse=0.96+0.04*Math.sin(f/7);
-  const ring=(start:number)=>spring({frame:Math.max(0,f-start),fps:30,config:{damping:18,stiffness:70,mass:.7}});
+  const titleIn=spring({frame:f,fps:30,config:{damping:180,stiffness:150}});
+  const plateOpacity=interpolate(f,[0,10,132,149],[0,1,1,.72],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
   return <AbsoluteFill style={{background:BG,overflow:"hidden"}}>
-    <div style={{position:"absolute",inset:0,background:"radial-gradient(circle at 70% 35%,rgba(70,110,140,.18),transparent 34%),linear-gradient(180deg,#081018,#05080c)"}}/>
-    <div style={{position:"absolute",top:240,left:80,color:STEEL,fontFamily:"Arial",fontSize:20,fontWeight:700,letterSpacing:3}}>FLORIDA</div>
-    <div style={{position:"absolute",top:510,left:450,color:INK,fontFamily:"Arial",fontSize:24,fontWeight:900,letterSpacing:4}}>CUBA</div>
-    <div style={{position:"absolute",top:560,left:488,color:RED,fontFamily:"Arial",fontSize:18,fontWeight:800,letterSpacing:2}}>LA HABANA</div>
-    <div style={{position:"absolute",top:320,left:210,width:610,height:250,border:"2px solid rgba(126,151,168,.38)",borderRadius:"50% 46% 55% 44%",transform:"rotate(-8deg)"}}/>
-    <div style={{position:"absolute",top:190,left:420,width:330,height:160,border:"2px solid rgba(126,151,168,.28)",borderRadius:"55% 42% 50% 38%",transform:"rotate(12deg)"}}/>
-    <div style={{position:"absolute",top:350,left:520,width:12,height:250,background:"linear-gradient(180deg,rgba(217,54,54,0),rgba(217,54,54,.85))",transform:"rotate(12deg)",transformOrigin:"top"}}/>
-    {[0,1,2,3].map((i)=>{
-      const p=ring(18+i*12);
-      return <div key={i} style={{position:"absolute",top:345-i*18,left:430-i*18,width:250+i*36,height:250+i*36,border:`3px solid rgba(217,54,54,${0.58-i*.08})`,borderRadius:"50%",opacity:p,transform:`scale(${interpolate(p,[0,1],[1.4,1])})`}}/>
-    })}
-    <div style={{position:"absolute",left:74,right:74,bottom:260}}>
+    <Video
+      src={HOOK_PLATE}
+      muted
+      playbackRate={0.7}
+      style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",opacity:plateOpacity}}
+    />
+    <div style={{position:"absolute",inset:0,background:"linear-gradient(180deg,rgba(2,7,12,.08) 0%,rgba(4,8,13,.18) 42%,rgba(4,8,13,.76) 72%,rgba(4,8,13,.96) 100%)"}}/>
+    <div style={{position:"absolute",inset:0,boxShadow:"inset 0 0 180px rgba(0,0,0,.45)"}}/>
+    <div style={{position:"absolute",left:74,right:74,bottom:250,opacity:titleIn,transform:`translateY(${interpolate(titleIn,[0,1],[34,0])}px)`}}>
       <div style={{color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3,marginBottom:16}}>2026</div>
-      <div style={{color:INK,fontFamily:"Arial",fontSize:72,fontWeight:900,lineHeight:.98,letterSpacing:-2}}>LA PRESIÓN<br/>SE AMPLÍA</div>
-      <div style={{color:STEEL,fontFamily:"Arial",fontSize:24,fontWeight:650,marginTop:22}}>No fue una sola medida.</div>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:72,fontWeight:900,lineHeight:.98,letterSpacing:-2,textShadow:"0 8px 28px rgba(0,0,0,.48)"}}>LA PRESIÓN<br/>SE AMPLÍA</div>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:27,fontWeight:700,marginTop:20,textShadow:"0 4px 18px rgba(0,0,0,.55)"}}>No fue una sola medida.</div>
     </div>
-    <LayerLabel text="PETRÓLEO" y={780} delay={92}/>
-    <LayerLabel text="SANCIONES" y={850} delay={104}/>
-    <LayerLabel text="FINANZAS" y={920} delay={116}/>
-    <LayerLabel text="MOVILIDAD" y={990} delay={128}/>
-    <div style={{position:"absolute",right:90,top:120,width:12,height:12,borderRadius:99,background:RED,transform:`scale(${pulse})`}}/>
+    <LayerLabel text="PETRÓLEO" y={790} delay={74}/>
+    <LayerLabel text="SANCIONES" y={860} delay={88}/>
+    <LayerLabel text="FINANZAS" y={930} delay={102}/>
+    <LayerLabel text="MOVILIDAD" y={1000} delay={116}/>
+    <div style={{position:"absolute",right:90,top:120,width:12,height:12,borderRadius:99,background:RED,boxShadow:"0 0 18px rgba(217,54,54,.55)",transform:`scale(${pulse})`}}/>
   </AbsoluteFill>
 };
 

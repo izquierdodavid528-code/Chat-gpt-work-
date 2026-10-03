@@ -2,7 +2,7 @@ import React from "react";
 import {Composition} from "remotion";
 import {RubioHabanaAnimated, TOTAL_FRAMES} from "./Video";
 import {AdvancedOpeningPilot, PILOT_FRAMES} from "./advanced/OpeningPilot";
-import {CartoonExplainerV6, CARTOON_FILM_FRAMES} from "./advanced/CartoonExplainerV6";
+import {CartoonExplainerV6, CARTOON_FILM_FRAMES} from "./advanced/CartoonExplainerV5";
 
 export const RemotionRoot: React.FC = () => (
   <>

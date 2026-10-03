@@ -56,6 +56,8 @@ const Figure: React.FC<{kind:"trump"|"rubio";x:number;y:number;s?:number;f:numbe
     <path d="M-120 200 Q-96 150 -47 148 L50 150 Q105 161 121 215 L106 425 Q22 453 -112 425 Z" fill={coat} stroke={C.ink} strokeWidth="10" strokeLinejoin="round"/>
     <path d="M-55 158 L8 158 L37 221 L-3 282 L-54 219 Z" fill={C.cream} stroke={C.ink} strokeWidth="5"/>
     <path d="M-19 205 L13 207 L29 339 L2 367 L-28 338 Z" fill={isTrump?C.red:C.gold} stroke={C.ink} strokeWidth="6"/>
+    <path d="M-56 221 L-78 326 M16 222 L38 321" fill="none" stroke="#8DA8AE" strokeWidth="5" opacity=".72"/>
+    <circle cx="53" cy="365" r="7" fill={C.gold}/><circle cx="58" cy="394" r="7" fill={C.gold}/>
     <path d="M-95 220 Q-136 259 -116 328 L-92 329 L-71 254 Z" fill={coat} stroke={C.ink} strokeWidth="9"/>
     <g transform={"rotate("+armA+" -110 305)"}>
       <path d="M-119 276 Q-96 311 -105 365" fill="none" stroke={coat} strokeWidth="31" strokeLinecap="round"/>
@@ -74,13 +76,18 @@ const Figure: React.FC<{kind:"trump"|"rubio";x:number;y:number;s?:number;f:numbe
     {isTrump?
       <path d="M-83 72 Q-105 7 -44 -18 Q6 -39 61 -4 Q92 15 75 44 Q50 25 26 29 Q-5 36 -42 68 Q-63 86 -83 72 Z" fill={hair} stroke={C.ink} strokeWidth="9" strokeLinejoin="round"/>:
       <path d="M-80 75 Q-80 8 -26 -9 Q38 -25 76 30 L71 66 Q30 34 -8 41 Q-43 43 -80 75 Z" fill={hair} stroke={C.ink} strokeWidth="9" strokeLinejoin="round"/>}
-    {isTrump&&<path d="M-60 17 Q-12 -10 54 9" fill="none" stroke="#F8D16F" strokeWidth="12" strokeLinecap="round"/>}
+    {isTrump&&<g fill="none" stroke="#F8D16F" strokeLinecap="round"><path d="M-60 17 Q-12 -10 54 9" strokeWidth="12"/><path d="M-69 40 Q-34 17 -4 14 M11 12 Q37 8 60 24" strokeWidth="5" opacity=".85"/></g>}
     <g opacity={blink}>
-      <path d="M-51 83 L-28 86 M16 85 L42 81" stroke={C.ink} strokeWidth="7" strokeLinecap="round"/>
-      <ellipse cx="-40" cy="99" rx="5" ry="7" fill={C.ink}/><ellipse cx="30" cy="98" rx="5" ry="7" fill={C.ink}/>
+      <path d={"M-60 78 Q-42 "+(70-reaction*11)+" -22 79 M13 79 Q34 "+(69+reaction*8)+" 53 73"} fill="none" stroke={C.ink} strokeWidth="8" strokeLinecap="round"/>
+      <ellipse cx="-40" cy="99" rx="10" ry="13" fill={C.cream} stroke={C.ink} strokeWidth="4"/>
+      <ellipse cx="30" cy="98" rx="10" ry="13" fill={C.cream} stroke={C.ink} strokeWidth="4"/>
+      <ellipse cx={"-40+"+(reaction*3)} cy="100" rx="4.5" ry="7" fill={C.ink}/>
+      <ellipse cx={"30+"+(reaction*3)} cy="99" rx="4.5" ry="7" fill={C.ink}/>
     </g>
+    <ellipse cx="-54" cy="119" rx="13" ry="7" fill={C.red} opacity=".20"/>
+    <ellipse cx="50" cy="118" rx="13" ry="7" fill={C.red} opacity=".20"/>
     <path d="M-4 95 L-12 122 L4 125" fill="none" stroke={C.ink} strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d={mouth>.2?"M-27 137 Q0 "+(133+mouth*20)+" 27 135":"M-26 137 Q0 151 27 135"} fill="none" stroke={C.ink} strokeWidth="6" strokeLinecap="round"/>
+    {mouth>.38?<g><path d={"M-28 136 Q0 "+(131+mouth*20)+" 28 134 Q0 "+(166+mouth*18)+" -28 136 Z"} fill={C.ink}/><path d={"M-12 139 Q0 "+(141+mouth*4)+" 13 139"} fill="none" stroke={C.cream} strokeWidth="5" strokeLinecap="round"/></g>:<path d="M-26 137 Q0 151 27 135" fill="none" stroke={C.ink} strokeWidth="6" strokeLinecap="round"/>}
     {isTrump&&<g transform="translate(44 299) rotate(7)">
       <path d="M0 0 H70 L79 74 L9 79 Z" fill={C.gold} stroke={C.ink} strokeWidth="6"/>
       {txt(39,32,13,"TRUMP",C.ink)}
@@ -167,7 +174,7 @@ const Intro: React.FC<{f:number}> = ({f})=>{
       {txt(0,62,31,"LA PRESIÓN CAMBIA",C.ink,900)}
       <path d="M-194 91 Q0 122 194 91" fill="none" stroke={C.gold} strokeWidth="12" strokeLinecap="round"/>
     </g>
-    <Figure kind="trump" x={760} y={707} s={.53} f={f} pose={1} reaction={prog(f,140,220)}/>
+    <Figure kind="trump" x={760} y={707} s={.64} f={f} pose={1} reaction={prog(f,140,220)}/>
     <Label x={230} y={883} f={f-120} date="2026" sub="PRESIÓN SOBRE LA HABANA" angle={-7}/>
   </g>;
 };
@@ -225,8 +232,8 @@ const February: React.FC<{f:number}> = ({f})=>{
       {txt(846,711,32,"SE RETIRAN",C.red,1000)}
       {txt(846,750,22,"LOS ARANCELES IEEPA",C.ink,900)}
     </g>
-    <Figure kind="trump" x={180} y={742} s={.53} f={f} pose={1} reaction={prog(f,700,740)}/>
-    <Figure kind="rubio" x={896} y={777} s={.47} f={f} pose={.5} reaction={prog(f,722,785)}/>
+    <Figure kind="trump" x={180} y={742} s={.65} f={f} pose={1} reaction={prog(f,700,740)}/>
+    <Figure kind="rubio" x={896} y={777} s={.59} f={f} pose={.5} reaction={prog(f,722,785)}/>
     <g transform={"translate(151 1085) rotate(-8)"} opacity=".8">
       {txt(0,0,19,"SE MUESTRA LA VÍA ARANCELARIA",C.red,900)}
       {txt(0,28,14,"NO DESAPARECEN TODAS LAS AUTORIDADES SOBRE CUBA",C.ink,800)}
@@ -264,7 +271,7 @@ const MayOrder: React.FC<{f:number}> = ({f})=>{
         </g>;
       })}
     </g>
-    <Figure kind="rubio" x={822} y={802} s={.52} f={f} pose={2} reaction={prog(f,960,1010)}/>
+    <Figure kind="rubio" x={822} y={802} s={.62} f={f} pose={2} reaction={prog(f,960,1010)}/>
     <g transform={"translate(797 1090) rotate(-7)"} opacity={tool}>
       <path d="M-86 -30 H86 L95 41 L-92 42 Z" fill={C.blueDeep} stroke={C.ink} strokeWidth="7"/>
       {txt(0,9,25,"STATE",C.cream)}
@@ -316,8 +323,8 @@ const OfacScene: React.FC<{f:number}> = ({f})=>{
       {txt(0,8,17,"OTRAS",C.cream)}
       {txt(0,31,15,"ENTIDADES",C.cream)}
     </g>
-    <Figure kind="rubio" x={215} y={833} s={.48} f={f} pose={2} reaction={mark*.5}/>
-    <Figure kind="trump" x={910} y={838} s={.44} f={f} pose={1} reaction={mark*.4}/>
+    <Figure kind="rubio" x={215} y={833} s={.59} f={f} pose={2} reaction={mark*.5}/>
+    <Figure kind="trump" x={910} y={838} s={.56} f={f} pose={1} reaction={mark*.4}/>
   </g>;
 };
 

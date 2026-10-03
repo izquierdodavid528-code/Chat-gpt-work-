@@ -12,6 +12,37 @@
     "expectedHeight": 1920,
     "expectedFps": 30,
     "requireAudio": true,
-    "minDurationSeconds": 59
+    "minDurationSeconds": 59,
+    "audioMastering": {
+      "enabled": true,
+      "targetIntegratedLufs": -18,
+      "targetTruePeakDbfs": -2,
+      "targetLraLu": 7,
+      "sampleRateHz": 48000,
+      "codec": "aac",
+      "bitrateKbps": 192
+    },
+    "audioQa": {
+      "enabled": true,
+      "requireAudio": true,
+      "expectedCodec": "aac",
+      "expectedSampleRateHz": 48000,
+      "minChannels": 2,
+      "maxChannels": 2,
+      "maxDurationDeltaSeconds": 0.12,
+      "targetIntegratedLufs": -18,
+      "integratedLufsTolerance": 2,
+      "maxTruePeakDbfs": -1.5,
+      "maxLoudnessRangeLu": 7,
+      "silence": {
+        "enabled": true,
+        "noiseDb": -50,
+        "minDurationSeconds": 0.5,
+        "enforce": false,
+        "maxLeadingSeconds": 0.2,
+        "maxTrailingSeconds": 1.5,
+        "maxContinuousSeconds": 3
+      }
+    }
   }
 }

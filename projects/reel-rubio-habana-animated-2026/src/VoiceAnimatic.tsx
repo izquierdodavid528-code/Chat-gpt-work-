@@ -13,6 +13,8 @@ import {
 export const RUBIO_ANIMATIC_FRAMES = 60 * 30;
 const VOICE_SCRATCH_READY = true;
 const VOICE_SCRATCH_FILE = "audio/narration-scratch-v1-master.mp3";
+const MUSIC_BED_FILE = "audio/rubio-music-bed-v1.wav";
+const SFX_CUES_FILE = "audio/rubio-sfx-cues-v1.wav";
 
 type Shot = {
   id: string; from: number; duration: number; act: string;
@@ -151,5 +153,7 @@ export const RubioSixtySecondAnimatic: React.FC=()=> <AbsoluteFill>
  <Paper/>
  {shots.map(shot=><Sequence key={shot.id} from={shot.from} durationInFrames={shot.duration}><ShotLayer shot={shot}/></Sequence>)}
  {VOICE_SCRATCH_READY&&<Audio src={staticFile(VOICE_SCRATCH_FILE)} volume={1}/>}
+ {VOICE_SCRATCH_READY&&<Audio src={staticFile(MUSIC_BED_FILE)} volume={1}/>}
+ {VOICE_SCRATCH_READY&&<Audio src={staticFile(SFX_CUES_FILE)} volume={1}/>}
  {!VOICE_SCRATCH_READY&&<div style={{position:"absolute",right:42,top:22,padding:"10px 14px",background:"#a74842",color:"white",font:"800 17px Arial, sans-serif",letterSpacing:1}}>VOICE SCRATCH PENDING — DO NOT APPROVE</div>}
 </AbsoluteFill>;

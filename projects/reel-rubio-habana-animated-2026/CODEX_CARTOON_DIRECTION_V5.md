@@ -12,12 +12,13 @@ El canal oficial [Memorias de Pez](https://www.youtube.com/@MemoriasDePez) prese
 - El trabuco aparece como prop satírico llevado hacia abajo; no se apunta, dispara ni se usa contra personas.
 
 ## Ritmo y contenido
-1. 0–8 s: mapa Florida–Cuba y ruta petrolera.
-2. 8–19 s: EO 14380 y aranceles del 29 de enero.
-3. 18–28 s: EO 14389 y retirada de la vía arancelaria IEEPA el 20 de febrero.
-4. 28–41 s: EO 14404 del 1 de mayo, sectores y delegación a Estado/Tesoro; Rubio recibe funciones, no firma la orden.
-5. 40–52 s: designaciones OFAC, Banco Exterior de Cuba y cambios financieros/de viaje por categoría.
-6. 50–60 s: atribuciones de Casa Blanca y MINREX y cierre cronológico.
+1. 0–4 s: mapa Florida–Cuba y ruta petrolera.
+2. 4–12 s: EO 14380 y aranceles del 29 de enero.
+3. 12–18 s: EO 14389 y retirada de la vía arancelaria IEEPA el 20 de febrero.
+4. 18–29 s: EO 14404 del 1 de mayo, sectores y delegación a Estado/Tesoro; Rubio recibe funciones, no firma la orden.
+5. 29–41 s: designaciones OFAC y Banco Exterior de Cuba.
+6. 41–52 s: cambios financieros y de viaje por categoría.
+7. 52–60 s: atribuciones de Casa Blanca y MINREX y cierre cronológico.
 
 ## Validación
-Render completo, revisión de frames al inicio/fin de cada acto, comprobación de encuadre y lectura en móvil. La versión no añade voz ni música: los tiempos visuales siguen la narración V2 y deben ajustarse al máster de audio cuando exista.
+Render completo, revisión de frames al inicio/fin de cada acto, comprobación de encuadre y lectura en móvil; comparar transiciones con el máster de voz cuando se produzca. La versión no añade voz ni música: los tiempos visuales siguen la narración V2 y deben ajustarse al máster de audio cuando exista.

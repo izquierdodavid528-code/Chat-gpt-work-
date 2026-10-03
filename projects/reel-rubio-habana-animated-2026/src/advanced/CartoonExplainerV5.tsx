@@ -118,9 +118,9 @@ const SceneBase: React.FC<{f:number;tint?:string}> = ({f,tint=C.paper})=><g>
 </g>;
 
 const Intro: React.FC<{f:number}> = ({f})=>{
-  const move=prog(f,0,260), route=prog(f,30,270);
+  const move=prog(f,0,150), route=prog(f,18,145);
   const sx=mix(-240,510,move);
-  return <g opacity={visibility(f,0,325,35)}>
+  return <g opacity={visibility(f,0,150,18)}>
     <SceneBase f={f} tint="#E7F0E8"/>
     <path d="M89 505 Q209 375 380 420 L493 496 L453 683 L343 785 L197 731 L103 644 Z" fill={C.greenLight} stroke={C.ink} strokeWidth="10" strokeLinejoin="round"/>
     <path d="M503 897 Q611 820 733 853 Q856 888 970 1014 L919 1090 L791 1039 L673 1007 L544 1002 Z" fill={C.green} stroke={C.ink} strokeWidth="10" strokeLinejoin="round"/>
@@ -141,10 +141,10 @@ const Intro: React.FC<{f:number}> = ({f})=>{
 };
 
 const January: React.FC<{f:number}> = ({f})=>{
-  const gate=prog(f,300,470);
-  const stamp=pop(f,352,205);
-  const bx=mix(-240,390,prog(f,260,505));
-  return <g opacity={visibility(f,245,620,42)}>
+  const gate=prog(f,218,297);
+  const stamp=pop(f,265,205);
+  const bx=mix(-240,390,prog(f,112,378));
+  return <g opacity={visibility(f,104,390,18)}>
     <SceneBase f={f} tint="#EEE5D3"/>
     <path d="M-50 900 Q220 842 463 902 T1110 870 L1110 1102 Q814 1154 554 1108 T-50 1128 Z" fill={C.green} stroke={C.ink} strokeWidth="10"/>
     <path d="M40 1020 H1040" stroke={C.gold} strokeWidth="21" strokeLinecap="round"/>
@@ -156,7 +156,7 @@ const January: React.FC<{f:number}> = ({f})=>{
     </g>
     <circle cx="726" cy="950" r="28" fill={C.gold} stroke={C.ink} strokeWidth="9"/>
     <Figure kind="trump" x={818} y={591} s={.68} f={f} pose={2} reaction={prog(f,355,414)}/>
-    <Label x={283} y={495} f={f-278} date="29 ENE" sub="ORDEN EJECUTIVA 14380" angle={-5}/>
+    <Label x={283} y={495} f={f-120} date="29 ENE" sub="ORDEN EJECUTIVA 14380" angle={-5}/>
     <g transform={"translate(606 739) rotate("+(-8+Math.sin(f/9)*9)+" 0 0)"} opacity={stamp}>
       <path d="M-95 -52 L95 -52 L85 53 L-87 55 Z" fill={C.red} stroke={C.ink} strokeWidth="8"/>
       {txt(0,9,33,"ARANCEL",C.cream)}
@@ -167,12 +167,12 @@ const January: React.FC<{f:number}> = ({f})=>{
 };
 
 const February: React.FC<{f:number}> = ({f})=>{
-  const lift=prog(f,615,735);
-  const page=prog(f,560,695);
-  return <g opacity={visibility(f,560,940,42)}>
+  const lift=prog(f,424,515);
+  const page=prog(f,350,438);
+  return <g opacity={visibility(f,344,584,18)}>
     <SceneBase f={f} tint="#F4E8CD"/>
     <path d="M0 1140 Q185 1060 359 1113 T728 1090 T1080 1082" fill="none" stroke={C.green} strokeWidth="40" strokeLinecap="round"/>
-    <Boat x={mix(145,795,prog(f,600,864))} y={1070+Math.sin(f/5)*4} f={f} s={.78}/>
+    <Boat x={mix(145,795,prog(f,368,538))} y={1070+Math.sin(f/5)*4} f={f} s={.78}/>
     <g transform="translate(722 954)">
       <circle r="32" fill={C.gold} stroke={C.ink} strokeWidth="9"/>
       <g transform={"rotate("+(-87*lift)+")"}>
@@ -187,11 +187,11 @@ const February: React.FC<{f:number}> = ({f})=>{
       <path d="M-91 -92 L-64 -104 M69 99 L96 88" stroke={C.gold} strokeWidth="9" strokeLinecap="round"/>
     </g>
     <path d="M746 833 Q689 808 647 782" fill="none" stroke={C.red} strokeWidth="9" strokeDasharray="12 14"/>
-    <g opacity={prog(f,707,780)}>
+    <g opacity={prog(f,458,520)}>
       {txt(846,711,32,"SE RETIRAN",C.red,1000)}
       {txt(846,750,22,"LOS ARANCELES IEEPA",C.ink,900)}
     </g>
-    <Figure kind="trump" x={125} y={742} s={.53} f={f} pose={1} reaction={prog(f,700,740)}/>
+    <Figure kind="trump" x={180} y={742} s={.53} f={f} pose={1} reaction={prog(f,700,740)}/>
     <Figure kind="rubio" x={896} y={777} s={.47} f={f} pose={.5} reaction={prog(f,722,785)}/>
     <g transform={"translate(151 1085) rotate(-8)"} opacity=".8">
       {txt(0,0,19,"SE MUESTRA LA VÍA ARANCELARIA",C.red,900)}
@@ -201,11 +201,11 @@ const February: React.FC<{f:number}> = ({f})=>{
 };
 
 const MayOrder: React.FC<{f:number}> = ({f})=>{
-  const unfold=prog(f,870,1050);
-  const tool=pop(f,948,160);
+  const unfold=prog(f,558,682);
+  const tool=pop(f,640,160);
   const cardX=mix(-540,528,unfold);
   const icons=[["ENERGÍA",0],["FINANZAS",1],["METALES",2],["SEGURIDAD",3]];
-  return <g opacity={visibility(f,855,1240,42)}>
+  return <g opacity={visibility(f,512,900,18)}>
     <SceneBase f={f} tint="#E8E9D9"/>
     <path d="M70 963 C215 857 350 914 457 970 S777 1061 1015 934" fill="none" stroke={C.gold} strokeWidth="12" strokeDasharray="9 18" strokeLinecap="round"/>
     <g transform={"translate("+cardX+" 730) rotate("+(-5+Math.sin(f/29)*1.5)+" 0 0)"}>
@@ -218,7 +218,7 @@ const MayOrder: React.FC<{f:number}> = ({f})=>{
       {icons.map(([label,i])=>{
         const ix=Number(i);
         const xx=-198+ix*132;
-        const p=pop(f,960+ix*13);
+        const p=pop(f,630+ix*9);
         return <g key={label} transform={"translate("+xx+" "+(85+(1-p)*90)+") scale("+(.5+p*.5)+")"} opacity={p}>
           <circle r="39" fill={[C.gold,C.blue,C.red,C.green][ix]} stroke={C.ink} strokeWidth="7"/>
           {ix===0&&<path d="M-6 18 C-19 -1 -4 -20 3 -29 C19 -9 19 8 6 18 C3 25 -8 25 -6 18 Z" fill={C.cream}/>}
@@ -258,9 +258,9 @@ const Bank: React.FC<{f:number;x:number;y:number}> = ({f,x,y})=>{
 };
 
 const OfacScene: React.FC<{f:number}> = ({f})=>{
-  const mark=pop(f,1284,230);
-  const bounce=prog(f,1260,1320);
-  return <g opacity={visibility(f,1200,1567,40)}>
+  const mark=pop(f,1000,230);
+  const bounce=prog(f,980,1040);
+  return <g opacity={visibility(f,840,1260,18)}>
     <SceneBase f={f} tint="#E8EEE5"/>
     <path d="M0 1043 Q228 1020 418 1050 T780 1026 T1080 1050 L1080 1153 Q805 1127 576 1155 T0 1140 Z" fill={C.green} stroke={C.ink} strokeWidth="8"/>
     <Bank f={f} x={540} y={963}/>
@@ -270,25 +270,25 @@ const OfacScene: React.FC<{f:number}> = ({f})=>{
       {txt(0,10,52,"OFAC",C.cream,1000)}
       {txt(0,47,15,"DESIGNACIÓN · 3 SEP",C.cream,900)}
     </g>
-    <g transform={"translate(145 701) rotate(-5)"} opacity={prog(f,1260,1330)}>
+    <g transform={"translate(145 701) rotate(-5)"} opacity={prog(f,990,1060)}>
       <path d="M-103 -45 L104 -40 L96 44 L-97 40 Z" fill={C.gold} stroke={C.ink} strokeWidth="7"/>
       {txt(0,9,19,"LISTA SDN",C.ink)}
       {txt(0,32,12,"NUEVAS DESIGNACIONES",C.ink,800)}
     </g>
-    <g transform={"translate(913 729) rotate(6)"} opacity={prog(f,1320,1390)}>
+    <g transform={"translate(913 729) rotate(6)"} opacity={prog(f,1030,1100)}>
       <path d="M-91 -42 L88 -46 L97 42 L-91 45 Z" fill={C.blue} stroke={C.ink} strokeWidth="7"/>
       {txt(0,8,17,"OTRAS",C.cream)}
       {txt(0,31,15,"ENTIDADES",C.cream)}
     </g>
-    <Figure kind="rubio" x={171} y={833} s={.48} f={f} pose={2} reaction={mark*.5}/>
+    <Figure kind="rubio" x={215} y={833} s={.48} f={f} pose={2} reaction={mark*.5}/>
     <Figure kind="trump" x={910} y={838} s={.44} f={f} pose={1} reaction={mark*.4}/>
   </g>;
 };
 
 const FinanceTravel: React.FC<{f:number}> = ({f})=>{
-  const u=prog(f,1535,1630);
-  const narrow=prog(f,1620,1705);
-  return <g opacity={visibility(f,1500,1800,36)}>
+  const u=prog(f,1260,1350);
+  const narrow=prog(f,1330,1410);
+  return <g opacity={visibility(f,1200,1590,18)}>
     <SceneBase f={f} tint="#F1E4D5"/>
     <path d="M0 931 Q272 900 495 932 T1080 913 L1080 1108 Q807 1097 546 1123 T0 1110 Z" fill="#D3BA90" stroke={C.ink} strokeWidth="8"/>
     <path d="M-30 1005 H1099" stroke={C.cream} strokeWidth="16" strokeDasharray="19 24"/>
@@ -297,7 +297,7 @@ const FinanceTravel: React.FC<{f:number}> = ({f})=>{
       {txt(0,10,20,"BANCO",C.cream)}
       {txt(0,37,12,"TRANSACCIÓN",C.cream,800)}
     </g>
-    <path d="M282 887 C435 823 543 831 621 896 C699 960 791 945 846 874" fill="none" stroke={C.red} strokeWidth="13" strokeDasharray="1050" strokeDashoffset={1050*(1-prog(f,1500,1700))} strokeLinecap="round"/>
+    <path d="M282 887 C435 823 543 831 621 896 C699 960 791 945 846 874" fill="none" stroke={C.red} strokeWidth="13" strokeDasharray="1050" strokeDashoffset={1050*(1-prog(f,1205,1430))} strokeLinecap="round"/>
     <g transform={"translate(846 874) rotate("+(-90*u)+" 0 0)"} opacity={1-u}>
       <path d="M-61 -51 Q0 -108 63 -51 L44 -33 Q0 -74 -42 -32 Z" fill={C.red} stroke={C.ink} strokeWidth="7"/>
       <path d="M-58 -40 V44 H43" fill="none" stroke={C.ink} strokeWidth="8" strokeLinecap="round"/>
@@ -320,7 +320,7 @@ const FinanceTravel: React.FC<{f:number}> = ({f})=>{
     </g>
     {txt(538,570,35,"29–30 SEP",C.red,1000)}
     {txt(538,620,21,"REGLAS FINANCIERAS Y DE VIAJE",C.ink,900)}
-    <g transform={"translate(540 1224)"} opacity={prog(f,1640,1710)}>
+    <g transform={"translate(540 1224)"} opacity={prog(f,1440,1510)}>
       <path d="M-397 -73 Q-388 -96 -360 -94 L351 -88 Q385 -84 386 -56 L372 66 Q367 90 341 88 L-361 82 Q-393 78 -393 51 Z" fill={C.cream} stroke={C.ink} strokeWidth="8"/>
       {txt(0,-4,28,"REGLAS MÁS ESTRECHAS EN CATEGORÍAS CONCRETAS",C.red,1000)}
       {txt(0,37,17,"NO ES UNA PROHIBICIÓN TOTAL DE VIAJAR O TRANSACCIONAR",C.ink,800)}
@@ -329,7 +329,7 @@ const FinanceTravel: React.FC<{f:number}> = ({f})=>{
 };
 
 const Closing: React.FC<{f:number}> = ({f})=>{
-  const p=prog(f,1705,1795);
+  const p=prog(f,1536,1795);
   return <g opacity={p}>
     <rect x="0" y="1450" width={W} height="470" fill={C.paper} opacity=".96"/>
     <path d="M0 1450 Q200 1388 386 1450 T778 1440 T1080 1420" fill="none" stroke={C.red} strokeWidth="14"/>
@@ -366,7 +366,7 @@ export const CartoonExplainerV5: React.FC = ()=>{
   const vignette=0.06+Math.abs(pulse(f,89))*.012;
   return <AbsoluteFill style={{overflow:"hidden",background:C.paper}}>
     <svg width={W} height={H} viewBox={"0 0 "+W+" "+H} style={{position:"absolute",inset:0}}>
-      <g transform={"translate("+camX+" "+camY+") rotate("+camR+" 540 960)"}>
+      <g transform={"translate("+camX+" "+camY+") translate(-65 -115) scale(1.12) rotate("+camR+" 540 960)"}>
         <Intro f={f}/>
         <January f={f}/>
         <February f={f}/>

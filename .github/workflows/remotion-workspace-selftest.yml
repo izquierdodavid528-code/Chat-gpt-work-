@@ -8,6 +8,7 @@ on:
       - ".github/workflows/studio-render-request.yml"
       - ".github/workflows/new-project.yml"
       - "scripts/remotion/**"
+      - "scripts/media/**"
       - "projects/_template-remotion/**"
   workflow_dispatch:
 
@@ -61,6 +62,36 @@ jobs:
             "$RUNNER_TEMP/audio-probe.json" \
             "$RUNNER_TEMP/audio-qa-report.json"
           grep -q '"result": "PASS"' "$RUNNER_TEMP/audio-qa-report.json"
+
+          # Validation renders may skip full LUFS analysis, but they must not
+          # accept an effectively silent AAC stream as usable audio.
+          printf '%s\n' '{"render":{"requireAudio":true,"audioQa":{"enabled":true,"requireAudio":true,"expectedCodec":"aac","expectedSampleRateHz":48000,"minChannels":1,"maxChannels":2,"maxDurationDeltaSeconds":0.12,"validationSignal":{"enabled":true,"minPeakDbfs":-45.0}}}}' > "$RUNNER_TEMP/validation-audio-config.json"
+          python3 scripts/media/audio-qa.py \
+            "$RUNNER_TEMP/validation-audio-config.json" \
+            "$RUNNER_TEMP/audio-test.mp4" \
+            "$RUNNER_TEMP/audio-probe.json" \
+            "$RUNNER_TEMP/validation-audio-pass.json" \
+            --validation
+          grep -q '"validationSignal": "PASS"' "$RUNNER_TEMP/validation-audio-pass.json"
+
+          ffmpeg -y \
+            -f lavfi -i "color=c=black:s=320x240:r=30:d=3" \
+            -f lavfi -i "anullsrc=r=48000:cl=stereo:d=3" \
+            -c:v libx264 -pix_fmt yuv420p \
+            -c:a aac -b:a 192k -ar 48000 \
+            -shortest "$RUNNER_TEMP/silent-audio-test.mp4" >/dev/null 2>&1
+          ffprobe -v error -show_streams -show_format -of json \
+            "$RUNNER_TEMP/silent-audio-test.mp4" > "$RUNNER_TEMP/silent-audio-probe.json"
+          if python3 scripts/media/audio-qa.py \
+            "$RUNNER_TEMP/validation-audio-config.json" \
+            "$RUNNER_TEMP/silent-audio-test.mp4" \
+            "$RUNNER_TEMP/silent-audio-probe.json" \
+            "$RUNNER_TEMP/validation-audio-fail.json" \
+            --validation; then
+            echo "Silent validation fixture unexpectedly passed" >&2
+            exit 1
+          fi
+          grep -q '"validationSignal": "FAIL"' "$RUNNER_TEMP/validation-audio-fail.json"
 
       - name: Validate two-pass audio mastering end-to-end
         run: |

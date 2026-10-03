@@ -4,7 +4,7 @@ import {AbsoluteFill, Audio, Img, Sequence, Video, interpolate, spring, staticFi
 export const ANIMATIC_FRAMES = 60 * 30;
 const BED = staticFile("rubio-habana-animatic-bed.wav");
 const HOOK_PLATE = staticFile("rubio-habana-map.mp4");
-const RUBIO_PORTRAIT = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Official_portrait_of_Secretary_Marco_Rubio_%283x4_cropped%29.jpg/960px-Official_portrait_of_Secretary_Marco_Rubio_%283x4_cropped%29.jpg";
+const RUBIO_PORTRAIT = staticFile("rubio-official-portrait.jpg");
 
 const BG="#081018";
 const INK="#F2F0EA";

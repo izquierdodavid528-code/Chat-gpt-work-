@@ -21,6 +21,15 @@ const LayerLabel: React.FC<{text:string; y:number; delay:number}> = ({text,y,del
   }}><span style={{display:"inline-block",width:16,height:16,borderRadius:99,background:RED,marginRight:18,boxShadow:"0 0 16px rgba(217,54,54,.5)"}}/>{text}</div>;
 };
 
+const TransitionPulse:React.FC=()=>{
+  const f=useCurrentFrame();
+  const shade=interpolate(f,[0,5,11],[0,.78,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+  const sweep=interpolate(f,[0,11],[-18,118],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+  return <AbsoluteFill style={{pointerEvents:"none",background:`rgba(3,7,11,${shade})`}}>
+    <div style={{position:"absolute",top:0,bottom:0,left:`${sweep}%`,width:3,background:RED,boxShadow:"0 0 28px rgba(217,54,54,.65)",opacity:interpolate(f,[0,3,8,11],[0,1,1,0])}}/>
+  </AbsoluteFill>;
+};
+
 const MapHook:React.FC=()=>{
   const f=useCurrentFrame();
   const pulse=0.96+0.04*Math.sin(f/7);
@@ -228,5 +237,6 @@ export const RubioHabanaAnimatic:React.FC=()=>{
     <Sequence from={720} durationInFrames={390}><Designations/></Sequence>
     <Sequence from={1110} durationInFrames={390}><FinanceLayer/></Sequence>
     <Sequence from={1500} durationInFrames={300}><Close/></Sequence>
+    {[150,420,720,1110,1500].map((at)=><Sequence key={at} from={at-5} durationInFrames={12}><TransitionPulse/></Sequence>)}
   </AbsoluteFill>;
 };

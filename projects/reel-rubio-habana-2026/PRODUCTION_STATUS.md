@@ -61,11 +61,16 @@ Concurrency release:
 - run `37087663265`
 - 1-frame validation used only to release the previous validation concurrency group
 
-**Current authoritative full Blender run:**
-- requestId: `rubio-habana-map-hook-v5-open-contours-full-final`
-- run: `37087696933`
+**Current authoritative full Blender run:
+- requestId: `rubio-habana-map-hook-v5-open-contours-full-authoritative`
+- run: `37087906808`
 - validationFrameCount: 0
-- status at last update: queued behind the 1-frame release run
+- prior release/full runs were automatically superseded after the concurrency fix
+
+Concurrency policy:
+- `.github/workflows/blender-smart-render.yml` now uses latest-request-wins for a project;
+- a newer render request cancels an older validation or production render;
+- the previous one-frame "release" workaround is no longer needed.
 
 Next Blender gate:
 1. let run `37087696933` render all 105 frames;

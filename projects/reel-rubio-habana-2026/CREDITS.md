@@ -4,22 +4,22 @@ Updated: 2026-10-03
 
 ## Music
 
-**Time Passes** — Kevin MacLeod (incompetech.com)  
+**Impact Moderato** — Kevin MacLeod (incompetech.com)  
 Licensed under Creative Commons Attribution 3.0 (CC BY 3.0).
 
-Source:
-https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100042
+Source / archived media:
+https://commons.wikimedia.org/wiki/File:Kevin_MacLeod_-_03_-_Impact_Moderato.ogg
 
 License:
 https://creativecommons.org/licenses/by/3.0/
 
 Production use:
 - documentary background bed;
-- imported automatically before Remotion rendering as `rubio-habana-bed.mp3`;
+- imported automatically before Remotion rendering as `rubio-habana-bed.ogg`;
 - final mix remains subject to narration/music balance QA.
 
 Required attribution for publication:
-Music: "Time Passes" by Kevin MacLeod (incompetech.com), licensed under CC BY 3.0.
+Music: "Impact Moderato" by Kevin MacLeod (incompetech.com), licensed under CC BY 3.0.
 
 ## Marco Rubio official portrait
 

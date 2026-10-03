@@ -225,9 +225,11 @@ const EmergencyPaper:React.FC<{frame:number}> = ({frame}) => {
 };
 
 const OpeningAct:React.FC=()=>{
-  const f=useCurrentFrame();
+  const rf=useCurrentFrame();
+  const f=rf*(330/540);
   const iconFade=interpolate(f,[72,94],[1,0],clamp);
   const mapDark=interpolate(f,[150,230],[0,.12],clamp);
+  const paperWipe=interpolate(f,[306,330],[0,1],clamp);
 
   return <AbsoluteFill style={{overflow:"hidden",background:C.sea}}>
     <MapIllustration frame={f}/>
@@ -265,6 +267,7 @@ const OpeningAct:React.FC=()=>{
     <CustomsGate frame={f}/>
     <CalendarFlip frame={f}/>
     <EmergencyPaper frame={f}/>
+    <div style={{position:"absolute",inset:-20,background:C.paper,clipPath:`circle(${paperWipe*155}% at 78% 86%)`,pointerEvents:"none"}}/>
 
   </AbsoluteFill>;
 };
@@ -272,8 +275,9 @@ const OpeningAct:React.FC=()=>{
 
 const SectorToken:React.FC<{label:string;kind:"bolt"|"metal"|"bank"|"shield"|"crate";frame:number;delay:number;x:number;y:number;rot:number}> = ({label,kind,frame,delay,x,y,rot}) => {
   const p=spring({frame:Math.max(0,frame-delay),fps:30,config:{damping:11,stiffness:185,mass:.7}});
-  const yy=interpolate(p,[0,1],[y+95,y]);
-  const r=interpolate(p,[0,1],[rot-18,rot]);
+  const settle=Math.sin((frame+delay)/14)*3*p;
+  const yy=interpolate(p,[0,1],[y+95,y])+settle;
+  const r=interpolate(p,[0,1],[rot-18,rot])+Math.sin((frame+delay)/20)*1.3*p;
   return <div style={{position:"absolute",left:x,top:yy,width:142,height:142,opacity:p,transform:`scale(${interpolate(p,[0,1],[.2,1])}) rotate(${r}deg)`,transformOrigin:"center"}}>
     <svg width="142" height="142" viewBox="0 0 142 142">
       <circle cx="71" cy="66" r="56" fill={C.cream} stroke={C.ink} strokeWidth="8"/>
@@ -318,7 +322,8 @@ const RubioMini:React.FC<{frame:number}> = ({frame}) => {
 };
 
 const MayAct:React.FC=()=>{
-  const f=useCurrentFrame();
+  const rf=useCurrentFrame();
+  const f=rf*(360/330);
   const paperIn=spring({frame:f,fps:30,config:{damping:16,stiffness:120}});
   const lid=spring({frame:Math.max(0,f-48),fps:30,config:{damping:13,stiffness:155}});
   const date=spring({frame:Math.max(0,f-22),fps:30,config:{damping:11,stiffness:180}});
@@ -361,9 +366,6 @@ const MayAct:React.FC=()=>{
 
     <RubioMini frame={f}/>
 
-    <div style={{position:"absolute",right:90,bottom:150,width:470,fontFamily:"Arial",fontSize:30,fontWeight:1000,lineHeight:1.05,color:C.ink,opacity:interpolate(f,[230,260],[0,1],clamp)}}>
-      La orden presidencial<br/>se convierte en herramientas<br/>de implementación.
-    </div>
   </AbsoluteFill>;
 };
 
@@ -515,7 +517,8 @@ const EducationLane:React.FC<{frame:number}> = ({frame}) => {
 };
 
 const FinanceMobilityAct:React.FC=()=>{
-  const f=useCurrentFrame();
+  const rf=useCurrentFrame();
+  const f=rf*(360/330);
   const door=spring({frame:f,fps:30,config:{damping:17,stiffness:120}});
   const route=interpolate(f,[36,132],[0,1],clamp);
   const tokenX=interpolate(f,[50,146],[120,720],clamp);
@@ -589,7 +592,8 @@ const FinalMechanism:React.FC<{frame:number}> = ({frame}) => {
 };
 
 const CloseAct:React.FC=()=>{
-  const f=useCurrentFrame();
+  const rf=useCurrentFrame();
+  const f=rf*(390/240);
   const wipe=interpolate(f,[0,55],[1,0],clamp);
   const line=interpolate(f,[185,300],[0,1],clamp);
   const final=spring({frame:Math.max(0,f-286),fps:30,config:{damping:15,stiffness:135}});
@@ -628,10 +632,10 @@ const FuturePlaceholder:React.FC=()=>(
 export const RubioHabanaAnimated:React.FC=()=>(
   <AbsoluteFill>
     <PaperTexture/>
-    <Sequence from={0} durationInFrames={330}><OpeningAct/></Sequence>
-    <Sequence from={330} durationInFrames={360}><MayAct/></Sequence>
-    <Sequence from={690} durationInFrames={360}><DesignationsAct/></Sequence>
-    <Sequence from={1050} durationInFrames={360}><FinanceMobilityAct/></Sequence>
-    <Sequence from={1410} durationInFrames={390}><CloseAct/></Sequence>
+    <Sequence from={0} durationInFrames={540}><OpeningAct/></Sequence>
+    <Sequence from={540} durationInFrames={330}><MayAct/></Sequence>
+    <Sequence from={870} durationInFrames={360}><DesignationsAct/></Sequence>
+    <Sequence from={1230} durationInFrames={330}><FinanceMobilityAct/></Sequence>
+    <Sequence from={1560} durationInFrames={240}><CloseAct/></Sequence>
   </AbsoluteFill>
 );

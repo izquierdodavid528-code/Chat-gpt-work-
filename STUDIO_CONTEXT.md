@@ -24,9 +24,9 @@ Drive root:
 
 ## Human-operated Google Flow handoff
 
-There is no Google Flow API, credential or GitHub Actions generation step in this repository. Flow is a manual art-department handoff: Codex prepares shot briefs and copy-ready prompts; the user generates and exports approved images or short clips; the files are uploaded to the configured Drive project folder. Treat an asset as available only after it has been received and checked. Never describe this as an automated Flow integration.
+There is no Google Flow API, credential or GitHub Actions generation step in this repository. Flow is a manual creative handoff: Codex prepares shot briefs and copy-ready prompts; the user generates and exports approved still images and video clips; the files are uploaded to the configured Drive project folder. Flow video is a first-class production route and can replace selected Blender shots when it meets the visual and continuity needs faster. The automated pipeline resumes after upload: Drive sync, Remotion/Blender processing, QA and delivery workflows remain available. Treat an asset as available only after it has been received and checked. Never describe Flow generation itself as automated.
 
-Start with one style frame and one character reference. Reuse the approved reference for poses and optional short motion clips. Keep generated text, labels, maps and factual geography out of Flow outputs; build those deterministically in Remotion.
+Start with one style frame and one character reference. Reuse approved references for poses and video clips. Plan Flow video actively for motion-led shots; use focused prompts and controlled revisions to spend credits efficiently, without treating available credits as a reason to avoid useful generations. Blender complements Flow for deterministic 3D geometry, exact camera paths, reusable rigs or simulations Flow cannot reliably deliver. Keep generated text, labels, maps and factual geography out of Flow outputs; build those deterministically in Remotion.
 
 ## Current Rubio / Havana project state
 

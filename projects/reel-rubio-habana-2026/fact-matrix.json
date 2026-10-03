@@ -127,6 +127,24 @@
         "Rubio depicted as sole author of all measures"
       ],
       "attribution": "fact"
+    },
+    {
+      "id": "ofac-sept30-mobility",
+      "date": "2026-09-30",
+      "claim": "OFAC eliminated the general authorization for attendance at or organization of professional meetings or conferences in Cuba, narrowed certain educational travel authorizations, and removed group people-to-people educational travel, with specified wind-down/grandfathering provisions.",
+      "actor": "Treasury / OFAC",
+      "sourceType": "primary",
+      "source": "OFAC FAQs 1274, 1275, 701, 702 / Sep 29 update effective Sep 30",
+      "visualAllowed": [
+        "professional-meeting icon crossed out",
+        "education/travel route narrowing",
+        "travel authorization document card"
+      ],
+      "visualNotAllowed": [
+        "claiming all travel to Cuba became prohibited",
+        "depicting a blanket border closure"
+      ],
+      "attribution": "fact, exact categories and exceptions preserved"
     }
   ]
 }

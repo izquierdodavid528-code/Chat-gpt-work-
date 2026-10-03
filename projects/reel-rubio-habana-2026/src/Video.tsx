@@ -146,32 +146,43 @@ const Framework:React.FC=()=>{
 const Designations:React.FC=()=>{
   const f=useCurrentFrame();
   const intro=spring({frame:f,fps:30,config:{damping:180,stiffness:150}});
-  const node=(delay:number)=>spring({frame:Math.max(0,f-delay),fps:30,config:{damping:18,stiffness:90,mass:.7}});
-  const cards=[
-    {label:"PERSONAS",x:110,y:555,d:35},
-    {label:"ENTIDADES",x:560,y:520,d:62},
-    {label:"BANCO",x:300,y:810,d:95},
-    {label:"LISTA SDN",x:590,y:930,d:125}
-  ];
-  return <AbsoluteFill style={{background:"radial-gradient(circle at 55% 38%,#132432,#070b10 62%)",overflow:"hidden"}}>
-    <div style={{position:"absolute",left:70,top:120,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>JUNIO → SEPTIEMBRE</div>
-    <div style={{position:"absolute",left:70,top:174,right:70,color:INK,fontFamily:"Arial",fontSize:58,fontWeight:900,lineHeight:1}}>NUEVAS<br/>DESIGNACIONES</div>
-    <div style={{position:"absolute",left:70,top:330,right:70,color:STEEL,fontFamily:"Arial",fontSize:24,fontWeight:650,lineHeight:1.25}}>OFAC añade personas y entidades; el 3 de septiembre incluye al Banco Exterior de Cuba.</div>
-    <div style={{position:"absolute",left:110,top:480,width:860,height:650}}>
-      <div style={{position:"absolute",left:415,top:250,width:150,height:150,borderRadius:"50%",border:"3px solid rgba(217,54,54,.9)",background:"rgba(217,54,54,.08)",display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:26,fontWeight:900,letterSpacing:2,transform:`scale(${.88+.12*intro})`}}>OFAC</div>
-      {cards.map((c,i)=>{
-        const p=node(c.d);
-        const cx=490,cy=325;
-        const tx=c.x+115,ty=c.y-480+42;
-        const dx=tx-cx,dy=ty-cy;
-        const len=Math.sqrt(dx*dx+dy*dy);
-        return <React.Fragment key={c.label}>
-          <div style={{position:"absolute",left:cx,top:cy,width:len,height:2,background:"linear-gradient(90deg,rgba(217,54,54,.75),rgba(126,151,168,.15))",transformOrigin:"left center",transform:`rotate(${Math.atan2(dy,dx)}rad) scaleX(${p})`}}/>
-          <div style={{position:"absolute",left:c.x-110,top:c.y-480,width:230,height:84,borderRadius:18,border:"1px solid rgba(126,151,168,.35)",background:"rgba(10,20,28,.92)",display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:1.4,opacity:p,transform:`scale(${.82+.18*p})`}}>{c.label}</div>
-        </React.Fragment>;
-      })}
+  const june=spring({frame:Math.max(0,f-40),fps:30,config:{damping:180,stiffness:150}});
+  const sept=spring({frame:Math.max(0,f-175),fps:30,config:{damping:180,stiffness:150}});
+  const chip=(label:string,accent:boolean=false)=><div style={{padding:"16px 18px",borderRadius:16,border:`1px solid ${accent?"rgba(217,54,54,.42)":"rgba(126,151,168,.3)"}`,background:accent?"rgba(217,54,54,.07)":"rgba(15,31,42,.8)",color:INK,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:.6}}>{label}</div>;
+  return <AbsoluteFill style={{background:"radial-gradient(circle at 80% 28%,rgba(25,63,84,.30),transparent 33%),#070b10",overflow:"hidden"}}>
+    <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(126,151,168,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(126,151,168,.04) 1px,transparent 1px)",backgroundSize:"58px 58px"}}/>
+    <div style={{position:"absolute",left:70,top:108,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>CAPA 3 · DESIGNACIONES</div>
+    <div style={{position:"absolute",left:70,top:164,right:70,color:INK,fontFamily:"Arial",fontSize:60,fontWeight:900,lineHeight:1}}>JUNIO → SEPTIEMBRE</div>
+    <div style={{position:"absolute",left:70,top:270,right:70,color:STEEL,fontFamily:"Arial",fontSize:24,fontWeight:650,lineHeight:1.25}}>La aplicación del nuevo marco continúa mediante acciones de OFAC y State.</div>
+
+    <div style={{position:"absolute",left:70,right:70,top:420,height:500,borderRadius:30,border:"1px solid rgba(126,151,168,.24)",background:"rgba(8,18,25,.78)",padding:"36px",opacity:june,transform:`translateY(${interpolate(june,[0,1],[24,0])}px)`}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div>
+          <div style={{color:RED,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2}}>04 JUN · OFAC</div>
+          <div style={{color:INK,fontFamily:"Arial",fontSize:36,fontWeight:900,marginTop:8}}>Actualización de la lista SDN</div>
+        </div>
+        <div style={{width:92,height:92,borderRadius:"50%",border:"3px solid "+RED,display:"flex",alignItems:"center",justifyContent:"center",color:INK,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:1}}>OFAC</div>
+      </div>
+      <div style={{display:"flex",gap:14,flexWrap:"wrap",marginTop:44}}>
+        {chip("ICAP",true)}
+        {chip("MINFAR",true)}
+        {chip("PERSONAS")}
+        {chip("OTRAS ENTIDADES")}
+      </div>
+      <div style={{position:"absolute",left:36,right:36,bottom:38,color:STEEL,fontFamily:"Arial",fontSize:20,fontWeight:700,lineHeight:1.3}}>La inclusión en la lista es un hecho verificable; las razones específicas se atribuyen a Treasury/OFAC.</div>
     </div>
-    <div style={{position:"absolute",left:70,right:70,bottom:230,padding:"28px 30px",borderTop:"1px solid rgba(126,151,168,.24)",color:INK,fontFamily:"Arial",fontSize:29,fontWeight:850,lineHeight:1.2}}>Las razones específicas permanecen atribuidas al gobierno de EE.UU.</div>
+
+    <div style={{position:"absolute",left:70,right:70,top:980,height:465,borderRadius:30,border:"1px solid rgba(217,54,54,.23)",background:"linear-gradient(135deg,rgba(217,54,54,.055),rgba(8,18,25,.84))",padding:"36px",opacity:sept,transform:`translateY(${interpolate(sept,[0,1],[26,0])}px)`}}>
+      <div style={{color:GOLD,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2}}>03 SEP · OFAC</div>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:38,fontWeight:900,marginTop:12,lineHeight:1.08}}>BANCO EXTERIOR DE CUBA</div>
+      <div style={{color:STEEL,fontFamily:"Arial",fontSize:22,fontWeight:700,marginTop:16,lineHeight:1.3}}>OFAC lo añade a la SDN List junto con otros objetivos relacionados con Cuba.</div>
+      <div style={{position:"absolute",left:36,right:36,bottom:42,height:110,borderRadius:20,border:"1px solid rgba(126,151,168,.25)",background:"rgba(8,14,20,.74)",padding:"22px 24px"}}>
+        <div style={{color:STEEL,fontFamily:"Arial",fontSize:15,fontWeight:900,letterSpacing:2}}>FUENTE PRIMARIA</div>
+        <div style={{color:INK,fontFamily:"Arial",fontSize:19,fontWeight:800,marginTop:8}}>U.S. Treasury · OFAC Recent Actions · 2026-09-03</div>
+      </div>
+    </div>
+
+    <div style={{position:"absolute",left:70,right:70,bottom:165,color:INK,fontFamily:"Arial",fontSize:28,fontWeight:900,lineHeight:1.18,opacity:intro}}>La presión deja de ser una sola orden: se convierte en una secuencia de decisiones administrativas.</div>
   </AbsoluteFill>;
 };
 

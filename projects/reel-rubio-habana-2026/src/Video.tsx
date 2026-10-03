@@ -33,22 +33,16 @@ const TransitionPulse:React.FC=()=>{
 const MapHook:React.FC=()=>{
   const f=useCurrentFrame();
   const titleIn=spring({frame:f,fps:30,config:{damping:180,stiffness:150}});
-  const route=interpolate(f,[16,72],[0,1],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
-  const contour=(delay:number)=>interpolate(f,[delay,delay+24],[0,1],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
-  return <AbsoluteFill style={{background:"radial-gradient(circle at 50% 44%,#102432 0%,#081018 48%,#05080c 100%)",overflow:"hidden"}}>
-    <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(126,151,168,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(126,151,168,.045) 1px,transparent 1px)",backgroundSize:"58px 58px"}}/>
-    <div style={{position:"absolute",left:110,top:640,width:330,height:170,borderRadius:"56% 44% 50% 50% / 58% 52% 48% 42%",background:"#2a3942",transform:"rotate(-8deg)",boxShadow:"0 0 0 2px rgba(126,151,168,.18),0 24px 80px rgba(0,0,0,.35)"}}/>
-    <div style={{position:"absolute",right:95,top:900,width:590,height:135,borderRadius:"58% 42% 58% 42% / 55% 48% 52% 45%",background:"#2a3942",transform:"rotate(-4deg)",boxShadow:"0 0 0 2px rgba(126,151,168,.18),0 24px 80px rgba(0,0,0,.35)"}}/>
-    <div style={{position:"absolute",left:310,top:780,width:470,height:3,background:"linear-gradient(90deg,#3b9bc2,#8cc5dc)",transformOrigin:"left center",transform:`rotate(19deg) scaleX(${route})`,boxShadow:"0 0 18px rgba(59,155,194,.45)"}}/>
-    <div style={{position:"absolute",left:280,top:760,width:12,height:12,borderRadius:"50%",background:"#7fc9e8"}}/>
-    <div style={{position:"absolute",right:292,top:925,width:12,height:12,borderRadius:"50%",background:RED}}/>
-    {[0,1,2,3].map((i)=>{
-      const p=contour(54+i*14);
-      return <div key={i} style={{position:"absolute",left:165-i*12,top:980+i*34,width:760+i*20,height:160,borderTop:`3px solid rgba(217,54,54,${.25+i*.10})`,borderRadius:"50%",transform:`scaleX(${p}) rotate(-2deg)`,transformOrigin:"center",opacity:p}}/>;
-    })}
-    <div style={{position:"absolute",left:250,top:700,color:STEEL,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2}}>MIAMI</div>
-    <div style={{position:"absolute",right:250,top:1042,color:STEEL,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2}}>LA HABANA</div>
-    <div style={{position:"absolute",inset:0,background:"linear-gradient(180deg,rgba(2,7,12,.08) 0%,rgba(4,8,13,.10) 40%,rgba(4,8,13,.72) 76%,rgba(4,8,13,.95) 100%)"}}/>
+  const plateOpacity=interpolate(f,[0,10,132,149],[0,1,1,.72],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
+  return <AbsoluteFill style={{background:BG,overflow:"hidden"}}>
+    <Video
+      src={HOOK_PLATE}
+      muted
+      playbackRate={0.7}
+      style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",opacity:plateOpacity}}
+    />
+    <div style={{position:"absolute",inset:0,background:"linear-gradient(180deg,rgba(2,7,12,.10) 0%,rgba(4,8,13,.12) 40%,rgba(4,8,13,.58) 72%,rgba(4,8,13,.92) 100%)"}}/>
+    <div style={{position:"absolute",inset:0,boxShadow:"inset 0 0 180px rgba(0,0,0,.42)"}}/>
     <div style={{position:"absolute",left:74,right:74,top:118,opacity:titleIn,transform:`translateY(${interpolate(titleIn,[0,1],[28,0])}px)`}}>
       <div style={{color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3,marginBottom:14}}>2026</div>
       <div style={{color:INK,fontFamily:"Arial",fontSize:70,fontWeight:900,lineHeight:.98,letterSpacing:-2,textShadow:"0 8px 28px rgba(0,0,0,.58)"}}>LA PRESIÓN<br/>SE AMPLÍA</div>
@@ -58,10 +52,8 @@ const MapHook:React.FC=()=>{
     <LayerLabel text="SANCIONES" y={1330} delay={88}/>
     <LayerLabel text="FINANZAS" y={1400} delay={102}/>
     <LayerLabel text="MOVILIDAD" y={1470} delay={116}/>
-    <div style={{position:"absolute",right:74,bottom:82,color:STEEL,fontFamily:"Arial",fontSize:14,fontWeight:900,letterSpacing:2,opacity:.72}}>PREVISUALIZACIÓN · MAPA PROVISIONAL</div>
   </AbsoluteFill>
 };
-
 const OilLayer:React.FC=()=>{
   const f=useCurrentFrame();
   const mechanism=spring({frame:Math.max(0,f-18),fps:30,config:{damping:180,stiffness:150}});

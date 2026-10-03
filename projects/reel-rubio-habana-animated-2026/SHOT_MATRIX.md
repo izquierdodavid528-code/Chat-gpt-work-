@@ -1,3 +1,9 @@
+
+
+## Review after score/SFX render — run 37158143501
+
+Inspected the actual full render contact sheet. Audio-bearing render, captions and all 12 timed shots are present. Fix before the next visual review: the 20 FEB card text feels cramped; reduce/reflow its type. The S06 delegation card's long opacity ramp makes the graphic nearly invisible at the shot opening; shorten that reveal to land with “encargó su aplicación”. The S08 paper fold is still dominant at midpoint; inspect the final beat to ensure the bank reads before the cut. Music and action cues are technically included and passed configured media QA, but the balance still needs an attentive human listen. These are Remotion/timing refinements; no new Flow asset is requested yet.
+
 # SHOT MATRIX — 60-second voice-led animatic
 
 All 12 cut points follow Edge TTS word-boundary timings for the unchanged 120-word scratch narration. Frame boundaries are rounded to 30 fps. The full composition remains exactly 1800 frames / 60 seconds; the last spoken word ends at 55.737 s and the image holds through the close. Captions are phrase-level, never karaoke, and fit within two lines. Eight Remotion diagrams now have a first-pass animated treatment. Review them for clarity and factual scope before polishing.

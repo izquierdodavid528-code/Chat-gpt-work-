@@ -1,3 +1,7 @@
+## Current render check — run 37158143501
+
+Scratch music and action cues are now integrated in Remotion. The audio masterizer reports MASTERED; configured audio QA passes at -17.9 LUFS integrated, -4.6 dBFS true peak, 2.5 LU LRA, AAC 48 kHz stereo and 0.053 s A/V sync delta. Overall delivery report passes. This validates codec, loudness and sync only. It does not approve the scratch TTS voice or creative balance. Contact sheet confirms four intentional breath spaces remain quiet. Continue with phone-speaker listening and revise S04/S06/S08 visuals noted in PRODUCTION_STATUS and SHOT_MATRIX; keep music/cues conservative.
+
 > Updated 2026-10-03: first voice-led motion pass now has a scratch music bed, action cues and configured audio checks. Mix not creatively approved.
 
 # SOUND DESIGN V1 — scratch mix plan

@@ -1,3 +1,13 @@
+## Audio-bearing animatic render — run 37158143501
+
+Commit a7c756e0b330e3caba3527fbcd1ce7ee7d7a6d32 adds the scratch score/cues and enables configured mastering/audio QA. GitHub Actions: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37158143501; artifact delivery: https://drive.google.com/file/d/116A8XWaV4XwyDMiQzwcZQbu1Eovgqvn8/view?usp=drivesdk.
+
+The 60 s composition rendered successfully. Delivery: H.264 1080×1920 at 30 fps, 60.053 s container; stereo AAC, 48 kHz. Delivery report PASS. Audio master report MASTERED. Dedicated audio QA PASS: -17.9 LUFS integrated, -4.6 dBFS true peak, 2.5 LU LRA, 0.053 s A/V duration delta, no clipping/QA errors. Four brief quiet regions align with intentional breath spaces; max continuous region 0.688 s. The voice is an Edge TTS scratch take, not a final performance or subjective approval.
+
+The actual 12-shot contact sheet was inspected after the mixed render. It confirms the full story coverage and score layer. Outstanding visual refinement: S04 date/withdrawal text is cramped in the narrow card; S06 fades in too faintly at the start of its line; the bank transformation is still mostly a paper reveal at its midpoint. Review at phone scale and adjust timing/layout before calling the visual language locked. Current output is a technically and audio-QA passing animatic only, not creative, factual or final pass.
+
+No additional Flow prompt is justified yet: existing clips cover harbor, Rubio reaction and bank reveal; remaining information mechanisms (maps, conditional gate, legal dates/scopes, agency responsibilities) need precise Remotion composition. Reconsider Flow only if a concrete character/environment action remains missing after the next Remotion refinement.
+
 # PRODUCTION STATUS — Rubio / La Habana 2026
 
 Updated 2026-10-03 after remote repo, Drive and render audit.

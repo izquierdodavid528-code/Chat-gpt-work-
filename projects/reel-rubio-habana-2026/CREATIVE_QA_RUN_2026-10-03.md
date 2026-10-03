@@ -57,8 +57,10 @@ Status:
 NOT READY
 - Music bed exists and loops across 60 s.
 - Final narration has not been recorded/generated.
-- NARRATION_V3 is now 143 words, suitable for approximately 145–155 wpm plus short pauses.
+- NARRATION_V3 is now 147 words; at ~150 wpm it fits the 60-second target with only short pauses.
 - Final LUFS / true-peak gate remains pending.
+
+- finance + mobility narration alignment: PASS; the script now mentions the scoped professional/educational travel changes shown on screen.
 
 ## E — Captions
 

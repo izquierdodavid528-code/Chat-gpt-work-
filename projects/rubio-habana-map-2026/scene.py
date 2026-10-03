@@ -87,7 +87,7 @@ scene.render.resolution_y=1920
 scene.render.resolution_percentage=100
 scene.render.fps=30
 scene.frame_start=1
-scene.frame_end=150
+scene.frame_end=105
 scene.render.image_settings.file_format="PNG"
 try:
     scene.eevee.taa_render_samples = 32
@@ -152,7 +152,7 @@ route=make_bezier_line("MiamiHavanaRoute",[
 route.data.bevel_factor_end=0.02
 route.data.keyframe_insert("bevel_factor_end",frame=1)
 route.data.bevel_factor_end=1.0
-route.data.keyframe_insert("bevel_factor_end",frame=55)
+route.data.keyframe_insert("bevel_factor_end",frame=45)
 
 # City markers
 for name,(x,y),mat in [("Miami",miami,blue),("Havana",havana,red)]:
@@ -161,7 +161,7 @@ for name,(x,y),mat in [("Miami",miami,blue),("Havana",havana,red)]:
 
 # Pressure rings centered near Havana / north Cuba
 cx,cy=geo(-81.9,22.35)
-starts=[35,55,75,95]
+starts=[25,40,55,70]
 for i,start in enumerate(starts):
     bpy.ops.mesh.primitive_torus_add(major_radius=1.10+i*0.36,minor_radius=0.018,major_segments=96,minor_segments=10,location=(cx,cy,0.16+i*0.006))
     t=bpy.context.active_object
@@ -174,28 +174,6 @@ for i,start in enumerate(starts):
     t.keyframe_insert(data_path="scale",frame=start+12)
 
 # Titles on map
-make_text("FLORIDA",(*geo(-82.7,28.9),0.16),0.24,white,"FloridaLabel")
-make_text("CUBA",(*geo(-80.15,21.95),0.16),0.22,white,"CubaLabel")
-make_text("LA HABANA",havana+(0.24,),0.18,red,"HavanaLabel")
-
-# Layer words, staged vertically in upper-air plane
-layers=[("PETROLEO",38),("SANCIONES",58),("FINANZAS",78),("MOVILIDAD",98)]
-for idx,(body,start) in enumerate(layers):
-    o=make_text(body,(2.10,-2.35+idx*0.50,0.35),0.18,white,f"Layer_{idx}")
-    o.data.align_x="RIGHT"
-    o.scale=(0.001,0.001,0.001)
-    o.keyframe_insert(data_path="scale",frame=start-5)
-    o.scale=(1,1,1)
-    o.keyframe_insert(data_path="scale",frame=start+8)
-    # Red dot
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=16,ring_count=8,radius=0.038,location=(2.28,-2.24+idx*0.50,0.35))
-    dot=bpy.context.active_object; dot.data.materials.append(red)
-
-# Main title lying on map
-make_text("2026",(-2.55,-3.55,0.32),0.18,warm,"Year")
-title=make_text("LA PRESION\nSE AMPLIA",(-2.55,-4.02,0.32),0.36,white,"MainTitle")
-title.data.space_line=0.78
-sub=make_text("La politica cambia de instrumentos.",(-2.55,-4.92,0.32),0.14,land_edge,"SubTitle")
 
 # Camera
 bpy.ops.object.camera_add(location=(0.6,-10.8,14.0))
@@ -206,8 +184,8 @@ look_at(cam,(-0.15,-0.55,0.0))
 cam.keyframe_insert(data_path="location",frame=1)
 cam.location=(0.15,-9.8,12.9)
 look_at(cam,(-0.15,-0.40,0.0))
-cam.keyframe_insert(data_path="location",frame=150)
-cam.keyframe_insert(data_path="rotation_euler",frame=150)
+cam.keyframe_insert(data_path="location",frame=105)
+cam.keyframe_insert(data_path="rotation_euler",frame=105)
 
 # Soft key lights
 bpy.ops.object.light_add(type="AREA", location=(-5,-2,8))

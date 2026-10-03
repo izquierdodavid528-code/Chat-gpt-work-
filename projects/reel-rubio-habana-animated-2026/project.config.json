@@ -11,7 +11,7 @@
     "expectedWidth": 1080,
     "expectedHeight": 1920,
     "expectedFps": 30,
-    "requireAudio": false,
+    "requireAudio": true,
     "minDurationSeconds": 59
   }
 }

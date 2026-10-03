@@ -1,7 +1,7 @@
 {
-  "requestId": "rubio-habana-map-hook-v4-clean-3d-plate-validation",
+  "requestId": "rubio-habana-map-hook-v4-clean-3d-plate-full",
   "engine": "blender",
   "projectSlug": "rubio-habana-map-2026",
   "blenderMode": "auto",
-  "validationFrameCount": "6"
+  "validationFrameCount": "0"
 }

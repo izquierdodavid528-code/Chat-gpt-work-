@@ -33,7 +33,8 @@ const shots: Shot[] = [
   {id:"S09",from:1110,duration:150,act:"5 · TRANSFERENCIAS",heading:"PLACEHOLDER · DEFINED U-TURN ROUTE",caption:"Ese mes cambió la licencia general\npara ciertas transferencias U-turn.",visual:"Show only the transaction scope in OFAC FAQ 1272, not all Cuba-related payments.",kind:"placeholder"},
   {id:"S10",from:1260,duration:101,act:"5 · REUNIONES",heading:"PLACEHOLDER · REMOVE AUTHORIZATION TAB",caption:"También se eliminó la autorización\nde reuniones profesionales,",visual:"Add exact wind-down scope/date in a small sourced caption.",kind:"placeholder"},
   {id:"S11",from:1361,duration:148,act:"5 · VIAJES EDUCATIVOS",heading:"PLACEHOLDER · NARROWED EDUCATION LANES",caption:"y se acotaron viajes educativos,\ncon excepciones transitorias.",visual:"Keep an exception branch visible; details follow OFAC FAQ 1274.",kind:"placeholder"},
-  {id:"S12",from:1509,duration:291,act:"6 · CIERRE",heading:"EXISTING MAP STILL · TIMELINE PULLBACK",caption:"Washington invoca seguridad nacional;\nel MINREX denuncia un recrudecimiento del bloqueo.",visual:"Keep the two institutional views separately attributed.",kind:"image",asset:"flow/images/rubio-policy-map-reference-v1.jpg"},
+  {id:"S12a",from:1509,duration:75,act:"6 · CIERRE",heading:"WASHINGTON · POSICIÓN ATRIBUIDA",caption:"Washington invoca seguridad\nnacional.",visual:"Still anchor; label the rationale as Washington’s position.",kind:"image",asset:"flow/images/s12-closing-two-positions-start-v1.jpg"},
+  {id:"S12b",from:1584,duration:216,act:"6 · CIERRE",heading:"MINREX · DENUNCIA ATRIBUIDA",caption:"El MINREX denuncia un\nrecrudecimiento del bloqueo.",visual:"Six-second Flow acting plate slowed slightly to fill the 7.2-second closing window; overlay both institutional attributions in Remotion.",kind:"video",asset:"flow/video/s12-closing-two-positions-v1.mp4"},
 ];
 const ink="#25282a", ivory="#f2e8d4", coral="#ce6259";
 const Paper: React.FC=()=> <AbsoluteFill style={{backgroundColor:ivory,backgroundImage:"radial-gradient(circle at 12% 20%, rgba(37,40,42,.07) 0 1px, transparent 1.4px), radial-gradient(circle at 75% 65%, rgba(37,40,42,.045) 0 1px, transparent 1.4px)",backgroundSize:"19px 19px, 27px 27px"}}/>;
@@ -181,17 +182,28 @@ const BridgeTransition:React.FC<{bridge:Bridge}>=({bridge})=>{
  </AbsoluteFill>;
 };
 
+const S12Attribution: React.FC<{shotId:string}>=({shotId})=>{
+ const first=shotId==="S12a";
+ const title=first?"WASHINGTON":"MINREX";
+ const body=first?"Invoca seguridad nacional":"Denuncia un recrudecimiento del bloqueo";
+ return <div style={{position:"absolute",left:"44%",right:"7%",top:"15%",height:"19%",display:"flex",flexDirection:"column",justifyContent:"center",padding:"20px 26px",boxSizing:"border-box",color:"#29333b",fontFamily:"Arial,sans-serif",textAlign:"center"}}>
+  <div style={{fontSize:26,fontWeight:800,letterSpacing:2.4,color:"#b84f47",marginBottom:16}}>{title}</div>
+  <div style={{fontSize:first?39:34,lineHeight:1.14,fontWeight:700}}>{body}</div>
+ </div>;
+};
+
 const ShotLayer: React.FC<{shot:Shot}>=({shot})=>{
  const frame=useCurrentFrame();
  const zoom=interpolate(frame,[0,shot.duration],[1.01,1.045],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  return <AbsoluteFill>
   {shot.kind==="placeholder"&&<MotionGraphic shot={shot}/>}
-  {shot.kind==="video"&&shot.asset&&<OffthreadVideo src={staticFile(shot.asset)} muted startFrom={shot.startFrom??0} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
+  {shot.kind==="video"&&shot.asset&&<OffthreadVideo src={staticFile(shot.asset)} muted startFrom={shot.startFrom??0} playbackRate={shot.id==="S12b"?0.8333:1} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
   {shot.kind==="image"&&shot.asset&&<Img src={staticFile(shot.asset)} style={{width:"100%",height:"100%",objectFit:"cover",transform:"scale("+zoom+")"}}/>}
   <div style={{position:"absolute",left:64,right:64,top:72,display:"flex",justifyContent:"space-between",alignItems:"center",color:"#fff9ef",fontFamily:"Arial, sans-serif",textShadow:"0 2px 8px rgba(0,0,0,.55)"}}>
    <div style={{padding:"14px 18px",background:"rgba(31,39,44,.84)",borderRadius:8,fontSize:25,fontWeight:800,letterSpacing:2}}>{shot.act}</div>
    <div style={{padding:"12px 14px",background:"rgba(31,39,44,.78)",borderRadius:8,fontSize:22,fontWeight:800,letterSpacing:1.5}}>{shot.id} · ANIMATIC</div>
   </div>
+  {(shot.id==="S12a"||shot.id==="S12b")&&<S12Attribution shotId={shot.id}/>}
   {shot.id==="S08"&&<div style={{position:"absolute",left:66,top:158,padding:"13px 18px",background:"rgba(255,250,239,.93)",borderLeft:"7px solid "+coral,borderRadius:8,color:"#25282a",font:"800 21px Arial,sans-serif",letterSpacing:1.2,boxShadow:"0 5px 18px rgba(37,40,42,.18)"}}>OFAC · BANCO EXTERIOR DE CUBA · 03 SEP 2026</div>}
   <Caption>{shot.caption}</Caption>
  </AbsoluteFill>;

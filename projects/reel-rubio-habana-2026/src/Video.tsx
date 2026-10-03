@@ -104,7 +104,7 @@ const OilLayer:React.FC=()=>{
       </div>
     </div>
 
-    <div style={{position:"absolute",left:70,right:70,bottom:165,color:STEEL,fontFamily:"Arial",fontSize:21,fontWeight:650,lineHeight:1.28}}>La secuencia evita presentar la medida de enero como si hubiera permanecido sin cambios durante todo 2026.</div>
+    <div style={{position:"absolute",left:70,right:70,bottom:165,color:STEEL,fontFamily:"Arial",fontSize:21,fontWeight:650,lineHeight:1.28}}>ENERO · APERTURA DEL MECANISMO  →  FEBRERO · RETIRO DE LOS ARANCELES IEEPA</div>
   </AbsoluteFill>;
 };
 

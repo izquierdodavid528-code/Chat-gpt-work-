@@ -40,9 +40,9 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
  const f=useCurrentFrame();
  const p=interpolate(f,[0,shot.duration],[0,1],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  const coral="#ce6259", navy="#344556", teal="#4e9aa0", cream="#fffaf0", ink="#25282a";
- const card:React.CSSProperties={position:"absolute",left:"9%",right:"9%",top:"22%",height:"55%",borderRadius:26,background:"rgba(255,250,239,.9)",border:"2px solid rgba(37,40,42,.18)",boxShadow:"0 24px 60px rgba(37,40,42,.16)",overflow:"hidden"};
- const label:React.CSSProperties={font:"800 27px Arial,sans-serif",letterSpacing:2,color:navy};
- const tiny:React.CSSProperties={font:"700 23px Arial,sans-serif",letterSpacing:1.3,color:navy};
+ const card:React.CSSProperties={position:"absolute",left:"4%",right:"4%",top:"14%",height:"71%",borderRadius:26,background:"rgba(255,250,239,.9)",border:"2px solid rgba(37,40,42,.18)",boxShadow:"0 24px 60px rgba(37,40,42,.16)",overflow:"hidden"};
+ const label:React.CSSProperties={font:"800 32px Arial,sans-serif",letterSpacing:2,color:navy};
+ const tiny:React.CSSProperties={font:"700 28px Arial,sans-serif",letterSpacing:1.1,color:navy};
  const pill:React.CSSProperties={padding:"16px 22px",borderRadius:14,background:navy,color:cream,font:"800 27px Arial,sans-serif",letterSpacing:1.2,boxShadow:"0 10px 20px rgba(37,40,42,.15)"};
  const move=interpolate(p,[0,1],[70,0],{extrapolateLeft:"clamp",extrapolateRight:"clamp"});
  return <AbsoluteFill style={{overflow:"hidden",background:"linear-gradient(145deg,#e8ddc6,#f7f0e3 54%,#d8d1c3)"}}>
@@ -57,8 +57,8 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
      <path d="M154 343 C278 308 408 313 572 382" fill="none" stroke={coral} strokeWidth="10" strokeLinecap="round" strokeDasharray="700" strokeDashoffset={700*(1-p)} />
      <circle cx="155" cy="343" r="15" fill={cream} stroke={coral} strokeWidth="8"/>
      <circle cx="572" cy="382" r="17" fill={coral} stroke={cream} strokeWidth="6"/>
-     <text x="100" y="300" fill={navy} fontSize="23" fontWeight="700">POSIBLE PROVEEDOR</text>
-     <text x="530" y="450" fill={navy} fontSize="26" fontWeight="800">CUBA</text>
+     <text x="100" y="300" fill={navy} fontSize="30" fontWeight="700">POSIBLE PROVEEDOR</text>
+     <text x="530" y="450" fill={navy} fontSize="32" fontWeight="800">CUBA</text>
     </svg>
     <div style={{position:"absolute",right:26,bottom:24,...pill}}>29 ENE · VÍA CONDICIONAL</div>
    </div>}
@@ -126,7 +126,7 @@ const MotionGraphic: React.FC<{shot:Shot}>=({shot})=>{
     <div style={{position:"absolute",left:"63%",top:"20%",width:"23%",height:"62%",border:"3px solid "+navy,borderRadius:18,background:"rgba(255,250,240,.78)",display:"flex",flexDirection:"column",justifyContent:"space-around",alignItems:"center"}}>
      <div style={{width:"72%",height:12,background:coral,borderRadius:20,transform:"scaleX("+interpolate(p,[0,1],[1,.45])+")"}}/>
      <div style={{width:"72%",height:12,background:teal,borderRadius:20}}/>
-     <div style={{font:"800 24px Arial",color:navy,textAlign:"center"}}>EXCEPCIONES<br/>TRANSITORIAS</div>
+     <div style={{font:"800 28px Arial",color:navy,textAlign:"center"}}>EXCEPCIONES<br/>TRANSITORIAS</div>
     </div>
    </div>}
   </div>

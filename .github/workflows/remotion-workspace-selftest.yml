@@ -28,7 +28,7 @@ jobs:
 
       - name: Validate Python and JSON
         run: |
-          python3 -m py_compile scripts/remotion/render-plan.py scripts/remotion/verify-delivery.py scripts/media/audio-qa.py scripts/media/audio-master.py
+          python3 -m py_compile scripts/remotion/render-plan.py scripts/remotion/verify-delivery.py scripts/remotion/pull-drive-imports.py scripts/remotion/pull-remote-assets.py scripts/media/audio-qa.py scripts/media/audio-master.py
           python3 -m json.tool projects/_template-remotion/project.config.json >/dev/null
 
       - name: Validate workflows

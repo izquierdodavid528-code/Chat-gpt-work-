@@ -126,20 +126,6 @@ Work from fast visual tests to approved finals. Consider Flow video early for mo
 9. audio/caption QA;
 10. final render.
 
-<!-- previous list replaced -->
-<!-- Work from cheap to expensive:
-
-1. story/action beat;
-2. rough storyboard;
-3. proxy assets;
-4. Remotion timing;
-5. representative-frame or low-res previews;
-6. final Flow/Blender asset generation;
-7. final integration;
-8. visual QA;
-9. audio/caption QA;
-10. final render. -->
-
 Do not spend final-render compute on a shot whose timing/composition has not been approved.
 
 ## Asset storage

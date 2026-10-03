@@ -40,7 +40,7 @@ Editorial guardrail:
 
 ## 00:24-00:37 - Rubio role + designations
 
-> Como secretario de Estado, Marco Rubio anunció medidas dentro de ese marco. Entre junio y septiembre, OFAC añadió personas, entidades y al Banco Exterior de Cuba.
+> Como secretario de Estado, Rubio anunció medidas dentro de ese marco. Entre junio y septiembre, OFAC añadió personas, entidades y al Banco Exterior de Cuba.
 
 Primary sources:
 - White House / EO 14404.
@@ -64,7 +64,7 @@ Editorial guardrail:
 
 ## 00:50-01:00 - Close
 
-> La Casa Blanca lo vincula a seguridad nacional y política exterior. El MINREX lo describe como un recrudecimiento del bloqueo económico, financiero y comercial. Lo documentado: en 2026, la arquitectura de restricciones cambió y se amplió.
+> La Casa Blanca lo vincula a seguridad nacional y política exterior. El MINREX lo describe como recrudecimiento del bloqueo económico, financiero y comercial. Lo documentado: en 2026, las restricciones cambiaron y se ampliaron.
 
 Treatment:
 - visually separate the two attributed official interpretations;
@@ -75,5 +75,5 @@ Treatment:
 
 - Generate or record the final narration only after the 60-second visual animatic passes creative QA.
 - Captions must be derived from final narration timing, not this estimated timecode.
-- Target spoken pace: approximately 145-155 wpm with natural pauses. Current narration: 143 words.
+- Target spoken pace: approximately 145-150 wpm with natural pauses.
 - Do not compress pauses just to force the script into 60 seconds; trim wording instead if the final voice exceeds the slot.

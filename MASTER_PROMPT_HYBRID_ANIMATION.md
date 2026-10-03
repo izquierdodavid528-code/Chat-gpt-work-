@@ -20,6 +20,7 @@ Before changing code:
 4. Inspect relevant GitHub Actions/workflows before creating or replacing automation.
 5. Read project-specific strategy/status files.
 6. Preserve working infrastructure unless there is a demonstrated technical reason to change it.
+7. For the Rubio/Havana project, read `projects/reel-rubio-habana-animated-2026/PRODUCTION_STATUS.md` and `projects/reel-rubio-habana-animated-2026/FLOW_ASSET_BRIEFS.md`; preserve the main-branch rough-cut baseline and keep the next creative test to an isolated 8–12-second opening pilot.
 
 ## Creative objective
 
@@ -34,6 +35,10 @@ Do not solve visual richness only with more text, panels or generic fades.
 Treat the tools as departments:
 
 ### Flow = art department
+
+Google Flow is a user-operated handoff in this repository: no Flow API or generation workflow is configured in GitHub Actions. Prepare precise copy-ready prompts, asset names, framing and acceptance criteria; the user runs approved generations and exports the selected files. Never imply that Flow has run or that assets exist before they have been supplied and checked. Do not use external generation or spend credits on the user's behalf without explicit authorization.
+
+For the Rubio/Havana pilot, start with one style frame and one reusable character reference. Reuse the approved image as a reference/ingredient for later poses. Keep maps, coastlines, dates, labels, official text and captions out of Flow generations; implement verified information in Remotion.
 
 Use Flow not only for full generated clips but for:
 - character design;
@@ -142,6 +147,8 @@ Google Drive:
 - final deliveries.
 
 Do not commit heavy media to GitHub unless explicitly justified.
+
+For the current Rubio project, the configured Drive folder is `Remotion Projects/03 - Reel Rubio Habana Animated 2026`; keep Flow images and video under `assets/flow/images` and `assets/flow/video`.
 
 ## Visual quality
 

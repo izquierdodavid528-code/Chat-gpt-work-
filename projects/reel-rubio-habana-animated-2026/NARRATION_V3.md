@@ -1,47 +1,48 @@
-# NARRATION V3 — scratch-recording draft
+# NARRATION V3 — source-checked scratch draft
 
-Status: draft for a timed voice test, not final approval. It condenses the previous 145-word version. Confirm legal/factual wording against the linked primary sources and the current date before recording final narration.
+Checked against the primary sources below on 2026-10-03. Draft only: no scratch take exists yet and it has not been timed acoustically. It contains 120 words; at 130 wpm the estimate is 55.4 seconds, leaving about 4.6 seconds for pauses. Re-time after recording; do not speed up a natural read to fit.
 
-Target: about 60 seconds including short natural pauses. Read conversationally; do not race. If the test exceeds the scene plan, tighten wording or shift visual timing before speeding up the voice.
+## Scratch script
 
-## 00:00–00:04 — Hook
+### 00:00–00:04 — Hook
 Washington amplió la presión sobre La Habana.
 
-## 00:04–00:18 — January and February
-El 29 de enero, una orden abrió la posibilidad de aranceles a países que suministraran petróleo a Cuba. El 20 de febrero se retiró esa vía arancelaria bajo IEEPA; otras medidas siguieron vigentes.
+### 00:04–00:20 — January and February
+El 29 de enero se abrió la vía para posibles aranceles a países que suministraran petróleo a Cuba. El 20 de febrero se retiraron esos aranceles; la emergencia y otras medidas siguieron vigentes.
 
-## 00:18–00:29 — May and Rubio's role
-En mayo, otra orden amplió sanciones y asignó funciones a Estado y Tesoro. Rubio aparece como secretario de Estado, no como firmante.
+### 00:20–00:33 — May and Rubio's role
+En mayo, la orden habilitó sanciones por vínculos con ciertos sectores o conductas y encargó su aplicación a Estado y Tesoro. Rubio, secretario de Estado, no la firmó.
 
-## 00:29–00:41 — OFAC designations
-OFAC añadió nuevas personas y entidades a su lista. En septiembre incluyó al Banco Exterior de Cuba.
+### 00:33–00:41 — OFAC designations
+En septiembre, OFAC añadió varias entidades a su lista, incluido el Banco Exterior de Cuba.
 
-## 00:41–00:52 — Finance and travel
-Ese mes también cambiaron reglas bancarias y de viaje. OFAC retiró la autorización para ciertas transferencias U-turn y reuniones profesionales; además, estrechó algunas actividades educativas.
+### 00:41–00:53 — Finance and travel
+Ese mes cambió la licencia general para ciertas transferencias U-turn. También se eliminó la autorización de reuniones profesionales y se acotaron viajes educativos, con excepciones transitorias.
 
-## 00:52–01:00 — Attributed close
-La Casa Blanca cita seguridad; el MINREX denuncia el recrudecimiento del bloqueo.
+### 00:53–01:00 — Attributed close
+Washington invoca seguridad nacional; el MINREX denuncia un recrudecimiento del bloqueo.
 
-Spoken draft: about 116 words. This leaves room for measured delivery, pauses and visual holds; validate with an actual scratch recording. Put the specific scope and the 30 October wind-down date in Remotion captions rather than rushing them into the voice.
+## Source-check decisions
 
-## Accuracy and scope notes
-
-- The 29 January order established a mechanism under which additional duties could be imposed; avoid saying all suppliers were automatically tariffed.
-- The 20 February action ended those IEEPA tariff actions only. Do not imply it ended the wider Cuba sanctions policy.
-- The May 1 order is presidential; do not say Rubio signed it.
-- OFAC added Banco Exterior de Cuba to the SDN list on 3 September 2026.
-- Define U-turn transactions in an on-screen caption as the specific transfers addressed by OFAC, not all banking or travel.
-- State that the professional-meeting authorization was removed and certain educational authorizations narrowed; do not imply a blanket travel ban. Some transactions previously authorized had a limited wind-down period through 30 October.
-- Attribute U.S. government rationales and MINREX's characterization to those institutions.
-- Final speech, captions and policy visuals require source/date review at export.
+- EO 14380 created a conditional process for possible extra duties; it did not automatically tariff every oil supplier.
+- EO 14389 ended IEEPA duties under listed orders including EO 14380, while other actions and the national emergency remained.
+- EO 14404 authorized sanctions under stated criteria and delegated implementation to State and Treasury; it did not automatically block everyone in listed sectors. Rubio was Secretary of State, not the signer.
+- OFAC added Banco Exterior de Cuba among multiple entities on 2026-09-03.
+- The 2026-09-30 amendments removed the defined U-turn general license, eliminated the professional meetings/conferences authorization, and narrowed educational authorizations. Specific transition/grandfathering terms belong in precise Remotion captions, not compressed narration.
+- Attribute both viewpoints: White House states its national-security rationale; MINREX calls the measures a worsening of the blockade.
 
 ## Primary sources
 
-- [EO 14380 — 29 January 2026](https://www.whitehouse.gov/presidential-actions/2026/01/addressing-threats-to-the-united-states-by-the-government-of-cuba/)
-- [EO 14389 — Ending Certain Tariff Actions, 20 February 2026](https://www.whitehouse.gov/presidential-actions/2026/02/ending-certain-tariff-actions/)
-- [EO 14404 — 1 May 2026](https://www.whitehouse.gov/presidential-actions/2026/05/imposing-sanctions-on-those-responsible-for-repression-in-cuba-and-for-threats-to-united-states-national-security-and-foreign-policy/)
-- [OFAC designations, 3 September 2026](https://ofac.treasury.gov/recent-actions/20260903)
-- [OFAC September 2026 changes and wind-down guidance](https://ofac.treasury.gov/recent-actions/20260929_33)
-- [OFAC FAQ 1272 — U-turn transactions](https://ofac.treasury.gov/faqs/1272)
-- [OFAC FAQ 1275 — professional meetings](https://ofac.treasury.gov/faqs/1275)
-- [OFAC FAQ 1274 — educational activities](https://ofac.treasury.gov/faqs/1274)
+- EO 14380 (White House, 2026-01-29): https://www.whitehouse.gov/presidential-actions/2026/01/addressing-threats-to-the-united-states-by-the-government-of-cuba/
+- EO 14389 (White House, 2026-02-20): https://www.whitehouse.gov/presidential-actions/2026/02/ending-certain-tariff-actions/
+- EO 14404 (White House, 2026-05-01): https://www.whitehouse.gov/presidential-actions/2026/05/imposing-sanctions-on-those-responsible-for-repression-in-cuba-and-for-threats-to-united-states-national-security-and-foreign-policy/
+- OFAC designations (2026-09-03): https://ofac.treasury.gov/recent-actions/20260903
+- OFAC FAQs 1272–1275 (2026-09-29): https://ofac.treasury.gov/faqs/added/2026-09-29
+- FAQ 1272: https://ofac.treasury.gov/faqs/1272
+- FAQ 1274: https://ofac.treasury.gov/faqs/1274
+- FAQ 1275: https://ofac.treasury.gov/faqs/1275
+- MINREX statement carried by Granma (2026-05-07): https://www.granma.cu/cuba/2026-05-07/la-orden-ejecutiva-del-primero-de-mayo-y-las-medidas-de-bloqueo-anunciadas-hoy-incrementan-el-dano-a-la-poblacion-cubana-y-refuerzan-la-amenaza-de-agresion-07-05-2026-16-05-55
+
+## Voice
+
+Use a natural neutral Spanish documentary read, 125–135 wpm, with pauses at dates and attribution. Do not imitate a public figure. The connected Runway voice endpoint returned 401 (token revoked); no suitable local Spanish TTS is installed. No narration audio or real duration is claimed yet.

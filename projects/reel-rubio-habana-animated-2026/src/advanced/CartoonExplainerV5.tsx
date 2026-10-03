@@ -330,21 +330,49 @@ const FinanceTravel: React.FC<{f:number}> = ({f})=>{
 
 const Closing: React.FC<{f:number}> = ({f})=>{
   const p=prog(f,1562,1580);
+  const arrive=prog(f,1535,1680);
+  const build=pop(f,1580,145);
+  const wave=pulse(f,22)*12;
   return <g opacity={p}>
-    <rect x="0" y="1450" width={W} height="470" fill={C.paper} opacity=".96"/>
-    <path d="M0 1450 Q200 1388 386 1450 T778 1440 T1080 1420" fill="none" stroke={C.red} strokeWidth="14"/>
-    <g transform={"translate(275 1603) scale("+(.85+p*.15)+")"}>
-      <path d="M-218 -77 Q-211 -93 -190 -92 H195 Q216 -89 216 -69 V53 Q213 74 190 74 H-194 Q-217 71 -217 49 Z" fill={C.blueDeep} stroke={C.ink} strokeWidth="8"/>
-      {txt(0,-21,18,"CASA BLANCA",C.cream)}
-      {txt(0,15,15,"SEGURIDAD Y POLÍTICA EXTERIOR",C.cream,800)}
+    <rect width={W} height={H} fill="#E9EFE3"/>
+    <circle cx="862" cy="355" r="104" fill={C.gold} opacity=".72"/>
+    <path d="M0 500 Q160 455 314 495 T640 482 T1080 498" fill="none" stroke={C.cream} strokeWidth="18" strokeLinecap="round"/>
+    {txt(540,265,58,"2026: UN CAMBIO DE RUMBO",C.red,1000)}
+    {txt(540,326,23,"DOS POSTURAS SOBRE LAS NUEVAS RESTRICCIONES",C.ink,900)}
+    <path d="M95 720 Q190 628 322 660 Q425 690 524 654 Q662 604 777 648 Q884 689 1000 672 Q917 752 811 772 Q694 798 557 751 Q423 705 296 762 Q178 811 95 720 Z" fill={C.green} stroke={C.ink} strokeWidth="11" strokeLinejoin="round"/>
+    <path d="M127 711 Q270 670 403 712 T675 708 T943 700" fill="none" stroke={C.greenLight} strokeWidth="13" strokeLinecap="round"/>
+    {txt(552,724,37,"CUBA",C.ink,1000)}
+    <path d={"M0 "+(922+wave)+" Q235 "+(870-wave/2)+" 470 "+(925+wave)+" T920 "+(914-wave/2)+" T1120 "+(930+wave)+" L1120 1920 L0 1920 Z"} fill={C.blue} opacity=".62"/>
+    <path d={"M-40 "+(1028-wave)+" Q210 "+(984+wave)+" 470 "+(1034-wave)+" T930 "+(1011+wave)+" T1120 "+(1037-wave)+" "} fill="none" stroke={C.cream} strokeWidth="18" strokeLinecap="round"/>
+    <path d="M0 1120 Q176 1104 350 1120 L350 1284 L0 1284 Z" fill="#D8C49E" stroke={C.ink} strokeWidth="8"/>
+    <path d="M730 1098 Q897 1082 1080 1105 L1080 1284 L730 1284 Z" fill="#D8C49E" stroke={C.ink} strokeWidth="8"/>
+    <g transform={"translate(130 "+(1085+(1-build)*90)+") scale("+(.72+build*.28)+")"}>
+      <path d="M-8 0 L0 -82 L8 0 M-55 -44 Q0 -111 56 -44 M-41 -57 Q0 -103 41 -57 M-25 -71 Q0 -96 25 -71" fill="none" stroke={C.green} strokeWidth="11" strokeLinecap="round"/>
+      <path d="M-13 1 L-75 66 M-5 1 L52 69 M0 2 L4 91" stroke={C.wood} strokeWidth="10" strokeLinecap="round"/>
+      <circle cx="-76" cy="65" r="22" fill={C.greenLight}/><circle cx="53" cy="67" r="23" fill={C.greenLight}/>
     </g>
-    <g transform={"translate(806 1603) scale("+(.85+p*.15)+")"}>
-      <path d="M-218 -77 Q-211 -93 -190 -92 H195 Q216 -89 216 -69 V53 Q213 74 190 74 H-194 Q-217 71 -217 49 Z" fill={C.gold} stroke={C.ink} strokeWidth="8"/>
-      {txt(0,-21,18,"MINREX",C.ink)}
-      {txt(0,15,15,"DENUNCIA EL RECRUD. DEL BLOQUEO",C.ink,800)}
+    <g transform={"translate(930 "+(1075+(1-build)*90)+") scale("+(.72+build*.28)+")"}>
+      <path d="M-15 5 L-15 -53 L16 -53 L16 5 M-52 5 L-52 -25 L-15 -25 M16 5 L54 5 L54 -36 L16 -36" fill="none" stroke={C.wood} strokeWidth="9"/>
+      <path d="M-61 -24 L-34 -58 L-5 -24 M6 -35 L36 -69 L67 -35" fill={C.red} stroke={C.ink} strokeWidth="6" strokeLinejoin="round"/>
+      <rect x="-4" y="-8" width="20" height="30" fill={C.blueDeep}/><rect x="32" y="-19" width="12" height="15" fill={C.cream}/>
     </g>
-    <path d="M541 1540 L541 1665" stroke={C.red} strokeWidth="8" strokeDasharray="9 13"/>
-    {txt(540,1771,34,"EN 2026 LAS RESTRICCIONES CAMBIARON Y SE AMPLIARON",C.red,1000)}
+    <Boat x={mix(-220,540,arrive)} y={1241+Math.sin(f/6)*5} f={f} s={.63}/>
+    <g transform="translate(540 1392)">
+      <path d="M-476 -104 Q-468 -132 -433 -128 L-36 -124 Q-4 -121 -3 -92 L-14 66 Q-19 93 -49 92 L-445 86 Q-478 83 -479 54 Z" fill={C.blueDeep} stroke={C.ink} strokeWidth="8"/>
+      <path d="M-3 0 L22 -20 L42 2 L20 20 Z" fill={C.cream} stroke={C.ink} strokeWidth="6"/>
+      {txt(-238,-56,21,"CASA BLANCA",C.gold,1000)}
+      {txt(-238,-18,18,"INVoca seguridad y política exterior",C.cream,800)}
+      {txt(-238,20,18,"para justificar sus medidas",C.cream,800)}
+      <path d="M-42 92 L-2 128 L13 91" fill={C.blueDeep} stroke={C.ink} strokeWidth="7" strokeLinejoin="round"/>
+      <path d="M40 -104 Q46 -129 79 -128 L437 -125 Q473 -121 475 -91 L463 60 Q460 88 429 88 L71 83 Q42 79 39 51 Z" fill={C.gold} stroke={C.ink} strokeWidth="8"/>
+      <path d="M42 0 L16 -20 L-5 1 L18 20 Z" fill={C.gold} stroke={C.ink} strokeWidth="6"/>
+      {txt(256,-53,21,"MINREX",C.red,1000)}
+      {txt(256,-15,18,"DENUNCIA EL RECRUD. DEL BLOQUEO",C.ink,800)}
+      {txt(256,22,18,"y el daño a la población cubana",C.ink,800)}
+      <path d="M429 85 L466 120 L483 83" fill={C.gold} stroke={C.ink} strokeWidth="7" strokeLinejoin="round"/>
+    </g>
+    {txt(540,1664,28,"EN 2026 LAS RESTRICCIONES CAMBIARON",C.red,1000)}
+    {txt(540,1704,28,"Y SE AMPLIARON",C.red,1000)}
   </g>;
 };
 

@@ -20,5 +20,8 @@ El canal oficial [Memorias de Pez](https://www.youtube.com/@MemoriasDePez) prese
 6. 41–52 s: cambios financieros y de viaje por categoría.
 7. 52–60 s: atribuciones de Casa Blanca y MINREX y cierre cronológico.
 
+## Cierre visual
+El cierre debe ocupar el encuadre: mapa de Cuba, puerto y barco animado, con las afirmaciones atribuidas en globos de diálogo sobre la escena. Mantener el resumen dentro del área segura vertical y reservar espacio negativo solo cuando tenga función narrativa.
+
 ## Validación
 Render completo, revisión de frames al inicio/fin de cada acto, comprobación de encuadre y lectura en móvil; comparar transiciones con el máster de voz cuando se produzca. La versión no añade voz ni música: los tiempos visuales siguen la narración V2 y deben ajustarse al máster de audio cuando exista.

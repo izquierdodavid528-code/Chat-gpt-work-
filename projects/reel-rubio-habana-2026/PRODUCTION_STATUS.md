@@ -64,10 +64,20 @@ Full request has already been issued:
 - state at last check: waiting for validation concurrency group to release
 
 Next Blender gate:
-1. render all 105 frames;
-2. inspect control frames 1 / 53 / 105;
-3. inspect final MP4 motion and framing;
-4. only then accept `rubio-habana-map.mp4` as the Remotion hook dependency.
+1. finish the already-running v4 105-frame delivery;
+2. inspect final MP4 motion and framing;
+3. render the 0–149 Remotion composite before creative approval;
+4. compare against the prepared v5 candidate if v4 still reads too synthetic.
+
+V5 candidate is already prepared in `projects/rubio-habana-map-2026/scene.py` but has NOT been requested/rendered yet:
+- closed concentric rings replaced with open offset policy contours;
+- red emission reduced;
+- route glow reduced;
+- city markers reduced;
+- compositor glow reduced.
+
+Reason:
+the v4 control frames are technically clean, but the closed red rings can read like a bullseye/target rather than neutral policy layers.
 
 ## Remotion state
 
@@ -92,6 +102,13 @@ Creative upgrades completed after reviewing the previous 20-second render:
 The hook already references the Blender plate and stretches the 3.5-second plate across the 5-second hook using playbackRate 0.7.
 
 The project delivery QA now requires at least 59 seconds so an obsolete 20-second render cannot pass as a production delivery.
+
+Audio pipeline correction:
+- the previous animatic contained an AAC stream that was effectively inaudible (~-70 dB mean);
+- validation QA now has an optional signal-floor gate and this project enables it at -45 dBFS peak minimum;
+- the workspace self-test includes a negative silent-AAC fixture and passes;
+- the music bed is now `Impact Moderato` by Kevin MacLeod, imported from the immutable Wikimedia Commons original and credited in `CREDITS.md`;
+- final narration remains intentionally ungenerated until voice choice / credit usage is authorized and the visual animatic passes.
 
 ## Factual / editorial guardrails
 

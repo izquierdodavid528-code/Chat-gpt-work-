@@ -49,7 +49,7 @@ V5 control-frame finding:
 
 Status:
 - v5 STATIC CONTROLS: PASS for Remotion composite test.
-- authoritative full-run control frames 1 / 53 / 105: PASS; all four open policy contours are visible by frame 105 and route/framing remain readable.
+- authoritative full-run control frames 1 / 53 / 105: previous v5 checks PASS; current delivery run 37088519777 is rendering the verified five-block full plate.
 - v5 is not yet approved as a finished hook until the assembled Blender motion and then motion + typography + music are reviewed together in the 5-second Remotion validation.
 
 ## D — Audio
@@ -83,7 +83,7 @@ PASS for current copy, with source ledger
 Do not render the 60-second production master yet.
 
 Required sequence:
-1. finish authoritative 105-frame Blender v5 delivery (run 37087906808);
+1. finish authoritative 105-frame Blender v5 delivery (run 37088519777);
 2. confirm delivery QA + Drive upload;
 3. render a 0–149 Remotion hook validation;
 4. review the hook composite;

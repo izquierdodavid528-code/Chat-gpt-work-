@@ -36,7 +36,7 @@ No debe parecer propaganda, videojuego bélico ni presentación de PowerPoint.
 Visual:
 - mapa 3D Florida–Cuba;
 - línea marítima hacia La Habana;
-- cuatro anillos se cierran progresivamente;
+- cuatro contornos/capas abiertas se trazan progresivamente, sin formar una diana;
 - PETRÓLEO · SANCIONES · FINANZAS · MOVILIDAD.
 
 Voz:
@@ -136,10 +136,10 @@ No:
 
 ## Blender
 Blender se usará donde aporte comprensión y realismo:
-- mapa Florida–Cuba;
-- tanker/petróleo;
-- red financiera;
-- macro de documentos.
+- mapa Florida–Cuba cuando aporte profundidad espacial;
+- objetos/entornos sólo cuando superen claramente una solución de motion graphics;
+- red financiera únicamente si el 3D mejora la comprensión;
+- macro de documentos sólo con tratamiento claramente editorial, nunca como falsa evidencia.
 
 Regla: **realismo del entorno, no falsificación de acontecimientos.**
 

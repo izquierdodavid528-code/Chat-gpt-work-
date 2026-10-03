@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "project": "reel-rubio-habana-2026",
+  "version": "v1-strategy",
+  "title": "2026: La presión sobre La Habana",
+  "thesis": "En 2026 la presión de Washington sobre La Habana se amplió por capas: energía, sanciones, finanzas y movilidad.",
+  "targetDurationSeconds": 60,
+  "output": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "chapters": [
+    {
+      "id": "hook",
+      "timeline": {
+        "start": 0,
+        "end": 5
+      },
+      "message": "No fue una sola medida.",
+      "visual": "Mapa 3D Florida-Cuba; cuatro anillos: petróleo, sanciones, finanzas, movilidad.",
+      "sourceType": "narrative synthesis"
+    },
+    {
+      "id": "oil",
+      "timeline": {
+        "start": 5,
+        "end": 14
+      },
+      "message": "EO 14380 abre la capa de presión energética mediante posibles aranceles a países que suministren petróleo a Cuba.",
+      "visual": "Tanker genérico + ruta marítima + EO 14380.",
+      "sourceType": "White House EO 14380"
+    },
+    {
+      "id": "framework",
+      "timeline": {
+        "start": 14,
+        "end": 24
+      },
+      "message": "EO 14404 amplía autoridades de sanción y delega implementación a State/Treasury.",
+      "visual": "Documento macro + red institucional + inserto real de Rubio.",
+      "sourceType": "White House EO 14404"
+    },
+    {
+      "id": "designations",
+      "timeline": {
+        "start": 24,
+        "end": 37
+      },
+      "message": "Nuevas designaciones alcanzan personas, bancos y entidades en varios sectores.",
+      "visual": "Listas oficiales se transforman en red de nodos.",
+      "sourceType": "Treasury/OFAC + State"
+    },
+    {
+      "id": "finance",
+      "timeline": {
+        "start": 37,
+        "end": 50
+      },
+      "message": "Cambios de septiembre endurecen transacciones indirectas y eliminan la U-turn.",
+      "visual": "Grafo financiero A-B-C + rutas que se detienen.",
+      "sourceType": "OFAC Sep 29/30"
+    },
+    {
+      "id": "close",
+      "timeline": {
+        "start": 50,
+        "end": 60
+      },
+      "message": "Washington y La Habana describen la política de manera opuesta; lo documentado es una arquitectura más amplia.",
+      "visual": "Cierre dual Washington documents / Havana skyline.",
+      "sourceType": "US official + Cuban official response"
+    }
+  ],
+  "creativeQa": [
+    "tesis entendida en 5 segundos",
+    "papel de Rubio no sobredimensionado",
+    "cada escena añade información",
+    "vertical 9:16 plenamente utilizado",
+    "música presente desde el hook",
+    "subtítulos sincronizados",
+    "sin propaganda visual",
+    "sin recreación presentada como evidencia"
+  ],
+  "production": {
+    "remotion": {
+      "master": true
+    },
+    "blender": {
+      "scenes": [
+        "hook-map",
+        "oil-route",
+        "financial-network",
+        "document-macro"
+      ],
+      "policy": "realistic environment/object animation only; no synthetic political footage"
+    }
+  }
+}

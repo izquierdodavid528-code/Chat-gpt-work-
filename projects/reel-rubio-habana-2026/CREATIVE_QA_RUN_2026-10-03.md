@@ -90,3 +90,27 @@ Required sequence:
 3. render a 0–149 Remotion hook validation;
 4. review the hook composite;
 5. only then approve or reject Blender v5 as the production hook after motion + typography review.
+
+
+## Full 60-second Remotion preview review
+
+Run: `37089348442`
+Status: PASS technically; provisional creatively.
+
+Representative frame review:
+- 00:02 provisional hook: layout readable; temporary geography intentionally not production-approved.
+- 00:09 oil mechanism: PASS.
+- 00:19 EO 14404 / State-Treasury / Rubio identification: PASS.
+- 00:30 OFAC designations: PASS.
+- 00:43 / 00:47 finance + mobility: PASS.
+- 00:55 / 00:59 close: FAIL due to label/headline overlap.
+
+Fix applied:
+- `LO DOCUMENTADO` moved to a separate vertical band above the final headline.
+- close-only validation requested in run `37089628002`.
+
+Audio validation:
+- PASS;
+- AAC stereo 48 kHz;
+- peak -21.5 dBFS;
+- previous near-silent-audio defect is resolved.

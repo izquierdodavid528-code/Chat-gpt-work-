@@ -182,15 +182,16 @@ const BridgeTransition:React.FC<{bridge:Bridge}>=({bridge})=>{
  </AbsoluteFill>;
 };
 
-const S12Attribution: React.FC<{shotId:string}>=({shotId})=>{
- const first=shotId==="S12a";
- const title=first?"WASHINGTON":"MINREX";
- const body=first?"Invoca seguridad nacional":"Denuncia un recrudecimiento del bloqueo";
- return <div style={{position:"absolute",left:"44%",right:"7%",top:"15%",height:"19%",display:"flex",flexDirection:"column",justifyContent:"center",padding:"20px 26px",boxSizing:"border-box",color:"#29333b",fontFamily:"Arial,sans-serif",textAlign:"center"}}>
-  <div style={{fontSize:26,fontWeight:800,letterSpacing:2.4,color:"#b84f47",marginBottom:16}}>{title}</div>
-  <div style={{fontSize:first?39:34,lineHeight:1.14,fontWeight:700}}>{body}</div>
- </div>;
-};
+const S12Attribution: React.FC=()=> <AbsoluteFill style={{pointerEvents:"none",fontFamily:"Arial,sans-serif",textAlign:"center",color:"#29333b"}}>
+ <div style={{position:"absolute",left:"44%",right:"7%",top:"14.5%",height:"20%",display:"flex",flexDirection:"column",justifyContent:"center",padding:"18px 24px",boxSizing:"border-box"}}>
+  <div style={{fontSize:25,fontWeight:800,letterSpacing:2.2,color:"#b84f47",marginBottom:13}}>WASHINGTON</div>
+  <div style={{fontSize:37,lineHeight:1.12,fontWeight:700}}>Invoca seguridad nacional</div>
+ </div>
+ <div style={{position:"absolute",left:"44%",right:"7%",top:"40.5%",height:"20%",display:"flex",flexDirection:"column",justifyContent:"center",padding:"18px 24px",boxSizing:"border-box"}}>
+  <div style={{fontSize:25,fontWeight:800,letterSpacing:2.2,color:"#b84f47",marginBottom:13}}>MINREX</div>
+  <div style={{fontSize:33,lineHeight:1.12,fontWeight:700}}>Denuncia un recrudecimiento del bloqueo</div>
+ </div>
+</AbsoluteFill>;
 
 const ShotLayer: React.FC<{shot:Shot}>=({shot})=>{
  const frame=useCurrentFrame();
@@ -203,7 +204,7 @@ const ShotLayer: React.FC<{shot:Shot}>=({shot})=>{
    <div style={{padding:"14px 18px",background:"rgba(31,39,44,.84)",borderRadius:8,fontSize:25,fontWeight:800,letterSpacing:2}}>{shot.act}</div>
    <div style={{padding:"12px 14px",background:"rgba(31,39,44,.78)",borderRadius:8,fontSize:22,fontWeight:800,letterSpacing:1.5}}>{shot.id} · ANIMATIC</div>
   </div>
-  {(shot.id==="S12a"||shot.id==="S12b")&&<S12Attribution shotId={shot.id}/>}
+  {(shot.id==="S12a"||shot.id==="S12b")&&<S12Attribution/>}
   {shot.id==="S08"&&<div style={{position:"absolute",left:66,top:158,padding:"13px 18px",background:"rgba(255,250,239,.93)",borderLeft:"7px solid "+coral,borderRadius:8,color:"#25282a",font:"800 21px Arial,sans-serif",letterSpacing:1.2,boxShadow:"0 5px 18px rgba(37,40,42,.18)"}}>OFAC · BANCO EXTERIOR DE CUBA · 03 SEP 2026</div>}
   <Caption>{shot.caption}</Caption>
  </AbsoluteFill>;

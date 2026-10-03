@@ -235,7 +235,7 @@ const ActionScene: React.FC<{frame: number}> = ({frame}) => {
       <RubioCutout frame={frame}/>
 
       <g opacity={windowProgress(frame, BOAT, BOAT + 24)}>
-        <path d="M278 1244 Q388 " + (1217 - tug * 28) + " 504 1320" fill="none" stroke={C.ink} strokeWidth="5" strokeDasharray="7 13"/>
+        <path d={"M278 1244 Q388 " + (1217 - tug * 28) + " 504 1320"} fill="none" stroke={C.ink} strokeWidth="5" strokeDasharray="7 13"/>
         <circle cx="286" cy="1241" r="9" fill={C.red} stroke={C.ink} strokeWidth="4"/>
       </g>
     </svg>
@@ -267,9 +267,7 @@ const FebruaryPaper: React.FC<{frame: number}> = ({frame}) => {
 export const FebruaryAct: React.FC<{frame: number}> = ({frame}) => {
   if (frame < START) return null;
 
-  const entry = springAt(frame, START, 150);
   const burst = windowProgress(frame, LIFT, LIFT + 12) * (1 - windowProgress(frame, LIFT + 12, CROSS));
-  const finale = windowProgress(frame, CROSS + 26, END);
 
   return (
     <AbsoluteFill style={{zIndex: 27, overflow: "hidden", pointerEvents: "none"}}>
@@ -291,24 +289,6 @@ export const FebruaryAct: React.FC<{frame: number}> = ({frame}) => {
         )}
       </SceneCamera>
       <ImpactAction at={LIFT} x={560} y={1350} radius={120}/>
-      <div style={{
-        position: "absolute",
-        right: 74,
-        bottom: 87,
-        color: C.ink,
-        background: "rgba(243,233,210,.92)",
-        border: "5px solid " + C.ink,
-        borderRadius: 10,
-        padding: "9px 15px",
-        fontFamily: "Arial, sans-serif",
-        fontWeight: 900,
-        fontSize: 17,
-        letterSpacing: 2,
-        opacity: finale * 0.86,
-        transform: "translateY(" + ((1 - finale) * 20) + "px)",
-      }}>LA VÍA ARANCELARIA SE RETIRA</div>
-      <div style={{position: "absolute", inset: 0, opacity: 0, pointerEvents: "none"}} aria-hidden/>
-      <div style={{position: "absolute", inset: 0, opacity: entry * 0.001, pointerEvents: "none"}}/>
     </AbsoluteFill>
   );
 };

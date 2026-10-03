@@ -12,7 +12,6 @@ import {
   DepthLayer,
   ImpactAction,
   ParticleField,
-  PhysicalTransition,
   SceneCamera,
 } from "./primitives";
 
@@ -42,12 +41,12 @@ const T = {
 };
 
 const CAMERA = [
-  {frame: 0, x: -12, y: 20, scale: 1.04, rotate: -0.7, tilt: 1.1},
-  {frame: 52, x: -28, y: -36, scale: 1.11, rotate: 0.2, tilt: 0.5},
-  {frame: 112, x: 8, y: -105, scale: 1.22, rotate: -0.5, tilt: 0.2},
-  {frame: 182, x: -58, y: -190, scale: 1.34, rotate: -1.2, tilt: 0},
-  {frame: 238, x: -128, y: -292, scale: 1.48, rotate: -1.5, tilt: 0},
-  {frame: 299, x: -245, y: -430, scale: 1.72, rotate: -2.2, tilt: 0},
+  {frame: 0, x: -12, y: 52, scale: 1.04, rotate: -0.7, tilt: 1.1},
+  {frame: 52, x: -24, y: 64, scale: 1.10, rotate: 0.2, tilt: 0.5},
+  {frame: 112, x: 12, y: 82, scale: 1.18, rotate: -0.45, tilt: 0.2},
+  {frame: 182, x: -32, y: 104, scale: 1.28, rotate: -1.0, tilt: 0},
+  {frame: 238, x: -86, y: 76, scale: 1.40, rotate: -1.35, tilt: 0},
+  {frame: 299, x: -172, y: 8, scale: 1.58, rotate: -1.9, tilt: 0},
 ];
 
 const ROUTE = {
@@ -100,6 +99,11 @@ const LandMasses: React.FC = () => (
       strokeLinejoin="round"
     />
     <path d="M 212 249 C 310 274 393 322 438 399 C 470 454 486 535 523 617" fill="none" stroke={C.cream} strokeWidth={7} strokeLinecap="round" opacity={0.38}/>
+    <g fill={C.green} stroke={C.ink} strokeWidth={6}>
+      <ellipse cx="610" cy="705" rx="18" ry="38" transform="rotate(-18 610 705)"/>
+      <ellipse cx="655" cy="765" rx="15" ry="31" transform="rotate(-18 655 765)"/>
+      <ellipse cx="696" cy="825" rx="12" ry="25" transform="rotate(-18 696 825)"/>
+    </g>
 
     <polygon
       points="314.3,964.5 345.7,940 391.4,919.5 442.9,895 500,870.5 557.1,858.2 622.9,870.5 688.6,911.4 757.1,960.5 817.1,1030 877.1,1091.4 928.6,1115.9 877.1,1058.6 820,1038.2 745.7,1001.4 668.6,980.9 594.3,964.5 520,952.3 445.7,960.5 382.9,980.9"
@@ -135,7 +139,7 @@ const AnimatedRoute: React.FC<{frame: number}> = ({frame}) => {
         d="M -160 1170 C 110 1010 510 1000 825 1140"
         fill="none"
         stroke={warning > 0.45 ? C.red : C.mustard}
-        strokeWidth={10}
+        strokeWidth={10 + Math.sin(frame / 8) * 0.9}
         strokeLinecap="round"
         strokeDasharray={dash}
         strokeDashoffset={dash * (1 - p)}
@@ -210,6 +214,33 @@ const TankerRig: React.FC<{frame: number}> = ({frame}) => {
   );
 };
 
+const ForegroundCurrent: React.FC<{frame: number}> = ({frame}) => {
+  const drift = Math.sin(frame / 18) * 18;
+  const drift2 = Math.cos(frame / 24) * 22;
+  return (
+    <svg width="1080" height="1920" viewBox="0 0 1080 1920" style={{position: "absolute", inset: 0}}>
+      <path
+        d={`M -160 ${1505 + drift} C 120 ${1410 + drift2}, 430 ${1515 - drift}, 710 ${1455 + drift2} S 1120 ${1400 + drift}, 1240 ${1510 + drift2} L 1240 2020 L -160 2020 Z`}
+        fill="rgba(79,133,152,.24)"
+      />
+      <path
+        d={`M -120 ${1570 + drift2} C 180 ${1490 - drift}, 470 ${1590 + drift2}, 760 ${1515 - drift} S 1060 ${1480 + drift2}, 1220 ${1560 + drift} `}
+        fill="none"
+        stroke="rgba(255,246,230,.32)"
+        strokeWidth="18"
+        strokeLinecap="round"
+      />
+      <path
+        d={`M -90 ${1640 - drift} C 230 ${1580 + drift2}, 510 ${1680 - drift2}, 860 ${1595 + drift} S 1120 ${1570 - drift2}, 1230 ${1635 + drift}`}
+        fill="none"
+        stroke="rgba(32,39,42,.10)"
+        strokeWidth="8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+};
+
 const TariffMechanism: React.FC<{frame: number}> = ({frame}) => {
   const entry = spring({
     frame: Math.max(0, frame - T.tariffRig),
@@ -221,69 +252,77 @@ const TariffMechanism: React.FC<{frame: number}> = ({frame}) => {
     fps: 30,
     config: {damping: 11, stiffness: 215, mass: 0.65},
   });
-  const swing = followThrough(frame, T.tariffRig + 8, 16, 0.42, 0.055);
-  const match = windowProgress(frame, T.matchCut, PILOT_FRAMES - 1);
+  const swing = followThrough(frame, T.tariffRig + 8, 13, 0.42, 0.06);
+  const match = easeOutCubic(windowProgress(frame, T.matchCut, PILOT_FRAMES - 1));
+  const matchTilt = match * 13;
 
   return (
     <>
       <div
         style={{
           position: "absolute",
-          left: 720,
-          top: 850,
-          width: 260,
-          height: 310,
-          transformOrigin: "38px 20px",
-          transform: `translate3d(${(1 - entry) * 240}px,${(1 - entry) * -120}px,0) rotate(${-18 + entry * 15 + swing}deg) scale(${1 + match * 2.8})`,
+          left: 738,
+          top: 858,
+          width: 224,
+          height: 286,
+          transformOrigin: "112px 8px",
+          transformStyle: "preserve-3d",
+          transform: `perspective(900px) translate3d(${(1 - entry) * 240}px,${(1 - entry) * -125}px,${match * 180}px) rotateZ(${-16 + entry * 13 + swing}deg) rotateY(${matchTilt}deg) rotateX(${match * 5}deg) scale(${1 + match * 2.25})`,
           opacity: entry,
           zIndex: 6,
         }}
       >
-        <div style={{position: "absolute", left: 24, top: -116, width: 11, height: 138, background: C.ink, borderRadius: 8}}/>
+        <svg width="300" height="210" viewBox="0 0 300 210" style={{position: "absolute", left: -38, top: -178, overflow: "visible"}}>
+          <path d="M150 205 C 125 135 180 92 142 22" fill="none" stroke={C.ink} strokeWidth="9" strokeLinecap="round"/>
+          <path d="M153 204 C 130 140 182 97 146 28" fill="none" stroke="rgba(255,246,230,.24)" strokeWidth="3" strokeLinecap="round"/>
+        </svg>
+
         <div
           style={{
             position: "absolute",
             inset: 0,
-            clipPath: "polygon(12% 0, 88% 0, 100% 14%, 100% 100%, 0 100%, 0 14%)",
-            background: C.red,
+            clipPath: "polygon(16% 0, 84% 0, 100% 15%, 100% 100%, 0 100%, 0 15%)",
+            background: "linear-gradient(165deg, #E26B60 0%, #D95B52 58%, #C94C47 100%)",
             border: `9px solid ${C.ink}`,
-            borderRadius: 22,
-            boxShadow: "14px 16px 0 rgba(32,39,42,.18)",
+            borderRadius: 16,
+            boxShadow: "15px 18px 0 rgba(32,39,42,.18)",
           }}
         >
-          <div style={{position: "absolute", left: 28, top: 40, fontFamily: "Arial", fontSize: 25, fontWeight: 1000, letterSpacing: 3, color: C.cream}}>ARANCEL</div>
-          <div style={{position: "absolute", left: 28, top: 88, fontFamily: "Arial", fontSize: 62, fontWeight: 1000, lineHeight: 0.85, color: C.cream}}>29<br/>ENE</div>
-          <div style={{position: "absolute", left: 30, bottom: 32, fontFamily: "Arial", fontSize: 18, fontWeight: 900, color: C.ink}}>EO 14380</div>
+          <div style={{position: "absolute", left: 89, top: 13, width: 46, height: 46, borderRadius: "50%", background: C.paper2, border: `7px solid ${C.ink}`}}/>
+          <div style={{position: "absolute", left: 25, top: 65, fontFamily: "Arial", fontSize: 23, fontWeight: 1000, letterSpacing: 3, color: C.cream}}>ARANCEL</div>
+          <div style={{position: "absolute", left: 24, top: 108, fontFamily: "Arial", fontSize: 58, fontWeight: 1000, lineHeight: 0.82, color: C.cream}}>29<br/>ENE</div>
+          <div style={{position: "absolute", left: 26, bottom: 25, fontFamily: "Arial", fontSize: 16, fontWeight: 900, color: C.ink}}>EO 14380</div>
+          <div style={{position: "absolute", right: 18, bottom: 22, width: 44, height: 12, borderRadius: 99, background: "rgba(255,246,230,.30)", transform: "rotate(-18deg)"}}/>
         </div>
       </div>
 
       <div
         style={{
           position: "absolute",
-          left: 605,
-          top: 1132,
-          width: 250,
-          height: 88,
+          left: 610,
+          top: 1145,
+          width: 220,
+          height: 72,
           transformOrigin: "center",
-          transform: `scale(${0.82 + strike * 0.18}) translateY(${(1 - strike) * -38}px) rotate(-4deg)`,
+          transform: `scale(${0.76 + strike * 0.24}) translateY(${(1 - strike) * -34}px) rotate(-5deg)`,
           opacity: strike,
           border: `7px solid ${C.red}`,
-          borderRadius: 18,
-          background: "rgba(255,246,230,.88)",
+          borderRadius: 999,
+          background: "rgba(255,246,230,.90)",
           fontFamily: "Arial",
           fontWeight: 1000,
-          fontSize: 21,
-          letterSpacing: 2,
+          fontSize: 19,
+          letterSpacing: 2.2,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           color: C.red,
-          boxShadow: "9px 10px 0 rgba(32,39,42,.13)",
+          boxShadow: "9px 10px 0 rgba(32,39,42,.12)",
         }}
       >
         PETRÓLEO
       </div>
-      <ImpactAction at={T.stamp + 3} x={735} y={1175} radius={130}/>
+      <ImpactAction at={T.stamp + 3} x={720} y={1180} radius={145}/>
     </>
   );
 };
@@ -294,7 +333,7 @@ const ScreenGraphics: React.FC<{frame: number}> = ({frame}) => {
     fps: 30,
     config: {damping: 16, stiffness: 130, mass: 0.9},
   });
-  const titleOut = 1 - windowProgress(frame, 96, 126);
+  const titleOut = 1 - windowProgress(frame, 82, 102);
   const pulse = 1 + Math.sin(frame / 17) * 0.006;
 
   return (
@@ -363,30 +402,19 @@ export const AdvancedOpeningPilot: React.FC = () => {
               <TankerRig frame={frame}/>
             </DepthLayer>
 
-            <DepthLayer camera={camera} depth={1.12}>
+            <DepthLayer camera={camera} depth={1.18}>
+              <ForegroundCurrent frame={frame}/>
+            </DepthLayer>
+
+            <DepthLayer camera={camera} depth={1.24}>
               <TariffMechanism frame={frame}/>
             </DepthLayer>
           </>
         )}
       </SceneCamera>
 
-      <PhysicalTransition
-        at={T.route + 8}
-        fromX={-90}
-        fromY={34}
-        fromScale={0.82}
-        fromRotation={-9}
-        style={{position: "absolute", left: 78, bottom: 165, zIndex: 18}}
-      >
-        <div style={{display: "flex", alignItems: "center", gap: 16}}>
-          <div style={{width: 54, height: 6, borderRadius: 99, background: C.mustard}}/>
-          <div style={{fontFamily: "Arial", fontWeight: 1000, fontSize: 21, letterSpacing: 2.4, color: C.cream}}>
-            FLORIDA ↔ CUBA
-          </div>
-        </div>
-      </PhysicalTransition>
-
       <ScreenGraphics frame={frame}/>
+
 
       <AbsoluteFill
         style={{

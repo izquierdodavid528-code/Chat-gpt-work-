@@ -1,0 +1,41 @@
+{
+  "slug": "rubio-habana-map-clean-validation",
+  "type": "blender",
+  "driveProjectDir": "02 - Reel Rubio Habana 2026",
+  "sceneScript": "scene.py",
+  "blendFile": "out/rubio-habana-map-clean-master.blend",
+  "previewFile": "out/rubio-habana-map-clean-preview.png",
+  "renderEngine": "BLENDER_EEVEE_NEXT",
+  "blenderVersion": "4.5.14",
+  "frameStart": 1,
+  "fps": 30,
+  "frames": 105,
+  "resolution": "1080x1920",
+  "render": {
+    "parallel": {
+      "safe": true,
+      "simulationPolicy": "none",
+      "blockSize": 21,
+      "maxParallel": 5,
+      "controlFrames": [
+        1,
+        53,
+        105
+      ],
+      "minFrames": 60,
+      "packResources": true
+    },
+    "video": {
+      "codec": "libx264",
+      "preset": "medium",
+      "crf": 16,
+      "pixFmt": "yuv420p"
+    },
+    "fidelity": {
+      "rmseMax": 0.00002,
+      "changedFractionMax": 0.0001
+    }
+  },
+  "videoFile": "out/rubio-habana-map-clean.mp4",
+  "framePadding": 4
+}

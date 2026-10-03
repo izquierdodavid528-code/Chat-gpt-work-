@@ -229,7 +229,7 @@ const Close:React.FC=()=>{
     </div>
     <div style={{position:"absolute",right:90,top:520,width:390,height:430,borderRadius:28,border:"1px solid rgba(217,54,54,.24)",background:"rgba(31,13,15,.76)",padding:"34px"}}>
       <div style={{color:RED,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2}}>LA HABANA</div>
-      <div style={{color:INK,fontFamily:"Arial",fontSize:31,fontWeight:850,lineHeight:1.15,marginTop:26}}>Autoridades cubanas las describen como coerción económica y extraterritorial.</div>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:31,fontWeight:850,lineHeight:1.15,marginTop:26}}>El MINREX las describe como un recrudecimiento del bloqueo económico, financiero y comercial.</div>
     </div>
     <div style={{position:"absolute",left:90,right:90,top:1080,height:3,background:"rgba(126,151,168,.18)"}}>
       <div style={{width:`${line*100}%`,height:"100%",background:RED}}/>

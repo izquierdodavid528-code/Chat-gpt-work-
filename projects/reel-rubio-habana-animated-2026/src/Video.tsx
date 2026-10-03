@@ -393,8 +393,9 @@ const ListRow:React.FC<{label:string;frame:number;delay:number;accent?:boolean;s
 const BankTransform:React.FC<{frame:number}> = ({frame}) => {
   const p=spring({frame:Math.max(0,frame-235),fps:30,config:{damping:14,stiffness:135}});
   const roof=interpolate(p,[0,1],[0,1]);
+  const zoom=interpolate(frame,[315,360],[1,2.65],clamp);
   const col=(d:number)=>spring({frame:Math.max(0,frame-(250+d)),fps:30,config:{damping:11,stiffness:180}});
-  return <div style={{position:"absolute",left:160,top:720,width:760,height:680,opacity:p,transform:`translateY(${interpolate(p,[0,1],[180,0])}px)`}}>
+  return <div style={{position:"absolute",left:160,top:720,width:760,height:680,opacity:p,transform:`translateY(${interpolate(p,[0,1],[180,0])}px) scale(${zoom})`,transformOrigin:"50% 45%"}}>
     <svg width="760" height="680" viewBox="0 0 760 680">
       <rect x="88" y="300" width="584" height="220" rx="18" fill={C.cream} stroke={C.ink} strokeWidth="12"/>
       <path d={`M70 300 L380 ${300-160*roof} L690 300 Z`} fill={C.paper2} stroke={C.ink} strokeWidth="12" strokeLinejoin="round"/>
@@ -494,7 +495,7 @@ const TravelBadge:React.FC<{frame:number}> = ({frame}) => {
       <circle cx="103" cy="145" r="32" fill={C.seaDark} stroke={C.ink} strokeWidth="8"/>
       <path d="M154 129 H225 M154 158 H214 M78 214 H225" stroke={C.navy} strokeWidth="11" strokeLinecap="round"/>
     </svg>
-    <div style={{position:"absolute",right:10,top:210,width:155,height:74,borderRadius:18,background:C.green,border:"8px solid "+C.ink,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"Arial",fontWeight:1000,fontSize:22,color:C.cream,transform:`translateY(${tabY}px) rotate(${tabRot}deg)`,opacity:1-interpolate(tab,[.8,1],[0,.15],clamp)}}>AUTORIZADO</div>
+    <div style={{position:"absolute",right:10,top:210,width:155,height:74,borderRadius:18,background:C.green,border:"8px solid "+C.ink,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"Arial",fontWeight:1000,fontSize:22,color:C.cream,transform:`translateY(${tabY}px) rotate(${tabRot}deg)`,opacity:interpolate(tab,[0,.7,1],[1,1,0],clamp)}}>AUTORIZADO</div>
     <div style={{position:"absolute",left:35,top:300,fontFamily:"Arial",fontWeight:1000,fontSize:24,color:C.ink}}>REUNIONES</div>
   </div>;
 };
@@ -520,7 +521,9 @@ const FinanceMobilityAct:React.FC=()=>{
   const rf=useCurrentFrame();
   const f=rf*(360/330);
   const door=spring({frame:f,fps:30,config:{damping:17,stiffness:120}});
-  const route=interpolate(f,[36,132],[0,1],clamp);
+  const route1=interpolate(f,[36,70],[0,1],clamp);
+  const route2=interpolate(f,[68,108],[0,1],clamp);
+  const route3=interpolate(f,[104,142],[0,1],clamp);
   const tokenX=interpolate(f,[50,146],[120,720],clamp);
   const tokenY=interpolate(f,[50,95,146],[600,450,650],clamp);
   const reject=spring({frame:Math.max(0,f-155),fps:30,config:{damping:11,stiffness:185}});
@@ -533,9 +536,9 @@ const FinanceMobilityAct:React.FC=()=>{
     <div style={{position:"absolute",right:85,top:92,padding:"12px 18px",background:C.cream,border:"7px solid "+C.ink,borderRadius:16,fontFamily:"Arial",fontWeight:1000,fontSize:23,color:C.red,transform:"rotate(3deg)"}}>29 SEP</div>
 
     <div style={{position:"absolute",left:80,top:280,width:920,height:680,borderRadius:40,background:C.paper,border:"10px solid "+C.ink,boxShadow:"16px 18px 0 rgba(0,0,0,.16)",transform:`scale(${interpolate(door,[0,1],[1.15,1])})`}}>
-      <FinancePipe x={85} y={365} w={310} h={80} active={route}/>
-      <FinancePipe x={370} y={365} w={270} h={80} rot={-17} active={route}/>
-      <FinancePipe x={605} y={290} w={220} h={80} rot={25} active={route}/>
+      <FinancePipe x={85} y={365} w={310} h={80} active={route1}/>
+      <FinancePipe x={370} y={365} w={270} h={80} rot={-17} active={route2}/>
+      <FinancePipe x={605} y={290} w={220} h={80} rot={25} active={route3}/>
       <MoneyToken x={tokenX} y={tokenY} rotation={f*3}/>
       <UTurnSign frame={f}/>
       <div style={{position:"absolute",right:80,bottom:90,width:210,height:140,borderRadius:20,background:C.red,border:"9px solid "+C.ink,transform:`scale(${reject})`,opacity:reject,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"Arial",fontWeight:1000,fontSize:30,color:C.cream,textAlign:"center",lineHeight:1}}>RUTA<br/>CERRADA</div>
@@ -546,9 +549,6 @@ const FinanceMobilityAct:React.FC=()=>{
     <TravelBadge frame={f}/>
     <EducationLane frame={f}/>
 
-    <div style={{position:"absolute",left:82,right:82,bottom:115,fontFamily:"Arial",fontWeight:1000,fontSize:27,lineHeight:1.05,color:C.cream,opacity:interpolate(f,[285,320],[0,1],clamp)}}>
-      Finanzas, reuniones y educación<br/>cambian mediante mecanismos distintos.
-    </div>
   </AbsoluteFill>;
 };
 

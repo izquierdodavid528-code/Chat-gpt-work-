@@ -49,21 +49,38 @@ Current solution:
 - Remotion owns all titles, labels and hierarchy;
 - Blender keeps Florida/Cuba geometry, Miami-Havana route and pressure rings.
 
-Current validation request:
+Validation request:
 - requestId: `rubio-habana-map-hook-v4-clean-3d-plate-validation`
-- validationFrameCount: 6
 - GitHub Actions run: `37085181118`
+- build-master: PASS
+- reference frames: PASS visual inspection
+- 6-frame render block: PASS
+- delivery verification: running at last status check
 
-After technical validation passes:
-1. set validationFrameCount back to 0;
-2. issue a new requestId;
-3. render all 105 frames;
-4. inspect beginning/middle/end frames before accepting the plate;
-5. allow Blender delivery to upload `rubio-habana-map.mp4` to Drive.
+Full request has already been issued:
+- requestId: `rubio-habana-map-hook-v4-clean-3d-plate-full`
+- validationFrameCount: 0
+- GitHub Actions run: `37085816242`
+- state at last check: waiting for validation concurrency group to release
+
+Next Blender gate:
+1. render all 105 frames;
+2. inspect control frames 1 / 53 / 105;
+3. inspect final MP4 motion and framing;
+4. only then accept `rubio-habana-map.mp4` as the Remotion hook dependency.
 
 ## Remotion state
 
-The animatic has been expanded from 20 seconds to the full 60-second chapter structure:
+The animatic has been expanded from 20 seconds to the full 60-second chapter structure.
+
+Creative upgrades completed after reviewing the previous 20-second render:
+- hook typography rebalanced into the upper safe area; pressure-layer labels moved below the map;
+- old schematic tanker removed;
+- oil scene rebuilt as the actual EO 14380 mechanism plus EO 14389 rollback;
+- EO 14404 scene now distinguishes the presidential order from State/Treasury implementation roles;
+- designations scene now uses dated OFAC examples (4 Jun and 3 Sep) instead of generic network-only graphics;
+- September finance scene explicitly defines CRL and preserves the exact indirect-transaction/U-turn scope;
+- restrained chapter transition pulses added.
 
 - 0–5 s: hook / map
 - 5–14 s: oil / EO 14380 and EO 14389 rollback

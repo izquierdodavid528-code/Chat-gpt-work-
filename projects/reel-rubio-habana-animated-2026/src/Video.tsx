@@ -451,6 +451,104 @@ const DesignationsAct:React.FC=()=>{
   </AbsoluteFill>;
 };
 
+
+const MoneyToken:React.FC<{x:number;y:number;rotation?:number;scale?:number}> = ({x,y,rotation=0,scale=1}) => (
+  <svg width={92*scale} height={92*scale} viewBox="0 0 92 92" style={{position:"absolute",left:x,top:y,transform:`rotate(${rotation}deg)`}}>
+    <circle cx="46" cy="46" r="37" fill={C.mustard} stroke={C.ink} strokeWidth="8"/>
+    <path d="M52 23 C35 20 27 29 29 39 C31 48 42 49 51 51 C62 53 67 59 64 68 C60 79 42 79 30 70" fill="none" stroke={C.ink} strokeWidth="7" strokeLinecap="round"/>
+    <path d="M46 18 V75" stroke={C.ink} strokeWidth="5" opacity=".75"/>
+  </svg>
+);
+
+const FinancePipe:React.FC<{x:number;y:number;w:number;h:number;rot?:number;active?:number}> = ({x,y,w,h,rot=0,active=1}) => (
+  <div style={{position:"absolute",left:x,top:y,width:w,height:h,transform:`rotate(${rot}deg)`,transformOrigin:"left center",borderRadius:999,background:C.paper2,border:"8px solid "+C.ink,overflow:"hidden"}}>
+    <div style={{width:`${Math.max(0,Math.min(1,active))*100}%`,height:"100%",background:C.seaDark}}/>
+  </div>
+);
+
+const UTurnSign:React.FC<{frame:number}> = ({frame}) => {
+  const enter=spring({frame:Math.max(0,frame-34),fps:30,config:{damping:13,stiffness:160}});
+  const cancel=spring({frame:Math.max(0,frame-150),fps:30,config:{damping:10,stiffness:210}});
+  return <div style={{position:"absolute",left:420,top:600,width:240,height:240,opacity:enter,transform:`scale(${interpolate(enter,[0,1],[.5,1])}) rotate(-3deg)`}}>
+    <div style={{position:"absolute",inset:0,borderRadius:"50%",background:C.cream,border:"10px solid "+C.ink,boxShadow:"12px 14px 0 rgba(32,39,42,.12)"}}/>
+    <svg width="240" height="240" viewBox="0 0 240 240" style={{position:"absolute",inset:0}}>
+      <path d="M164 164 C154 105 114 90 74 111 C47 125 45 158 62 180" fill="none" stroke={C.green} strokeWidth="22" strokeLinecap="round"/>
+      <path d="M58 174 L45 129 L91 144 Z" fill={C.green} stroke={C.ink} strokeWidth="6" strokeLinejoin="round"/>
+      <path d="M52 52 L188 188" stroke={C.red} strokeWidth={22*cancel} strokeLinecap="round"/>
+    </svg>
+    <div style={{position:"absolute",left:0,right:0,bottom:-50,textAlign:"center",fontFamily:"Arial",fontWeight:1000,fontSize:25,color:C.ink}}>U-TURN</div>
+  </div>;
+};
+
+const TravelBadge:React.FC<{frame:number}> = ({frame}) => {
+  const enter=spring({frame:Math.max(0,frame-185),fps:30,config:{damping:14,stiffness:150}});
+  const tab=spring({frame:Math.max(0,frame-232),fps:30,config:{damping:9,stiffness:200}});
+  const tabY=interpolate(tab,[0,1],[0,125]);
+  const tabRot=interpolate(tab,[0,1],[0,18]);
+  return <div style={{position:"absolute",left:115,top:1130,width:350,height:350,opacity:enter,transform:`translateX(${interpolate(enter,[0,1],[-180,0])}px)`}}>
+    <svg width="300" height="330" viewBox="0 0 300 330">
+      <path d="M95 10 C95 70 205 70 205 10" fill="none" stroke={C.ink} strokeWidth="15" strokeLinecap="round"/>
+      <rect x="36" y="74" width="228" height="214" rx="28" fill={C.cream} stroke={C.ink} strokeWidth="12"/>
+      <circle cx="103" cy="145" r="32" fill={C.seaDark} stroke={C.ink} strokeWidth="8"/>
+      <path d="M154 129 H225 M154 158 H214 M78 214 H225" stroke={C.navy} strokeWidth="11" strokeLinecap="round"/>
+    </svg>
+    <div style={{position:"absolute",right:10,top:210,width:155,height:74,borderRadius:18,background:C.green,border:"8px solid "+C.ink,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"Arial",fontWeight:1000,fontSize:22,color:C.cream,transform:`translateY(${tabY}px) rotate(${tabRot}deg)`,opacity:1-interpolate(tab,[.8,1],[0,.15],clamp)}}>AUTORIZADO</div>
+    <div style={{position:"absolute",left:35,top:300,fontFamily:"Arial",fontWeight:1000,fontSize:24,color:C.ink}}>REUNIONES</div>
+  </div>;
+};
+
+const EducationLane:React.FC<{frame:number}> = ({frame}) => {
+  const enter=spring({frame:Math.max(0,frame-210),fps:30,config:{damping:14,stiffness:150}});
+  const narrow=spring({frame:Math.max(0,frame-265),fps:30,config:{damping:13,stiffness:155}});
+  const laneW=interpolate(narrow,[0,1],[360,150]);
+  return <div style={{position:"absolute",right:85,top:1160,width:450,height:330,opacity:enter,transform:`translateX(${interpolate(enter,[0,1],[180,0])}px)`}}>
+    <svg width="180" height="130" viewBox="0 0 180 130" style={{position:"absolute",right:80,top:0}}>
+      <path d="M20 48 L90 14 L160 48 L90 82 Z" fill={C.navy} stroke={C.ink} strokeWidth="8" strokeLinejoin="round"/>
+      <path d="M52 66 V95 C72 111 108 111 128 95 V66" fill={C.paper2} stroke={C.ink} strokeWidth="7"/>
+      <path d="M160 48 V98" stroke={C.ink} strokeWidth="7"/>
+    </svg>
+    <div style={{position:"absolute",right:30,top:150,width:360,height:86,border:"8px solid "+C.ink,borderRadius:44,background:C.cream,overflow:"hidden"}}>
+      <div style={{width:laneW,height:"100%",background:C.seaDark,borderRight:"8px solid "+C.ink,transition:"none"}}/>
+    </div>
+    <div style={{position:"absolute",right:65,top:260,fontFamily:"Arial",fontWeight:1000,fontSize:24,color:C.ink}}>EDUCACIÓN</div>
+  </div>;
+};
+
+const FinanceMobilityAct:React.FC=()=>{
+  const f=useCurrentFrame();
+  const door=spring({frame:f,fps:30,config:{damping:17,stiffness:120}});
+  const route=interpolate(f,[36,132],[0,1],clamp);
+  const tokenX=interpolate(f,[50,146],[120,720],clamp);
+  const tokenY=interpolate(f,[50,95,146],[600,450,650],clamp);
+  const reject=spring({frame:Math.max(0,f-155),fps:30,config:{damping:11,stiffness:185}});
+
+  return <AbsoluteFill style={{background:C.navy,overflow:"hidden"}}>
+    <div style={{position:"absolute",inset:0,background:"radial-gradient(circle at 50% 35%, rgba(111,166,183,.38), transparent 48%)"}}/>
+    <div style={{position:"absolute",left:50,right:50,top:50,bottom:50,border:"12px solid "+C.ink,borderRadius:40,boxShadow:"inset 0 0 0 8px rgba(255,246,230,.08)"}}/>
+
+    <div style={{position:"absolute",left:78,top:72,fontFamily:"Arial",fontWeight:1000,fontSize:62,color:C.cream,opacity:interpolate(f,[0,24],[0,1],clamp)}}>DENTRO DEL SISTEMA</div>
+    <div style={{position:"absolute",right:85,top:92,padding:"12px 18px",background:C.cream,border:"7px solid "+C.ink,borderRadius:16,fontFamily:"Arial",fontWeight:1000,fontSize:23,color:C.red,transform:"rotate(3deg)"}}>29 SEP</div>
+
+    <div style={{position:"absolute",left:80,top:280,width:920,height:680,borderRadius:40,background:C.paper,border:"10px solid "+C.ink,boxShadow:"16px 18px 0 rgba(0,0,0,.16)",transform:`scale(${interpolate(door,[0,1],[1.15,1])})`}}>
+      <FinancePipe x={85} y={365} w={310} h={80} active={route}/>
+      <FinancePipe x={370} y={365} w={270} h={80} rot={-17} active={route}/>
+      <FinancePipe x={605} y={290} w={220} h={80} rot={25} active={route}/>
+      <MoneyToken x={tokenX} y={tokenY} rotation={f*3}/>
+      <UTurnSign frame={f}/>
+      <div style={{position:"absolute",right:80,bottom:90,width:210,height:140,borderRadius:20,background:C.red,border:"9px solid "+C.ink,transform:`scale(${reject})`,opacity:reject,display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"Arial",fontWeight:1000,fontSize:30,color:C.cream,textAlign:"center",lineHeight:1}}>RUTA<br/>CERRADA</div>
+    </div>
+
+    <div style={{position:"absolute",left:70,right:70,top:1025,height:4,background:"rgba(255,246,230,.22)"}}/>
+
+    <TravelBadge frame={f}/>
+    <EducationLane frame={f}/>
+
+    <div style={{position:"absolute",left:82,right:82,bottom:115,fontFamily:"Arial",fontWeight:1000,fontSize:27,lineHeight:1.05,color:C.cream,opacity:interpolate(f,[285,320],[0,1],clamp)}}>
+      Finanzas, reuniones y educación<br/>cambian mediante mecanismos distintos.
+    </div>
+  </AbsoluteFill>;
+};
+
 const FuturePlaceholder:React.FC=()=>(
   <AbsoluteFill style={{background:C.paper,justifyContent:"center",alignItems:"center"}}>
     <PaperTexture/>
@@ -464,6 +562,7 @@ export const RubioHabanaAnimated:React.FC=()=>(
     <Sequence from={0} durationInFrames={330}><OpeningAct/></Sequence>
     <Sequence from={330} durationInFrames={360}><MayAct/></Sequence>
     <Sequence from={690} durationInFrames={360}><DesignationsAct/></Sequence>
-    <Sequence from={1050} durationInFrames={TOTAL_FRAMES-1050}><FuturePlaceholder/></Sequence>
+    <Sequence from={1050} durationInFrames={360}><FinanceMobilityAct/></Sequence>
+    <Sequence from={1410} durationInFrames={TOTAL_FRAMES-1410}><FuturePlaceholder/></Sequence>
   </AbsoluteFill>
 );

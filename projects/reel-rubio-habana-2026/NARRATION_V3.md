@@ -18,7 +18,7 @@ Visual:
 
 ## 00:05-00:14 - Oil / tariff route
 
-> El 29 de enero, Trump abrió una vía arancelaria vinculada al suministro de petróleo a Cuba. El 20 de febrero, esos aranceles IEEPA terminaron, aunque la emergencia siguió vigente.
+> El 29 de enero, Trump abrió una vía arancelaria vinculada al suministro de petróleo a Cuba. El 20 de febrero, esa vía arancelaria bajo IEEPA terminó, aunque la emergencia siguió vigente.
 
 Primary sources:
 - White House / EO 14380.

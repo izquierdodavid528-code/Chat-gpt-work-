@@ -43,5 +43,12 @@
         "maxContinuousSeconds": 3
       }
     }
-  }
+  },
+  "driveAssetImports": [
+    {
+      "remote": "renders/rubio-habana-map.mp4",
+      "local": "rubio-habana-map.mp4",
+      "required": true
+    }
+  ]
 }

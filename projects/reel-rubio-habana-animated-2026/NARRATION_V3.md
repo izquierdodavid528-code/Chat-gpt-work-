@@ -8,21 +8,21 @@ Target: about 60 seconds including short natural pauses. Read conversationally; 
 Washington amplió la presión sobre La Habana.
 
 ## 00:04–00:18 — January and February
-El 29 de enero, una orden abrió la posibilidad de aranceles a países que suministraran petróleo a Cuba. El 20 de febrero se retiraron esos aranceles bajo IEEPA; otras medidas siguieron vigentes.
+El 29 de enero, una orden abrió la posibilidad de aranceles a países que suministraran petróleo a Cuba. El 20 de febrero se retiró esa vía arancelaria bajo IEEPA; otras medidas siguieron vigentes.
 
 ## 00:18–00:29 — May and Rubio's role
 En mayo, otra orden amplió sanciones y asignó funciones a Estado y Tesoro. Rubio aparece como secretario de Estado, no como firmante.
 
 ## 00:29–00:41 — OFAC designations
-OFAC sumó designaciones; en septiembre incluyó al Banco Exterior de Cuba.
+OFAC añadió nuevas personas y entidades a su lista. En septiembre incluyó al Banco Exterior de Cuba.
 
 ## 00:41–00:52 — Finance and travel
-También en septiembre cambiaron reglas bancarias y de viaje: se retiró la autorización para ciertas transferencias U-turn y reuniones profesionales; se estrecharon algunas actividades educativas. Algunas operaciones pudieron cerrarse hasta el 30 de octubre.
+Ese mes también cambiaron reglas bancarias y de viaje. OFAC retiró la autorización para ciertas transferencias U-turn y reuniones profesionales; además, estrechó algunas actividades educativas.
 
 ## 00:52–01:00 — Attributed close
-La Casa Blanca cita seguridad y política exterior; el MINREX lo llama recrudecimiento del bloqueo. Durante el año cambiaron varias restricciones.
+La Casa Blanca cita seguridad; el MINREX denuncia el recrudecimiento del bloqueo.
 
-Approximate count: 126 words. Confirm with the final voice recording and align captions to the recorded audio.
+Spoken draft: about 107 words. This leaves room for measured delivery, pauses and visual holds; validate with an actual scratch recording. Put the specific scope and the 30 October wind-down date in Remotion captions rather than rushing them into the voice.
 
 ## Accuracy and scope notes
 

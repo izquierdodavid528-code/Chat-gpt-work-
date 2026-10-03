@@ -109,7 +109,7 @@ const Framework:React.FC=()=>{
   const f=useCurrentFrame();
   const p=spring({frame:f,fps:30,config:{damping:180,stiffness:150}});
   const delegation=spring({frame:Math.max(0,f-90),fps:30,config:{damping:180,stiffness:150}});
-  const sectors=["ENERGÍA","DEFENSA","MINERÍA","FINANZAS","SEGURIDAD"];
+  const sectors=["ENERGÍA","DEFENSA","METALES / MINERÍA","SERVICIOS FIN.","SEGURIDAD"];
   return <AbsoluteFill style={{background:"radial-gradient(circle at 25% 35%,rgba(33,66,85,.28),transparent 34%),#070b10",overflow:"hidden"}}>
     <div style={{position:"absolute",inset:0,backgroundImage:"linear-gradient(rgba(126,151,168,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(126,151,168,.045) 1px,transparent 1px)",backgroundSize:"56px 56px"}}/>
     <div style={{position:"absolute",left:70,top:108,color:GOLD,fontFamily:"Arial",fontSize:20,fontWeight:900,letterSpacing:3}}>CAPA 2 · AUTORIDADES DE SANCIÓN</div>

@@ -75,5 +75,5 @@ Treatment:
 
 - Generate or record the final narration only after the 60-second visual animatic passes creative QA.
 - Captions must be derived from final narration timing, not this estimated timecode.
-- Target spoken pace: approximately 145-150 wpm with natural pauses.
+- Target spoken pace: approximately 145-150 wpm with natural pauses. Current narration: 147 words.
 - Do not compress pauses just to force the script into 60 seconds; trim wording instead if the final voice exceeds the slot.

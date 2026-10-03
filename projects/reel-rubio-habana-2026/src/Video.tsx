@@ -225,17 +225,17 @@ const Close:React.FC=()=>{
     <div style={{position:"absolute",left:70,top:178,right:70,color:INK,fontFamily:"Arial",fontSize:60,fontWeight:900,lineHeight:1.02,opacity:p,transform:`translateY(${interpolate(p,[0,1],[30,0])}px)`}}>DOS LECTURAS<br/>OFICIALES</div>
     <div style={{position:"absolute",left:90,top:520,width:390,height:430,borderRadius:28,border:"1px solid rgba(126,151,168,.28)",background:"rgba(12,25,34,.82)",padding:"34px"}}>
       <div style={{color:STEEL,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2}}>WASHINGTON</div>
-      <div style={{color:INK,fontFamily:"Arial",fontSize:31,fontWeight:850,lineHeight:1.15,marginTop:26}}>Órdenes, sanciones y restricciones como instrumentos de política.</div>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:31,fontWeight:850,lineHeight:1.15,marginTop:26}}>La Casa Blanca las vincula a seguridad nacional y política exterior.</div>
     </div>
     <div style={{position:"absolute",right:90,top:520,width:390,height:430,borderRadius:28,border:"1px solid rgba(217,54,54,.24)",background:"rgba(31,13,15,.76)",padding:"34px"}}>
       <div style={{color:RED,fontFamily:"Arial",fontSize:18,fontWeight:900,letterSpacing:2}}>LA HABANA</div>
-      <div style={{color:INK,fontFamily:"Arial",fontSize:31,fontWeight:850,lineHeight:1.15,marginTop:26}}>Una respuesta oficial opuesta sobre el impacto y la legitimidad de esas medidas.</div>
+      <div style={{color:INK,fontFamily:"Arial",fontSize:31,fontWeight:850,lineHeight:1.15,marginTop:26}}>Autoridades cubanas las describen como coerción económica y extraterritorial.</div>
     </div>
     <div style={{position:"absolute",left:90,right:90,top:1080,height:3,background:"rgba(126,151,168,.18)"}}>
       <div style={{width:`${line*100}%`,height:"100%",background:RED}}/>
     </div>
     <div style={{position:"absolute",left:70,right:70,bottom:310,color:STEEL,fontFamily:"Arial",fontSize:22,fontWeight:900,letterSpacing:2}}>LO DOCUMENTADO</div>
-    <div style={{position:"absolute",left:70,right:70,bottom:180,color:INK,fontFamily:"Arial",fontSize:54,fontWeight:900,lineHeight:1.02}}>LAS RESTRICCIONES<br/>SE HICIERON MÁS AMPLIAS.</div>
+    <div style={{position:"absolute",left:70,right:70,bottom:180,color:INK,fontFamily:"Arial",fontSize:50,fontWeight:900,lineHeight:1.02}}>LA ARQUITECTURA DE RESTRICCIONES<br/>CAMBIÓ Y SE AMPLIÓ.</div>
   </AbsoluteFill>;
 };
 

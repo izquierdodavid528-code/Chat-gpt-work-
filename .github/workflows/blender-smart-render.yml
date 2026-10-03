@@ -58,8 +58,10 @@ permissions:
   contents: read
 
 concurrency:
+  # The render.request.json file is the authoritative latest intent for a project.
+  # A newer request supersedes any older validation or production render.
   group: blender-smart-${{ inputs.project_slug }}
-  cancel-in-progress: ${{ inputs.validation_frame_count != '0' }}
+  cancel-in-progress: true
 
 env:
   DRIVE_BASE: Remotion Projects

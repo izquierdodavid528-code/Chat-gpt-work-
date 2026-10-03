@@ -1,3 +1,5 @@
+> Historical script retained for provenance. Use NARRATION_V3.md for the next scratch voice timing test; V2's 145 words should not be assumed to fit naturally in 60 seconds.
+
 # NARRATION V2 — illustrated rough cut
 
 Target: 60 seconds.

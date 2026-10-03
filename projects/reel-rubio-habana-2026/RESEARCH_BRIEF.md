@@ -38,12 +38,21 @@ Tratamiento:
 - cualquier acusación sobre actividades del ICAP permanece atribuida a Rubio/State;
 - no convertirla en conclusión editorial independiente.
 
-### 29–30 septiembre — CACR / CRL
-OFAC amplió el alcance de las restricciones relativas a la Cuba Restricted List a transacciones financieras indirectas y eliminó la autorización U-turn. También modificó diversas autorizaciones relacionadas con actividades y viajes.
+### 29–30 septiembre — CACR / CRL / movilidad
+OFAC amplió el alcance de las restricciones relativas a la Cuba Restricted List a transacciones financieras indirectas y eliminó la autorización U-turn.
+
+En movilidad, OFAC también:
+- eliminó la autorización general para asistir u organizar reuniones profesionales o conferencias en Cuba, con una autorización limitada de cierre;
+- estrechó determinadas autorizaciones de viaje educativo;
+- eliminó la autorización para viajes educativos grupales people-to-people, preservando disposiciones específicas de grandfathering.
 
 Fuentes primarias:
 - OFAC FAQs actualizadas el 29 Sep 2026;
+- OFAC FAQs 1274 y 1275;
 - CACR amendment effective 30 Sep 2026.
+
+Tratamiento:
+no resumir estos cambios como una prohibición general de viajar a Cuba.
 
 ## Papel documentado de Rubio
 Rubio aparece como:

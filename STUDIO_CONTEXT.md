@@ -7,13 +7,13 @@
 This repository is the control center for a reusable remote multimedia studio.
 
 Architecture:
-- ChatGPT / Codex: creative direction, planning, editing, code, automation and maintenance.
-- Flow / generative visual tools: visual development, character/background/prop assets and selective short motion plates.
+- ChatGPT / Codex / Work: creative direction, planning, code, orchestration, QA and documentation.
+- Google Vids / Gemini video tools / Flow: primary generative scene department for organic animation, acting, environments, transformations and motion plates.
 - GitHub: source code, configuration, prompts/manifests, version history and GitHub Actions.
 - Codespaces / VS Code Web: interactive remote workspace from Android or desktop.
-- Blender: selective 3D / rigged / spatial animation, not the default renderer for the whole reel.
-- Remotion: master timeline, 2D/2.5D animation, compositing, subtitles, audio and final video composition.
-- Google Drive: large assets, Blender/Flow intermediates, renders and delivery files.
+- Blender: selective deterministic 3D / rigid geometry / rigging / spatial animation when generative video cannot hold exact structure.
+- Remotion: master timeline, deterministic compositing, factual overlays, captions, audio, synchronization, QA and final video assembly.
+- Google Drive: large assets, generative/Blender intermediates, renders and delivery files.
 
 Repository:
 - `izquierdodavid528-code/Chat-gpt-work-`
@@ -30,22 +30,24 @@ Start with one style frame and one character reference. Reuse approved reference
 
 ## Current Rubio / Havana project state
 
-The main branch preserves the earlier 60-second rough-cut baseline. The latest cartoon render remains isolated on `memorias-cartoon-v6`; it is a technical validation, has no audio and was not delivered to Drive. The user has not approved its current visual style as the final direction. Preserve the baseline and work only on an 8–12-second opening pilot until the user approves its look and motion.
+The Rubio/Havana work has produced a stable 60-second audio animatic and an isolated 14.2-second generative pilot. The user has intentionally **paused the creative experiment** after the pilot proved two things: organic generated scenes can raise visual quality, but continuity of rigid furniture/architecture can drift and should not be fixed by endless regeneration.
 
-For that project, read `projects/reel-rubio-habana-animated-2026/PRODUCTION_STATUS.md` and `projects/reel-rubio-habana-animated-2026/FLOW_ASSET_BRIEFS.md` before editing.
+Do not automatically continue generating or correcting that pilot in a new chat. Treat the stable animatic as preserved and the pilot as a learning artifact unless the user explicitly resumes it.
+
+The reusable lessons have been promoted to `GENERATIVE_SCENE_WORKFLOW.md`.
 
 ## Canonical hybrid animation workflow
 
-Read `HYBRID_ANIMATION_PIPELINE.md` before designing an animated project.
+For any animation project read:
+1. `HYBRID_ANIMATION_PIPELINE.md` — tool roles and routing;
+2. `GENERATIVE_SCENE_WORKFLOW.md` — animatic/pilot/generation/continuity/QA protocol;
+3. `MASTER_PROMPT_HYBRID_ANIMATION.md` — stable startup contract.
 
-Shot routing rule:
-- Remotion first for 2D/2.5D, editorial timing, maps, typography, transitions and compositing.
-- Flow for reusable visual assets and selective short generated-motion plates.
-- Blender only when real depth, rigging, spatial camera motion, perspective or lighting materially improves the shot.
-- Blender defaults to EEVEE Next and short reusable segments; do not render a complete social reel in Blender unless the project is genuinely 3D-first.
-- Validate timing with proxies/low-cost previews before generating or rendering expensive final assets.
-
-For new animation sessions, `MASTER_PROMPT_HYBRID_ANIMATION.md` is the canonical startup prompt.
+Current routing principle:
+- generative scene tools first when scene understanding, acting or organic motion is the creative value;
+- Remotion for deterministic composition, timing, exact information, captions, audio and delivery;
+- Blender when rigid geometry, perspective, rigging or simulation must remain exact;
+- prove the language in an 8-15 second pilot before scaling it to the complete film.
 
 ## Canonical Blender workflow
 
@@ -190,7 +192,7 @@ The experiment showed that parallel EEVEE rendering reduced wall-clock frame com
 
 When asked to continue studio work:
 1. read this file;
-2. for animation work, read `HYBRID_ANIMATION_PIPELINE.md`;
+2. for animation work, read `HYBRID_ANIMATION_PIPELINE.md` and `GENERATIVE_SCENE_WORKFLOW.md`;
 3. read the target project's `project.config.json`;
 4. read `WORKSPACE_AUDIT.md` for the validated production contract;
 5. read `WORKSPACE_GUIDE.md` only when broader architecture is needed;

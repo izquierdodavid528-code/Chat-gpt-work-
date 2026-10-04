@@ -1,3 +1,7 @@
+## Received-source integration review
+
+See PRODUCTION_STATUS.md and the pilot override at the top of SHOT_MATRIX.md. Sources are registered and a separate 426-frame pilot is added; full animatic untouched. A new wood-slide cue replaces diagram-specific ticks. This is a review render, not a creative pass. Cabinet continuity and architecture drift in the generated sources are explicit blockers for acceptance.
+
 # S06–S08 generative pilot V1
 
 Base: f7b19a4211fe67f7794a9305974969359fddce44, validated render 37163392865. This pilot refines tool allocation under the existing master contract. It does not modify the 60-second master or replace the narration. Scope: frames 684–1109, 22.80–37.00 s, exactly 426 frames / 14.2 seconds.

@@ -1,10 +1,10 @@
 {
   "slug": "reel-rubio-habana-animated-2026",
   "type": "remotion",
-  "compositionId": "RubioSixtySecondAnimatic",
+  "compositionId": "RubioGenerativeS06S08Pilot",
   "driveProjectDir": "02 - Reel Rubio Habana 2026",
   "studioPort": 3000,
-  "outputFile": "out/rubio-sixty-second-animatic.mp4",
+  "outputFile": "out/rubio-generative-s06-s08-pilot-v1.mp4",
   "render": {
     "concurrency": "100%",
     "expectedCodec": "h264",
@@ -12,7 +12,7 @@
     "expectedHeight": 1920,
     "expectedFps": 30,
     "requireAudio": true,
-    "minDurationSeconds": 59,
+    "minDurationSeconds": 14.1,
     "audioMastering": {
       "enabled": true,
       "targetIntegratedLufs": -18,

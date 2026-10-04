@@ -1,3 +1,15 @@
+## Generative S06–S08 pilot — sources received, rendering for review
+
+Isolated branch `pilot/rubio-generative-s06-s08`, based on stable `f7b19a4211fe67f7794a9305974969359fddce44`. The 60-second compositions and VoiceAnimatic.tsx are unchanged. This branch's render selector targets the additional `RubioGenerativeS06S08Pilot`, exactly 426 frames / 14.2 s, master window 22.80–37.00 s. Restore the original render selector from the stable commit when selecting the full animatic; no infrastructure has changed.
+
+Received:
+- `1002979331.mp4` → `pilot-s06-delegation-organic-v1.mp4`: 720×1280, H.264, 24 fps, 8.000 s, AAC muted. Drive ID 1Knb7CJk-ht5vssR2huhp86Ob6TieiTjU.
+- `1002979337.mp4` → `pilot-s07-s08-registry-bank-v1.mp4`: same technical specs. Drive ID 1HNxCXjqcsQ38OXEC5pTH1hM6Cu6RRac-.
+
+Remotion removes the first clip's initial idle handle (19 project frames / 0.633 s), retains natural motion, uses a clean cut, and keeps the second take continuous through S07/S08. Exact overlay/caption windows derive from the original voice word boundaries. Narration and score are trimmed from frame 684 of the existing masters; voice unchanged. Original diagram SFX are replaced by a restrained wood-slide/settle cue tied to the model insertion.
+
+**CREATIVE HOLD:** frame review shows an empty single-chamber cabinet at the end of clip A versus a populated multi-slot cabinet at the start of clip B. Clip B changes the coral cuboid model into a different classical arched building around 4.5–5.5 source seconds, with a baked blended/ghosted transition. Do not hide these with wipes or claim creative pass. The scene action/camera is improved, but continuity/geometry fails the pilot acceptance criteria. Targeted source correction is required, primarily clip B, using clip A's exact held end frame as entry. Technical/audio verification follows the actual render; no master replacement.
+
 ## S12 closing asset gate — integrated and technically validated
 
 The supplied S12 assets are registered in the project's Flow folders and integrated into Remotion:

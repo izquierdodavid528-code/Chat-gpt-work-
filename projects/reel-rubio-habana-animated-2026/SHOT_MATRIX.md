@@ -1,3 +1,15 @@
+## Isolated generative pilot override — S06–S08
+
+The full 60-second matrix below remains the baseline. Only the additional 14.2-second pilot composition uses this override.
+
+| Beat / pilot frames | Voice window | Source / organic staging | Deterministic composition | Current gate |
+|---|---|---|---|---|
+| S06 / 0–220 | master 22.80–30.1667 | 1002979331 → pilot-s06-delegation-organic-v1.mp4; trimBefore 19 at 30 fps; natural gesture and rightward camera move | captions at 0–85 and 100–203; exact Estado/Tesoro and Rubio/non-signatory overlays | Usable acting; stations reveal late; cabinet handoff needs corrected B entry. |
+| S07 / 221–338 | master 30.1667–34.10 | first 3.933 s of pilot-s07-s08-registry-bank-v1.mp4; model enters register | OFAC / September / plural scope, phrase captions | Opening cabinet layout does not match A end. |
+| S08 / 339–425 | master 34.10–37.00 | continuation of same B take (no restart); camera approaches model | exact bank name / existing sourced date, phrase captions | Architecture drift and baked ghosted morph: CREATIVE HOLD. |
+
+The voice and 60-second composition are not replaced. Technical render/QAs are pending until the delivery is inspected.
+
 ## S12 assets integrated — TECHNICAL PASS, run 37163392865
 
 Still `s12-closing-two-positions-start-v1.jpg`: 00:50.30–00:52.80 (frames 1509–1583). Flow acting plate `s12-closing-two-positions-v1.mp4`: 00:52.80–01:00.00 (frames 1584–1799); source is 6.000 s / 24 fps and playbackRate 0.8333 fills the 7.2-second window. The two panels stay attributed together in both shots: WASHINGTON / “Invoca seguridad nacional” above; MINREX / “Denuncia un recrudecimiento del bloqueo” below. Phrase captions switch with the narration; no quotation marks or implication of a verbatim quote.

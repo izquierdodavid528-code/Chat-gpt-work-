@@ -1,4 +1,18 @@
-## Generative S06–S08 pilot — sources received, rendering for review
+## Generative pilot delivery checkpoint — 2026-10-04
+
+- Branch: `pilot/rubio-generative-s06-s08`; render source commit: `a2625809ec28908ee6c339fdfbf05935994ed352`.
+- Run: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37166646506
+- Delivery artifact: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37166646506/artifacts/11288968800 (GitHub retention until 2026-10-18).
+- Output: `rubio-generative-s06-s08-pilot-v1.mp4`; 426 frames, 14.200 s video / 14.250 s container, H.264 1080×1920 30 fps; AAC stereo 48 kHz.
+- TECHNICAL PASS: workflow compilation/render/delivery checks; independent ffprobe; full-file ffmpeg decode without errors.
+- AUDIO TECHNICAL PASS: -18.0 LUFS, -4.7 dBTP, 2.1 LU LRA, audio/video delta 0.050 s; automatic checks have no warnings. Voice/score retained from existing animatic; no new vocal audition or subjective listening approval claimed.
+- Caption/overlay frame review: four natural phrase cues, maximum two lines, bottom safe margin; factual overlays in upper negative space. Representative frames inspected at 270×480 mobile scale; frames additionally sampled across source action. No subjective full-motion playback approval claimed from frame sampling.
+- FACTUAL: original sourced narration/date/name retained; this stage did not introduce or independently re-check new facts. Stylized miniature is a metaphor, not the bank's authentic architecture.
+- CREATIVE HOLD: A→B cabinet layout discontinuity; B coral bank changes architecture and ghosts at source 4.5–5.5 s (pilot approximately 11.87–12.87 s); agency props reveal late relative to voice. Source 720p/24fps is upscaled/repeated to delivery 1080p/30, not native 1080p detail.
+- FINAL HOLD: this is an isolated review pilot, not the 60-second master or creative approval. Full stable animatic preserved at `f7b19a4211fe67f7794a9305974969359fddce44`.
+- Next gate: two localized source-video corrections below; integrate replacements in the same composition, render again, then assess continuity/acting. No general 60-second redesign started.
+
+## Generative S06–S08 pilot — sources received and technically rendered
 
 Isolated branch `pilot/rubio-generative-s06-s08`, based on stable `f7b19a4211fe67f7794a9305974969359fddce44`. The 60-second compositions and VoiceAnimatic.tsx are unchanged. This branch's render selector targets the additional `RubioGenerativeS06S08Pilot`, exactly 426 frames / 14.2 s, master window 22.80–37.00 s. Restore the original render selector from the stable commit when selecting the full animatic; no infrastructure has changed.
 

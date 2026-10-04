@@ -8,7 +8,7 @@ The full 60-second matrix below remains the baseline. Only the additional 14.2-s
 | S07 / 221–338 | master 30.1667–34.10 | first 3.933 s of pilot-s07-s08-registry-bank-v1.mp4; model enters register | OFAC / September / plural scope, phrase captions | Opening cabinet layout does not match A end. |
 | S08 / 339–425 | master 34.10–37.00 | continuation of same B take (no restart); camera approaches model | exact bank name / existing sourced date, phrase captions | Architecture drift and baked ghosted morph: CREATIVE HOLD. |
 
-The voice and 60-second composition are not replaced. Technical render/QAs are pending until the delivery is inspected.
+The voice and 60-second composition are not replaced. Technical render/delivery/audio QA PASS at run 37166646506 (source a2625809); independent ffprobe confirms 426 frames / 14.2 s and full decode succeeds. Creative acceptance remains HOLD for cabinet discontinuity and bank geometry drift. Correct A's cabinet using B as reference and B's bank using A as reference; exact local-edit briefs are in S06_S08_GENERATIVE_PILOT_V1.md. No full-master replacement.
 
 ## S12 assets integrated — TECHNICAL PASS, run 37163392865
 

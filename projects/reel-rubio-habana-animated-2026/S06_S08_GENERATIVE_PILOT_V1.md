@@ -1,3 +1,35 @@
+## Generative pilot delivery checkpoint — 2026-10-04
+
+- Branch: `pilot/rubio-generative-s06-s08`; render source commit: `a2625809ec28908ee6c339fdfbf05935994ed352`.
+- Run: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37166646506
+- Delivery artifact: https://github.com/izquierdodavid528-code/Chat-gpt-work-/actions/runs/37166646506/artifacts/11288968800 (GitHub retention until 2026-10-18).
+- Output: `rubio-generative-s06-s08-pilot-v1.mp4`; 426 frames, 14.200 s video / 14.250 s container, H.264 1080×1920 30 fps; AAC stereo 48 kHz.
+- TECHNICAL PASS: workflow compilation/render/delivery checks; independent ffprobe; full-file ffmpeg decode without errors.
+- AUDIO TECHNICAL PASS: -18.0 LUFS, -4.7 dBTP, 2.1 LU LRA, audio/video delta 0.050 s; automatic checks have no warnings. Voice/score retained from existing animatic; no new vocal audition or subjective listening approval claimed.
+- Caption/overlay frame review: four natural phrase cues, maximum two lines, bottom safe margin; factual overlays in upper negative space. Representative frames inspected at 270×480 mobile scale; frames additionally sampled across source action. No subjective full-motion playback approval claimed from frame sampling.
+- FACTUAL: original sourced narration/date/name retained; this stage did not introduce or independently re-check new facts. Stylized miniature is a metaphor, not the bank's authentic architecture.
+- CREATIVE HOLD: A→B cabinet layout discontinuity; B coral bank changes architecture and ghosts at source 4.5–5.5 s (pilot approximately 11.87–12.87 s); agency props reveal late relative to voice. Source 720p/24fps is upscaled/repeated to delivery 1080p/30, not native 1080p detail.
+- FINAL HOLD: this is an isolated review pilot, not the 60-second master or creative approval. Full stable animatic preserved at `f7b19a4211fe67f7794a9305974969359fddce44`.
+- Next gate: two localized source-video corrections below; integrate replacements in the same composition, render again, then assess continuity/acting. No general 60-second redesign started.
+
+## Local source corrections required — no new scene concepts
+
+### A: repair cabinet continuity
+Filename: `pilot-s06-delegation-organic-v2.mp4`; duration 8 s; recommended tool: the same video editor/model that made A, with video editing and multiple references if available.
+Attach A (`1002979331.mp4`) as edit target and B (`1002979337.mp4`) as reference. Scope: cabinet only; preserve A's timing, acting, camera and other props. Desired first frame: unchanged A opening. Desired last frame: identical viewpoint to A ending, but with B's cabinet partitions and three existing generic models. The coral bank remains outside on its rail. Connect preceding scene through existing desk/blank sheet; connect B by same cabinet/model geometry. Remotion keeps voice, all factual labels, captions and audio outside generation.
+
+Exact prompt:
+> Edit the first attached video, using the second video only as the visual reference for the wooden registry cabinet. Keep the first video's duration at 8 seconds, vertical 9:16, its illustrated character, face, suit, hands, gesture, camera movement, desk, lighting and paper texture unchanged. Make only this local continuity correction: whenever the wooden cabinet enters view, it must already have exactly the same outer dimensions, wooden frame, internal shelf divisions and three generic miniature objects as the cabinet at the beginning of the second video. Keep this layout rigid and consistent throughout the shot; no objects appearing, disappearing or changing shape. The coral rectangular bank model stays outside the cabinet on the brass rails, with its existing geometry unchanged. Do not alter the acting or add events. End at the original first video's camera viewpoint with the corrected cabinet ready for the second shot. No readable text, letters, dates, logos, signatures, dialogue, additional people, wipes or dissolves. Acceptance: character and action unchanged; corrected cabinet matches the second video's opening; all objects stay physically stable.
+
+### B: repair bank geometry
+Filename: `pilot-s07-s08-registry-bank-v2.mp4`; duration 8 s; same video editor/model, video edit rather than another unrelated shot.
+Attach B as edit target and A as object reference. Desired first frame: unchanged B opening cabinet, matching corrected A. Desired last frame: close-up of the SAME coral cuboid bank with rectangular teal doors/windows; no pediment, arch or other architecture. One physical action: insertion with continuous approach. Remotion keeps OFAC/month/exact date/bank name/captions and wood insertion SFX.
+
+Exact prompt:
+> Edit the first attached video locally. Use the second attached video only to lock the coral rectangular bank model's original shape. Preserve the 8-second duration, vertical 9:16, illustrated paper texture, warm lighting, wooden registry, shelf divisions, three existing miniature objects, brass rails and the insertion action. The bank is one rigid coral rectangular miniature with the original flat roof, rectangular teal doors and windows, same base and identical proportions from first to last frame. After insertion, the camera smoothly approaches that exact miniature while it stays physically inside the same shelf. Remove the existing transformation into the classical arched building: no morphing, pediment, arched doorway, duplicated edges, ghosting, crossfade, cut or background replacement. Final frame is a close-up of the unchanged rectangular model, with enough surrounding shelf to locate it in space and empty space for editorial labels. No readable text, legal/political information, dates, names, logos or narration. Acceptance: stable geometry in every frame, continuous camera, no disappearing registry, same model as preceding shot.
+
+Do not repeatedly regenerate failed geometry blindly. If localized video editing cannot preserve these rigid objects, retain approved acting from A and revise this bank/registry mechanism as a specifically scoped hybrid composition; do not claim this v1 pilot passes creatively.
+
 ## Received-source integration review
 
 See PRODUCTION_STATUS.md and the pilot override at the top of SHOT_MATRIX.md. Sources are registered and a separate 426-frame pilot is added; full animatic untouched. A new wood-slide cue replaces diagram-specific ticks. This is a review render, not a creative pass. Cabinet continuity and architecture drift in the generated sources are explicit blockers for acceptance.

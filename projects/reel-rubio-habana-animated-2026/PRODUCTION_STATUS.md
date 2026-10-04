@@ -1,3 +1,34 @@
+# PROJECT PAUSED BY USER — creative experiment checkpoint
+
+**Status: PAUSED intentionally. Do not continue this pilot automatically.**
+
+The user stopped this experiment after the 14.2-second S06-S08 generative pilot to preserve agent/generation quota and promote the useful lessons into the repository-wide production system.
+
+Stable reference:
+- full 60-second animatic remains preserved at `f7b19a4211fe67f7794a9305974969359fddce44`;
+- isolated pilot checkpoint: `aa3c3be66f7e4b4a2305e693e19fb4a733fe6e8f`;
+- pilot technical delivery passed, creative acceptance did not.
+
+What the pilot proved:
+- generated scene motion is more promising than trying to make Remotion perform all organic animation;
+- Remotion works best as director/compositor/editor and deterministic factual layer;
+- generated footage needs strict continuity anchors;
+- rigid furniture/architecture can drift even when acting/camera improve;
+- do not spend repeated generations trying to stabilize rigid geometry indefinitely;
+- use Blender/Remotion for exact rigid structures and generative video for organic motion;
+- test the language on 8-15 seconds before scaling;
+- technical QA and frame sampling do not equal full-speed creative approval.
+
+The canonical reusable workflow is now documented on `main` in:
+- `GENERATIVE_SCENE_WORKFLOW.md`;
+- `HYBRID_ANIMATION_PIPELINE.md`;
+- `MASTER_PROMPT_HYBRID_ANIMATION.md`;
+- `STUDIO_CONTEXT.md`.
+
+If this project is resumed later, start from the preserved stable animatic and the canonical workflow above. Do not blindly continue the two pending local regeneration requests from this branch unless the user explicitly chooses to resume this exact pilot.
+
+---
+
 ## Generative pilot delivery checkpoint — 2026-10-04
 
 - Branch: `pilot/rubio-generative-s06-s08`; render source commit: `a2625809ec28908ee6c339fdfbf05935994ed352`.
